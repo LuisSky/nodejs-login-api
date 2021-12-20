@@ -1,8 +1,11 @@
 const express = require('express')
 const routes = express.Router()
 
+// Routes
+const signup = require('../routes/signup.js')
 
-routes.get('/', (req, res) => res.status(200).send('ok'))
+routes.get('/', signup)
+
 
 
 module.exports = routes
