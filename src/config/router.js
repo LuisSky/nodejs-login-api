@@ -2,9 +2,9 @@ const express = require('express')
 const routes = express.Router()
 
 // Routes
-const signup = require('../routes/signup.js')
+const signup = require('../routes/auth-signup.js')
 
-routes.get('/', signup)
+routes.get('/', signup.signup)
 
 
 
