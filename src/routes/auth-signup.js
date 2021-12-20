@@ -1,5 +1,7 @@
 const signup = (req, res) => {
-  return res.status(201).send({ name: 'testing User' })
+  const {email, password} = req.body
+  
+  return res.status(201).send({ title: 'User created', email, password})
 }
 
 

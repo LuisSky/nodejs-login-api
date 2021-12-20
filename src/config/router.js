@@ -4,7 +4,7 @@ const routes = express.Router()
 // Routes
 const signup = require('../routes/auth-signup.js')
 
-routes.get('/', signup.signup)
+routes.post('/signup', signup.signup)
 
 
 
