@@ -5,6 +5,7 @@ const routes = express.Router()
 const auth = require('../routes/auth.js')
 
 routes.post('/signup', auth.signup)
+routes.post('/signin', auth.signin)
 
 
 
