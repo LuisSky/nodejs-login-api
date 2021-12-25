@@ -7,15 +7,21 @@ const signup = (req, res) => {
     return res.status(201).send({ title: 'User created', email, password})
   }
   catch(err) {
-    return res.status(400).send({ error: 'bad request'})
+    return res.status(400).send({ error: 'invalid request'})
   }
 }
 
 const signin = (req, res) => {
-  const {email, password} = req.body
-  
-  if (!email || !password) return res.status(400).send({ error: 'invalid login error'})
-  return res.status(200).send({ token: 'Fake Token'})
+  try {
+    const {email, password} = req.body
+    
+    if (!email || !password) throw new Error()
+    
+    return res.status(200).send({ token: 'Fake Token'})
+  }
+  catch(err) {
+    return res.status(400).send({ error: "invalid request"})
+  }
 }
 
 
