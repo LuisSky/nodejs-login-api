@@ -1,10 +1,11 @@
 const userServiceFake = require('../services/user-service.js')
+const { UnauthorizedError } = require('../helpers/errors')
 
 const signup = (req, res) => {
   try {
     const {email, password} = req.body
     
-    if (!email || !password) throw new Error()
+    if (!email || !password) throw new UnauthorizedError()
     
     userServiceFake.createOne({ email, password })
     
@@ -19,11 +20,10 @@ const signin = async (req, res) => {
   try {
     const {email, password} = req.body
     
-    if (!email || !password) throw new Error()
-    
     const user = await userServiceFake.findOne({ email })
     
-    if(!user) return res.status(400).send({ error: "invalid user"})
+    if(!user) throw new UnauthorizedError()
+    
     return res.status(200).send({ token: 'Fake Token'})
   }
   catch(err) {
