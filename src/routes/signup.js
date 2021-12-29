@@ -1,6 +1,4 @@
 const userServiceFake = require('../services/user-service.js')
-const { UnauthorizedError } = require('../helpers/errors')
-
 
 module.exports = class SigninRoute {
 
@@ -9,15 +7,10 @@ module.exports = class SigninRoute {
     try {
       const {email, password} = httpRequest.body
       
-      const user = userServiceFake.findOne({ email })
-      
-      if (!user) return {
-        statusCode: 400,
-        body: new UnauthorizedError()
-      }
+      const user = userServiceFake.createOne({ email, password })
       
       return {
-        statusCode: 200,
+        statusCode: 201,
         body: {
           title: 'User created', email, password
         }
