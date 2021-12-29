@@ -2,10 +2,24 @@ const express = require('express')
 const routes = express.Router()
 
 // Routes
-const auth = require('../routes/auth.js')
+const SigninRouter = require('../routes/signup.js')
+const SignupRouter = require('../routes/signup.js')
 
-routes.post('/signup', auth.signup)
-routes.post('/signin', auth.signin)
+
+class ExpressAdapter {
+  static adapt(route) {
+    return async (req, res) => {
+      const httpRequest = {
+        body: req.body
+      }
+      const httpResponse = await route.route(httpRequest)
+      return res.status(httpResponse.statusCode).json(httpResponse.body)
+    }
+  }
+}
+
+routes.post('/signup', ExpressAdapter.adapt(new SignupRouter()))
+routes.post('/signin', ExpressAdapter.adapt(new SigninRouter()))
 
 
 
