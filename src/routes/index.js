@@ -2,8 +2,8 @@ const express = require('express')
 const routes = express.Router()
 
 // Routes
-const SigninRouter = require('../routes/signup.js')
-const SignupRouter = require('../routes/signup.js')
+const SigninRouter = require('./signin.js')
+const SignupRouter = require('./signup.js')
 
 
 class ExpressAdapter {
