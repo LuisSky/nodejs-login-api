@@ -1,7 +1,7 @@
 const userServiceFake = require('../services/user-service.js')
 
-module.exports = class SigninRoute {
-
+class SigninRoute {
+  
   async route (httpRequest) {
   
     try {
@@ -26,3 +26,5 @@ module.exports = class SigninRoute {
     }
   }
 }
+
+module.exports = SigninRoute
