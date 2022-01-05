@@ -1,8 +1,11 @@
 const bcrypt = require('bcrypt')
 
 class EncryptHelper {
-  static hash(password) {
-    return bcrypt.hashSync(password, 10)
+  static hash(nonHashPassword) {
+    return bcrypt.hashSync(nonHashPassword, 10)
+  }
+  static compare(nonHashPassword, userHashPassword) {
+    return bcrypt.compare(nonHashPassword, userHashPassword)
   }
 }
 

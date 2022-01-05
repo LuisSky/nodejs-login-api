@@ -1,5 +1,7 @@
 
 const userServiceFake = require('../services/user-service.js')
+const EncryptHelper = require('../helpers/EncryptHelper.js')
+
 
 class SigninRoute {
   async route (httpRequest) {
@@ -7,8 +9,9 @@ class SigninRoute {
       const {email, password} = httpRequest.body
       
       const user = await userServiceFake.findOne({ email })
+      const verifyUser = await EncryptHelper.compare(password, user.password)
       
-      if(!user) throw new UnauthorizedError()
+      if(!user || !verifyUser) throw new UnauthorizedError()
       
       return {
         statusCode: 200,
