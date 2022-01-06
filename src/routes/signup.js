@@ -19,8 +19,8 @@ class SignupRoute {
       return {
         statusCode: 400,
         body: {
-          error: 'invalid request',
-          err: err.message
+          type: err.message,
+          error: err.error
         }
       }
     }
