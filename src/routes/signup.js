@@ -1,4 +1,4 @@
-const UserService = require('../services/userservice.js')
+const UserService = require('../services/user-service.js')
 
 class SignupRoute {  
   async route (httpRequest) {  
@@ -17,7 +17,7 @@ class SignupRoute {
     }
     catch(err) {
       return {
-        statusCode: 400,
+        statusCode: err.statusCode | 400,
         body: {
           type: err.message,
           error: err.error

@@ -1,5 +1,5 @@
 
-const userServiceFake = require('../services/user-service.js')
+const UserService = require('../services/user-service.js')
 const EncryptHelper = require('../helpers/EncryptHelper.js')
 
 
@@ -8,23 +8,23 @@ class SigninRoute {
     try {
       const {email, password} = httpRequest.body
       
-      const user = await userServiceFake.findOne({ email })
-      const verifyUser = await EncryptHelper.compare(password, user.password)
-      
-      if(!user || !verifyUser) throw new UnauthorizedError()
+      const userService = new UserService()
+      const user = await userService.verifyLogin(email, password)
       
       return {
         statusCode: 200,
         body: {
-          token: 'Fake Token'
+          token: 'Fake Token',
+          user
         }
       }
     }
     catch(err) {
       return {
-        statusCode: 400,
+        statusCode: err.statusCode | 400,
         body: {
-          error: "invalid request"
+          type: err.message,
+          error: err.error
         }
       }
     }
