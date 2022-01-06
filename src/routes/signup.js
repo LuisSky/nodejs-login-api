@@ -1,18 +1,12 @@
-const userServiceFake = require('../services/user-service.js')
-const EncryptHelper = require('../helpers/EncryptHelper.js')
+const UserService = require('../services/userservice.js')
 
 class SignupRoute {  
   async route (httpRequest) {  
     try {
       const {email, password} = httpRequest.body
-            
-      const verifyExistsUser = await userServiceFake.findOne({ email })
-      
-      if (verifyExistsUser) throw new Error()
-      
-      const hashPass = await EncryptHelper.hash(password)      
-      
-      const user = await userServiceFake.createOne({ email, hashPass })
+         
+      const userService = new UserService()      
+      const user = await userService.registerUser(email, password)
       
       return {
         statusCode: 201,
@@ -25,7 +19,8 @@ class SignupRoute {
       return {
         statusCode: 400,
         body: {
-          error: 'invalid request'
+          error: 'invalid request',
+          err: err.message
         }
       }
     }
