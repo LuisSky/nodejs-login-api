@@ -1,16 +1,7 @@
 const EncryptHelper = require('../helpers/EncryptHelper.js')
 const { ValidationError, UnauthorizedError } = require('../helpers/errors')
 const UserRepository = require('../repository/user-repository.js')
-
-const jwt = require('jsonwebtoken')
-const config = require('../config/server.js')
-
-class TokenGenerator {
-  generate(payload) {
-      const token = jwt.sign(payload, config.SECRET_TOKEN_PHRASE)
-      return token
-  }
-}
+const TokenGenerator = require('../helpers/token-generator.js')
 
 class UserService {
   async registerUser(email, password) {
@@ -44,10 +35,7 @@ class UserService {
     
     const tokenGenerator = new TokenGenerator()
     const token = tokenGenerator.generate(user)
-    return {
-      ...user,
-      token
-    }
+    return token
   }
 }
 
