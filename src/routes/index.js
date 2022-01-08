@@ -4,7 +4,7 @@ const routes = express.Router()
 // Routes
 const SigninRouter = require('./signin.js')
 const SignupRouter = require('./signup.js')
-
+const { UserRouteGet, UserRoutePost }  = require('./users.js')
 
 class ExpressAdapter {
   static adapt(route) {
@@ -21,13 +21,8 @@ class ExpressAdapter {
 
 routes.post('/signup', ExpressAdapter.adapt(new SignupRouter()))
 routes.post('/signin', ExpressAdapter.adapt(new SigninRouter()))
-
-
-const UserRepository = require('../repository/user-repository.js')
-routes.get('/users', (req, res) => {
-  return res.status(200).json(new UserRepository().findAll())
-})
-
+routes.get('/users', ExpressAdapter.adapt(new UserRouteGet()))
+routes.post('/users', ExpressAdapter.adapt(new UserRoutePost()))
 
 
 module.exports = routes
