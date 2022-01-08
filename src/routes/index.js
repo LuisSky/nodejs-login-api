@@ -18,13 +18,14 @@ class ExpressAdapter {
   }
 }
 
-const fakedb = require('../services/user-service')
 
 routes.post('/signup', ExpressAdapter.adapt(new SignupRouter()))
 routes.post('/signin', ExpressAdapter.adapt(new SigninRouter()))
 
+
+const UserRepository = require('../repository/user-repository.js')
 routes.get('/users', (req, res) => {
-  return res.status(200).json(fakedb.findAll())
+  return res.status(200).json(new UserRepository().findAll())
 })
 
 

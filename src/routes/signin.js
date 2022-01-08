@@ -9,13 +9,12 @@ class SigninRoute {
       const {email, password} = httpRequest.body
       
       const userService = new UserService()
-      const user = await userService.verifyLogin(email, password)
+      const token = await userService.verifyLogin(email, password)
       
       return {
         statusCode: 200,
         body: {
-          token: 'Fake Token',
-          user
+          token
         }
       }
     }
