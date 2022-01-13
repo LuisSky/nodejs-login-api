@@ -1,15 +1,16 @@
+require('dotenv').config()
+
 const jwt = require('jsonwebtoken')
-const config = require('../config/server.js')
 
 class TokenGenerator {
   generate(payload) {
-      const token = jwt.sign(payload, config.SECRET_TOKEN_PHRASE, {
+      const token = jwt.sign(payload, process.env.SECRET_TOKEN_PHRASE, {
         expiresIn: 300 
       })
       return token
   }
   async decode(token) {
-    const decoded = await jwt.verify(token, config.SECRET_TOKEN_PHRASE)
+    const decoded = await jwt.verify(token, process.env.SECRET_TOKEN_PHRASE)
     return decoded
   }
 }
