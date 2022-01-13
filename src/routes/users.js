@@ -10,7 +10,8 @@ class UserRouteGet {
          
       // const userService = new UserService()      
       // const user = await userService.registerUser(email, password)
-      const users = new UserRepository().findAll()
+      const userRepository = new UserRepository()
+      const users = await userRepository.findAll()
       
       return {
         statusCode: 200,

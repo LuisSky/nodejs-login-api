@@ -16,7 +16,7 @@ class UserService {
     
     const hashPass = await EncryptHelper.hash(password)      
     
-    const user = await userRepository.createOne({ email, hashPass })
+    const user = await userRepository.createOne({ email, password: hashPass })
     return user
   }
   
@@ -34,7 +34,7 @@ class UserService {
     if(!passwordCompare) throw new UnauthorizedError('Invalid user or password')
     
     const tokenGenerator = new TokenGenerator()
-    const token = tokenGenerator.generate(user)
+    const token = tokenGenerator.generate({ userid: user.id })
     return token
   }
 }

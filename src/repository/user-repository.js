@@ -1,16 +1,14 @@
-let users = []
+const knex = require('../config/database/knex.js')
 
 class UserRepository {
   createOne(user) {
-    const saveUser = { email: user.email, password: user.hashPass }
-    users.push(saveUser)
-    return saveUser
-  }
+    return knex('users').insert(user, ['id', 'email'])
+  }  
   findOne(findUser) {
-    return users.find((user) => user.email == findUser.email)
+    return knex('users').where({ email: findUser.email }).first()
   }
-  findAll() {
-    return users
+  findAll() {    
+    return knex('users').select(['id', 'email'])
   }  
 }
 
