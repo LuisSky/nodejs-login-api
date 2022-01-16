@@ -2,14 +2,18 @@
 
 require('dotenv').config()
 
+const { DB_CLIENT, DB_HOST, DB_DATABASE, DB_PASSWORD, DB_USER, DB_PORT } = process.env
+
 module.exports = {
 
   development: {
-    client: process.env.DB_CLIENT,
+    client: DB_CLIENT,
     connection: {
-      database: process.env.DB_DATABASE,
-      user: process.env.DB_USER,
-      password: process.env.DB_PASSWORD
+      host: DB_HOST,
+      database: DB_DATABASE,
+      user: DB_USER,
+      password: DB_PASSWORD,
+      port: DB_PORT
     },
     pool: {
       min: 2,
