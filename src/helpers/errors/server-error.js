@@ -1,7 +1,6 @@
 module.exports = class ServerError extends Error {
-  constructor(name){
+  constructor (name) {
     super('internal error')
     this.error = 'internal error'
   }
-  
 }

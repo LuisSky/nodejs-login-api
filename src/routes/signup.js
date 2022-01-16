@@ -1,21 +1,20 @@
 const UserService = require('../services/user-service.js')
 
-class SignupRoute {  
-  async route (httpRequest) {  
+class SignupRoute {
+  async route (httpRequest) {
     try {
-      const {email, password} = httpRequest.body
-         
-      const userService = new UserService()      
+      const { email, password } = httpRequest.body
+
+      const userService = new UserService()
       const user = await userService.registerUser(email, password)
-      
+
       return {
         statusCode: 201,
         body: {
           ...user
         }
       }
-    }
-    catch(err) {
+    } catch (err) {
       return {
         statusCode: err.statusCode | 400,
         body: {
@@ -28,4 +27,3 @@ class SignupRoute {
 }
 
 module.exports = SignupRoute
-
