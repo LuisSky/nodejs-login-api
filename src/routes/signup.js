@@ -15,8 +15,13 @@ class SignupRoute {
         }
       }
     } catch (err) {
+      if (!err.statusCode) {
+        err.statusCode = 500
+        err.message = 'internal error'
+        err.error = 'internal error'
+      }
       return {
-        statusCode: err.statusCode | 400,
+        statusCode: err.statusCode,
         body: {
           type: err.message,
           error: err.error
