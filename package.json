@@ -8,7 +8,7 @@
     "test": "echo \"Error: no test specified\" && exit 1"
   },
   "keywords": [],
-  "author": "Guilherme Abrantes",
+  "author": "Luis Sky",
   "license": "ISC",
   "dependencies": {
     "bcrypt": "^5.0.1",
