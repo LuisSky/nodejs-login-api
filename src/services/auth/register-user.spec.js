@@ -24,7 +24,8 @@ const makeEncrypterHelperSpy = () => {
   class EncrypterHelperSpy {
     hash (string) {
       this.string = string
-      return this.string
+      this.hashString = 'hash_string'
+      return this.hashString
     }
   }
 
@@ -88,12 +89,15 @@ describe('UserService', () => {
   })
 
   it('Should call UserRepository with correct params', async () => {
-    const { sut, userRepoSpy } = makeSut()
+    const { sut, encrypterHelperSpy, userRepoSpy } = makeSut()
 
-    await sut.execute('any_email@mail.com', 'any_pass')
+    const user = await sut.execute('any_email@mail.com', 'any_pass')
 
     console.log(userRepoSpy)
+    console.log(encrypterHelperSpy)
+    console.log(user)
     expect(userRepoSpy.email).toBe('any_email@mail.com')
-    expect(userRepoSpy.password).toBe('any_pass')
+    expect(encrypterHelperSpy.string).toBe('any_pass')
+    expect(userRepoSpy.password).toBe(user.password)
   })
 })
