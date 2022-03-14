@@ -55,4 +55,12 @@ describe('UserService', () => {
 
     expect(promise).rejects.toThrowError(new ValidationError('Password'))
   })
+
+  it('Should throw if no User alread exists', async () => {
+    const { sut, userRepoSpy } = makeSut()
+    userRepoSpy.mockExistUser = true
+    const promise = sut.execute('any_email@mail.com', 'any_pass')
+
+    expect(promise).rejects.toThrowError(new ValidationError('this user alread exist'))
+  })
 })
