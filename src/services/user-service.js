@@ -1,4 +1,4 @@
-const EncryptHelper = require('../helpers/EncryptHelper.js')
+const EncryptHelper = require('../helpers/encrypter.js')
 const { ValidationError, UnauthorizedError } = require('../helpers/errors')
 const UserRepository = require('../repository/user-repository.js')
 const TokenGenerator = require('../helpers/token-generator.js')
