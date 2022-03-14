@@ -41,4 +41,18 @@ describe('UserService', () => {
     const promise = sut.execute('any_mail@mail.com', 'any_pass')
     expect(promise).rejects.toThrowError(new MissingParamError('EncrypterHelper'))
   })
+
+  it('Should throw if no Email is provided', async () => {
+    const { sut } = makeSut()
+    const promise = sut.execute('any_pass')
+
+    expect(promise).rejects.toThrowError(new ValidationError('email'))
+  })
+
+  it('Should throw if no Password is provided', async () => {
+    const { sut } = makeSut()
+    const promise = sut.execute('any_email@mail.com')
+
+    expect(promise).rejects.toThrowError(new ValidationError('Password'))
+  })
 })
