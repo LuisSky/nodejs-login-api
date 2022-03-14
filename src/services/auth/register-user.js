@@ -11,8 +11,8 @@ module.exports = class RegisterUserService {
     if (!this.userRepository) throw new MissingParamError('UserRepository')
     if (!this.encrypterHelper) throw new MissingParamError('EncrypterHelper')
 
-    if (!email) throw new ValidationError('email is obrigatory')
-    if (!password) throw new ValidationError('password is obrigatory')
+    if (!email) throw new ValidationError('email')
+    if (!password) throw new ValidationError('password')
 
     const verifyExistsUser = await this.userRepository.findOne({ email })
 
