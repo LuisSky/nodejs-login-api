@@ -1,8 +1,7 @@
 // Update with your config settings.
+const env = require('./src/config/env')
 
-require('dotenv').config()
-
-const { DB_CLIENT, DB_HOST, DB_DATABASE, DB_PASSWORD, DB_USER, DB_PORT } = process.env
+const { DB_CLIENT, DB_HOST, DB_DATABASE, DB_PASSWORD, DB_USER, DB_PORT } = env
 
 module.exports = {
 
