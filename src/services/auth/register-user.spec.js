@@ -9,7 +9,9 @@ const makeUserRepositorySpy = () => {
       return this.mockExistUser
     }
   }
-  return new UserRepositorySpy()
+  const userRepositorySpy = new UserRepositorySpy()
+  userRepositorySpy.mockExistUser = false
+  return userRepositorySpy
 }
 
 const makeEncrypterHelperSpy = () => {
