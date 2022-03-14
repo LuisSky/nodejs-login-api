@@ -24,7 +24,6 @@ class SigninRoute {
         }
       }
     } catch (err) {
-      console.log(err)
       if (!err.statusCode) {
         err.statusCode = 500
         err.message = 'internal error'
