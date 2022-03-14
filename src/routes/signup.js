@@ -1,11 +1,19 @@
 const UserService = require('../services/user-service.js')
 
+const TokenGenerator = require('../helpers/token-generator')
+const EncryptHelper = require('../helpers/encrypter')
+const UserRepository = require('../repository/user-repository.js')
+
 class SignupRoute {
   async route (httpRequest) {
     try {
       const { email, password } = httpRequest.body
 
-      const userService = new UserService()
+      const userService = new UserService({
+        userRepository: new UserRepository(),
+        encryptHelper: new EncryptHelper(),
+        tokenGenerator: new TokenGenerator()
+      })
       const user = await userService.registerUser(email, password)
 
       return {

@@ -5,7 +5,10 @@
   "main": "src/main/",
   "scripts": {
     "start": "node ./src/main/",
-    "test": "jest"
+    "test": "jest --watch"
+  },
+  "standard": {
+    "env": ["jest"]
   },
   "keywords": [],
   "author": "Luis Sky",
