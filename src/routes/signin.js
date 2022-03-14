@@ -1,12 +1,20 @@
 
 const UserService = require('../services/user-service.js')
+const TokenGenerator = require('../helpers/token-generator')
+const EncryptHelper = require('../helpers/encrypter')
+const UserRepository = require('../repository/user-repository.js')
 
 class SigninRoute {
   async route (httpRequest) {
     try {
       const { email, password } = httpRequest.body
 
-      const userService = new UserService()
+      const userService = new UserService({
+        userRepository: new UserRepository(),
+        encryptHelper: new EncryptHelper(),
+        tokenGenerator: new TokenGenerator()
+      })
+
       const token = await userService.verifyLogin(email, password)
 
       return {
@@ -16,6 +24,7 @@ class SigninRoute {
         }
       }
     } catch (err) {
+      console.log(err)
       if (!err.statusCode) {
         err.statusCode = 500
         err.message = 'internal error'
