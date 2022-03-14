@@ -93,11 +93,17 @@ describe('UserService', () => {
 
     const user = await sut.execute('any_email@mail.com', 'any_pass')
 
-    console.log(userRepoSpy)
-    console.log(encrypterHelperSpy)
-    console.log(user)
     expect(userRepoSpy.email).toBe('any_email@mail.com')
     expect(encrypterHelperSpy.string).toBe('any_pass')
     expect(userRepoSpy.password).toBe(user.password)
+  })
+
+  it('Should returns an user if valid email and password is provided', async () => {
+    const { sut, userRepoSpy } = makeSut()
+
+    const user = await sut.execute('valid_email@mail.com', 'valid_pass')
+
+    expect(user.email).toBe('valid_email@mail.com')
+    expect(user.password).toBe(userRepoSpy.password)
   })
 })

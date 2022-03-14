@@ -15,21 +15,6 @@ class UserService {
     return true
   }
 
-  async registerUser (email, password) {
-    if (!this.verifyAllDependencyOfClass()) throw new MissingParamError('UserService was invoked without correct dependencys')
-    if (!email) throw new ValidationError('email is obrigatory')
-    if (!password) throw new ValidationError('password is obrigatory')
-
-    const verifyExistsUser = await this.userRepository.findOne({ email })
-
-    if (verifyExistsUser) throw new ValidationError('this user alread exist')
-
-    const hashPass = await this.encrypter.hash(password)
-
-    const user = await this.userRepository.createOne({ email, password: hashPass })
-    return user
-  }
-
   async verifyLogin (email, password) {
     if (!this.verifyAllDependencyOfClass()) throw new MissingParamError('UserService was invoked without correct dependencys')
     if (!email) throw new ValidationError('email is obrigatory')

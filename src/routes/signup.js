@@ -1,20 +1,15 @@
-const UserService = require('../services/user-service.js')
 
-const TokenGenerator = require('../helpers/token-generator')
 const EncryptHelper = require('../helpers/encrypter')
 const UserRepository = require('../repository/user-repository.js')
+const RegisterUserService = require('../services/auth/register-user')
 
 class SignupRoute {
   async route (httpRequest) {
     try {
       const { email, password } = httpRequest.body
 
-      const userService = new UserService({
-        userRepository: new UserRepository(),
-        encryptHelper: new EncryptHelper(),
-        tokenGenerator: new TokenGenerator()
-      })
-      const user = await userService.registerUser(email, password)
+      const registerUserService = new RegisterUserService({ userRepository: new UserRepository(), encrypterHelper: new EncryptHelper() })
+      const user = await registerUserService.execute(email, password)
 
       return {
         statusCode: 201,
