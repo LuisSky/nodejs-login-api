@@ -1,7 +1,7 @@
 require('dotenv').config()
 
 module.exports = {
-  PORT: process.env.SERVER_PORT | 3000,
+  PORT: process.env.SERVER_PORT,
 
   SECRET_TOKEN_PHRASE: process.env.SECRET_TOKEN_PHRASE,
 

@@ -2,9 +2,9 @@
   "name": "login-api",
   "version": "1.0.0",
   "description": "",
-  "main": "src/main/app.js",
+  "main": "src/main/",
   "scripts": {
-    "start": "node ./src/main/app.js",
+    "start": "node ./src/main/",
     "test": "echo \"Error: no test specified\" && exit 1"
   },
   "keywords": [],
