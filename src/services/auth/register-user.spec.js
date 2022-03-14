@@ -9,8 +9,10 @@ const makeUserRepositorySpy = () => {
       return this.mockExistUser
     }
 
-    async createOne ({ email }) {
-      return { email }
+    async createOne ({ email, password } = {}) {
+      this.email = email
+      this.password = password
+      return { email: this.email, password: this.password }
     }
   }
   const userRepositorySpy = new UserRepositorySpy()
@@ -22,6 +24,7 @@ const makeEncrypterHelperSpy = () => {
   class EncrypterHelperSpy {
     hash (string) {
       this.string = string
+      return this.string
     }
   }
 
@@ -82,5 +85,15 @@ describe('UserService', () => {
     await sut.execute('any_email@mail.com', 'any_pass')
 
     expect(encrypterHelperSpy.string).toBe('any_pass')
+  })
+
+  it('Should call UserRepository with correct params', async () => {
+    const { sut, userRepoSpy } = makeSut()
+
+    await sut.execute('any_email@mail.com', 'any_pass')
+
+    console.log(userRepoSpy)
+    expect(userRepoSpy.email).toBe('any_email@mail.com')
+    expect(userRepoSpy.password).toBe('any_pass')
   })
 })
