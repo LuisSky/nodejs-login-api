@@ -8,6 +8,10 @@ const makeUserRepositorySpy = () => {
     async findOne ({ email }) {
       return this.mockExistUser
     }
+
+    async createOne ({ email }) {
+      return { email }
+    }
   }
   const userRepositorySpy = new UserRepositorySpy()
   userRepositorySpy.mockExistUser = false
@@ -16,17 +20,23 @@ const makeUserRepositorySpy = () => {
 
 const makeEncrypterHelperSpy = () => {
   class EncrypterHelperSpy {
-
+    hash (string) {
+      this.string = string
+    }
   }
-  return new EncrypterHelperSpy()
+
+  const encrypterHelperSpy = new EncrypterHelperSpy()
+  return encrypterHelperSpy
 }
 
 const makeSut = () => {
   const userRepoSpy = makeUserRepositorySpy()
-  const sut = new RegisterUserService({ userRepository: userRepoSpy, encrypterHelper: makeEncrypterHelperSpy() })
+  const encrypterHelperSpy = makeEncrypterHelperSpy()
+  const sut = new RegisterUserService({ userRepository: userRepoSpy, encrypterHelper: encrypterHelperSpy })
 
   return {
     userRepoSpy,
+    encrypterHelperSpy,
     sut
   }
 }
@@ -64,5 +74,13 @@ describe('UserService', () => {
     const promise = sut.execute('any_email@mail.com', 'any_pass')
 
     expect(promise).rejects.toThrowError(new ValidationError('this user alread exist'))
+  })
+
+  it('Should call EncrypterHelper with correct params', async () => {
+    const { sut, encrypterHelperSpy } = makeSut()
+
+    await sut.execute('any_email@mail.com', 'any_pass')
+
+    expect(encrypterHelperSpy.string).toBe('any_pass')
   })
 })
