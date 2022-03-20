@@ -3,10 +3,17 @@ const UserService = require('../services/user-service.js')
 const TokenGenerator = require('../helpers/token-generator')
 const EncryptHelper = require('../helpers/encrypter')
 const UserRepository = require('../repository/user-repository.js')
+const { MissingParamError } = require('../helpers/errors')
 
 class SigninRoute {
   async route (httpRequest) {
     try {
+      if (!httpRequest.email) {
+        return {
+          statusCode: 400,
+          body: new MissingParamError('email')
+        }
+      }
       const { email, password } = httpRequest.body
 
       const userService = new UserService({
