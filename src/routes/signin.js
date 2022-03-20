@@ -1,11 +1,11 @@
 
-const UserService = require('../services/user-service.js')
-const TokenGenerator = require('../helpers/token-generator')
-const EncryptHelper = require('../helpers/encrypter')
-const UserRepository = require('../repository/user-repository.js')
 const { MissingParamError } = require('../helpers/errors')
 
 class SigninRoute {
+  constructor (authUseCase) {
+    this.authUseCase = authUseCase
+  }
+
   async route (httpRequest) {
     try {
       if (!httpRequest.email) {
@@ -22,13 +22,7 @@ class SigninRoute {
       }
       const { email, password } = httpRequest.body
 
-      const userService = new UserService({
-        userRepository: new UserRepository(),
-        encryptHelper: new EncryptHelper(),
-        tokenGenerator: new TokenGenerator()
-      })
-
-      const token = await userService.verifyLogin(email, password)
+      const token = await this.authUseCase.verifyLogin(email, password)
 
       return {
         statusCode: 200,
