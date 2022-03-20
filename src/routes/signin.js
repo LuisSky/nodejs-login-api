@@ -14,6 +14,12 @@ class SigninRoute {
           body: new MissingParamError('email')
         }
       }
+      if (!httpRequest.password) {
+        return {
+          statusCode: 400,
+          body: new MissingParamError('password')
+        }
+      }
       const { email, password } = httpRequest.body
 
       const userService = new UserService({
