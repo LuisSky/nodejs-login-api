@@ -53,7 +53,7 @@ describe('SigninRouter', () => {
     const httpResponse = await sut.route(httpRequest)
 
     expect(httpResponse.statusCode).toBe(400)
-    expect(httpResponse.body).toEqual(new MissingParamError('email'))
+    expect(httpResponse.body).toEqual(new MissingParamError('password'))
   })
 
   test('Should calls AuthUseCase with correct params', async () => {
@@ -67,7 +67,7 @@ describe('SigninRouter', () => {
     }
     await sut.route(httpRequest)
 
-    expect(authUseCaseSpy.email).toBe(httpRequest.email)
-    expect(authUseCaseSpy.password).toBe(httpRequest.password)
+    expect(authUseCaseSpy.email).toBe(httpRequest.body.email)
+    expect(authUseCaseSpy.password).toBe(httpRequest.body.password)
   })
 })
