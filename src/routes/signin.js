@@ -8,6 +8,12 @@ class SigninRoute {
 
   async route (httpRequest) {
     try {
+      if (!httpRequest.body) {
+        return {
+          statusCode: 400,
+          body: new MissingParamError('body')
+        }
+      }
       if (!httpRequest.email) {
         return {
           statusCode: 400,
