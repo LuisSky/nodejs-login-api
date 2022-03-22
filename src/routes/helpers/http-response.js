@@ -1,4 +1,4 @@
-const { ServerError, UnauthorizedError } = require('../../helpers/errors')
+const { ServerError, UnauthorizedError } = require('../../utils/errors')
 
 module.exports = class HttpResponse {
   static badRequest (error) {

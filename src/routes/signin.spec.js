@@ -1,4 +1,4 @@
-const { MissingParamError, ServerError, UnauthorizedError } = require('../helpers/errors')
+const { MissingParamError, ServerError, UnauthorizedError } = require('../utils/errors')
 const SigninRoute = require('./signin')
 
 const makeAuthUseCaseSpy = () => {

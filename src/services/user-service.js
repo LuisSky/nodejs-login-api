@@ -1,5 +1,5 @@
-const { ValidationError, UnauthorizedError } = require('../helpers/errors')
-const MissingParamError = require('../helpers/errors/missing-param-error')
+const { ValidationError } = require('../utils/helpers/errors')
+const MissingParamError = require('../utils/helpers/errors/missing-param-error')
 
 class UserService {
   constructor ({ userRepository, encryptHelper, tokenGenerator } = {}) {
@@ -23,10 +23,11 @@ class UserService {
     const user = await this.userRepository.findOne({ email })
 
     const passwordCompare = user && await this.encrypter.compare(password, user.password)
-    if (!passwordCompare) throw new UnauthorizedError('Invalid user or password')
-
-    const token = this.tokenGenerator.generate({ userid: user.id })
-    return token
+    if (passwordCompare) {
+      const token = this.tokenGenerator.generate({ userid: user.id })
+      return token
+    }
+    return null
   }
 }
 

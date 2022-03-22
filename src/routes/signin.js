@@ -1,5 +1,5 @@
 
-const { MissingParamError } = require('../helpers/errors')
+const { MissingParamError } = require('../utils/errors')
 const HttpResponse = require('./helpers/http-response')
 
 class SigninRoute {

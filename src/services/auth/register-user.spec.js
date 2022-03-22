@@ -1,5 +1,5 @@
 const RegisterUserService = require('./register-user.js')
-const { MissingParamError, ValidationError } = require('../../helpers/errors')
+const { MissingParamError, ValidationError } = require('../../utils/errors')
 // const makeSut = () => {
 //   return new UserService()
 // }

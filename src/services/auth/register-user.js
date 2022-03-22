@@ -1,4 +1,4 @@
-const { ValidationError, MissingParamError } = require('../../helpers/errors')
+const { ValidationError, MissingParamError } = require('../../utils/errors')
 
 module.exports = class RegisterUserService {
   constructor ({ userRepository, encrypterHelper } = {}) {
