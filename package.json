@@ -5,7 +5,8 @@
   "main": "src/main/",
   "scripts": {
     "start": "node ./src/main/",
-    "test": "jest --watch"
+    "dev": "jest --watch",
+    "test": "jest"
   },
   "standard": {
     "env": ["jest"]
