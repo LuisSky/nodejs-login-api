@@ -6,9 +6,12 @@ const makeAuthUseCaseSpy = () => {
     async verifyLogin (email, password) {
       this.email = email
       this.password = password
+      return this.validCredentials
     }
   }
-  return new AuthUseCaseSpy()
+  const authSpy = new AuthUseCaseSpy()
+  authSpy.validCredentials = true
+  return authSpy
 }
 
 const makeAuthUseCaseSpyWithError = () => {
@@ -96,7 +99,10 @@ describe('SigninRouter', () => {
   })
 
   test('Should return 401 if invalid crendentials are provided', async () => {
-    const { sut } = makeSut()
+    const { sut, authUseCaseSpy } = makeSut()
+
+    authUseCaseSpy.validCredentials = false
+
     const httpRequest = {
       body: {
         email: 'invalid_mail@mail.com',
@@ -107,5 +113,18 @@ describe('SigninRouter', () => {
 
     expect(httpResponse.statusCode).toBe(401)
     expect(httpResponse.body).toEqual(new UnauthorizedError('Unauthorized'))
+  })
+
+  test('Should return 200 if valid crendentials are provided', async () => {
+    const { sut } = makeSut()
+    const httpRequest = {
+      body: {
+        email: 'valid_mail@mail.com',
+        password: 'valid_password'
+      }
+    }
+    const httpResponse = await sut.route(httpRequest)
+
+    expect(httpResponse.statusCode).toBe(200)
   })
 })
