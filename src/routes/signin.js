@@ -16,6 +16,9 @@ class SigninRoute {
       const { email, password } = httpRequest.body
 
       const token = await this.authUseCase.verifyLogin(email, password)
+
+      if (!token) return HttpResponse.unauthorized()
+
       return HttpResponse.validResponse(token)
     } catch {
       return HttpResponse.serverError()
