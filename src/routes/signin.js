@@ -1,5 +1,5 @@
 
-const { MissingParamError } = require('../helpers/errors')
+const { MissingParamError, ServerError } = require('../helpers/errors')
 const HttpResponse = require('./helpers/http-response')
 
 class SigninRoute {
@@ -24,13 +24,7 @@ class SigninRoute {
         err.message = 'internal error'
         err.error = 'internal error'
       }
-      return {
-        statusCode: err.statusCode,
-        body: {
-          type: err.message,
-          error: err.error
-        }
-      }
+      return HttpResponse.serverError(new ServerError(err.message))
     }
   }
 }
