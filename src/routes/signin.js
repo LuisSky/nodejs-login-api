@@ -17,12 +17,7 @@ class SigninRoute {
 
       const token = await this.authUseCase.verifyLogin(email, password)
 
-      return {
-        statusCode: 200,
-        body: {
-          token
-        }
-      }
+      return HttpResponse.validResponse(token)
     } catch (err) {
       if (!err.statusCode) {
         err.statusCode = 500

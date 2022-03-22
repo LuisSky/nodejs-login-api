@@ -5,4 +5,11 @@ module.exports = class HttpResponse {
       body: error
     }
   }
+
+  static validResponse (body) {
+    return {
+      statusCode: 200,
+      body: body
+    }
+  }
 }
