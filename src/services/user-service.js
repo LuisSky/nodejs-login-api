@@ -1,5 +1,4 @@
-const { ValidationError } = require('../utils/helpers/errors')
-const MissingParamError = require('../utils/helpers/errors/missing-param-error')
+const { ValidationError, MissingParamError } = require('../utils/errors')
 
 class UserService {
   constructor ({ userRepository, encryptHelper, tokenGenerator } = {}) {
