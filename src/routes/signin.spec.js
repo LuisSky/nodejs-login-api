@@ -1,4 +1,4 @@
-const { MissingParamError } = require('../helpers/errors')
+const { MissingParamError, ServerError } = require('../helpers/errors')
 const SigninRoute = require('./signin')
 
 const makeAuthUseCaseSpy = () => {
@@ -9,6 +9,15 @@ const makeAuthUseCaseSpy = () => {
     }
   }
   return new AuthUseCaseSpy()
+}
+
+const makeAuthUseCaseSpyWithError = () => {
+  class AuthUseCaseSpyWithError {
+    async verifyLogin (email, password) {
+      throw new ServerError()
+    }
+  }
+  return new AuthUseCaseSpyWithError()
 }
 
 const makeSut = () => {
@@ -69,5 +78,20 @@ describe('SigninRouter', () => {
 
     expect(authUseCaseSpy.email).toBe(httpRequest.body.email)
     expect(authUseCaseSpy.password).toBe(httpRequest.body.password)
+  })
+
+  test('Should returns 500 if AuthUseCase throws', async () => {
+    const authUseCaseWithError = makeAuthUseCaseSpyWithError()
+    const sut = new SigninRoute(authUseCaseWithError)
+
+    const httpRequest = {
+      body: {
+        email: 'any_mail@mail.com',
+        password: 'any_password'
+      }
+    }
+    const httpResponse = await sut.route(httpRequest)
+    expect(httpResponse.body).toEqual(new ServerError())
+    expect(httpResponse.statusCode).toBe(500)
   })
 })
