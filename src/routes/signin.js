@@ -1,6 +1,6 @@
 
 const { MissingParamError } = require('../utils/errors')
-const HttpResponse = require('./helpers/http-response')
+const HttpResponse = require('../utils/helpers/http-response')
 
 class SigninRoute {
   constructor (authUseCase) {
