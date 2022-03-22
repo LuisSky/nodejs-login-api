@@ -7,7 +7,7 @@ module.exports = class RegisterUserService {
     this.encrypterHelper = encrypterHelper
   }
 
-  async execute (email, password) {
+  async execute ({ email, password } = {}) {
     if (!this.userRepository) throw new MissingParamError('UserRepository')
     if (!this.encrypterHelper) throw new MissingParamError('EncrypterHelper')
 
