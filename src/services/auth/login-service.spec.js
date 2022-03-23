@@ -42,4 +42,11 @@ describe('LoginService', () => {
     const promise = sut.verifyLogin()
     await expect(promise).rejects.toEqual(new ServerError())
   })
+
+  test('Should throw if no TokenGenerator is provided', async () => {
+    const { userRepoSpy, encrypterHelperSpy } = makeSut()
+    const sut = new LoginService({ userRepository: userRepoSpy, encryptHelper: encrypterHelperSpy })
+    const promise = sut.verifyLogin()
+    await expect(promise).rejects.toEqual(new ServerError())
+  })
 })
