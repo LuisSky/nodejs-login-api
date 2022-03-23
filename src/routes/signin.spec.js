@@ -2,33 +2,33 @@ const { MissingParamError, ServerError, UnauthorizedError } = require('../utils/
 const SigninRoute = require('./signin')
 
 const makeAuthUseCaseSpy = () => {
-  class AuthUseCaseSpy {
+  class LoginServiceSpy {
     async verifyLogin (email, password) {
       this.email = email
       this.password = password
       return this.validCredentials
     }
   }
-  const authSpy = new AuthUseCaseSpy()
-  authSpy.validCredentials = true
-  return authSpy
+  const loginService = new LoginServiceSpy()
+  loginService.validCredentials = true
+  return loginService
 }
 
 const makeAuthUseCaseSpyWithError = () => {
-  class AuthUseCaseSpyWithError {
+  class LoginServiceSpyWithError {
     async verifyLogin (email, password) {
       throw new ServerError()
     }
   }
-  return new AuthUseCaseSpyWithError()
+  return new LoginServiceSpyWithError()
 }
 
 const makeSut = () => {
-  const authUseCaseSpy = makeAuthUseCaseSpy()
-  const sut = new SigninRoute(authUseCaseSpy)
+  const loginService = makeAuthUseCaseSpy()
+  const sut = new SigninRoute(loginService)
   return {
     sut,
-    authUseCaseSpy
+    loginService
   }
 }
 
@@ -69,7 +69,7 @@ describe('SigninRouter', () => {
   })
 
   test('Should calls AuthUseCase with correct params', async () => {
-    const { sut, authUseCaseSpy } = makeSut()
+    const { sut, loginService } = makeSut()
 
     const httpRequest = {
       body: {
@@ -79,8 +79,8 @@ describe('SigninRouter', () => {
     }
     await sut.route(httpRequest)
 
-    expect(authUseCaseSpy.email).toBe(httpRequest.body.email)
-    expect(authUseCaseSpy.password).toBe(httpRequest.body.password)
+    expect(loginService.email).toBe(httpRequest.body.email)
+    expect(loginService.password).toBe(httpRequest.body.password)
   })
 
   test('Should returns 500 if AuthUseCase throws', async () => {
@@ -99,9 +99,9 @@ describe('SigninRouter', () => {
   })
 
   test('Should return 401 if invalid crendentials are provided', async () => {
-    const { sut, authUseCaseSpy } = makeSut()
+    const { sut, loginService } = makeSut()
 
-    authUseCaseSpy.validCredentials = false
+    loginService.validCredentials = false
 
     const httpRequest = {
       body: {

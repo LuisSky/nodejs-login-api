@@ -3,8 +3,8 @@ const { MissingParamError } = require('../utils/errors')
 const HttpResponse = require('../utils/helpers/http-response')
 
 class SigninRoute {
-  constructor (authUseCase) {
-    this.authUseCase = authUseCase
+  constructor (loginService) {
+    this.loginService = loginService
   }
 
   async route (httpRequest) {
@@ -15,7 +15,7 @@ class SigninRoute {
 
       const { email, password } = httpRequest.body
 
-      const token = await this.authUseCase.verifyLogin(email, password)
+      const token = await this.loginService.verifyLogin(email, password)
 
       if (!token) return HttpResponse.unauthorized()
 
