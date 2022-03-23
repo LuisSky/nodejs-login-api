@@ -71,4 +71,18 @@ describe('LoginService', () => {
     const promise = sut.verifyLogin(undefined, 'any_password')
     await expect(promise).rejects.toEqual(new MissingParamError('email'))
   })
+
+  test('Should throw if no password is provided', async () => {
+    const { sut } = makeSut()
+
+    const promise = sut.verifyLogin('any_email@mail.com', undefined)
+    await expect(promise).rejects.toEqual(new MissingParamError('password'))
+  })
+
+  test('Should return null if UserRepository do not found user', async () => {
+    const { sut } = makeSut()
+
+    const user = await sut.verifyLogin('any_email@mail.com', 'any_password')
+    expect(user).toBeNull()
+  })
 })
