@@ -1,4 +1,4 @@
-const { ServerError } = require('../../utils/errors')
+const { ServerError, MissingParamError } = require('../../utils/errors')
 const LoginService = require('./login-service')
 
 const makeUserRepoSpy = () => {
@@ -18,14 +18,29 @@ const makeEncrypterHelperSpy = () => {
   return encrypterHelperSpy
 }
 
+const makeTokenGeneratorSpy = () => {
+  class TokenGeneratorSpy {
+
+  }
+  const tokenGeneratorSpy = new TokenGeneratorSpy()
+  return tokenGeneratorSpy
+}
 const makeSut = () => {
   const userRepoSpy = makeUserRepoSpy()
   const encrypterHelperSpy = makeEncrypterHelperSpy()
-  const sut = new LoginService({ userRepository: userRepoSpy, encryptHelper: encrypterHelperSpy })
+  const tokenGeneratorSpy = makeTokenGeneratorSpy()
+
+  const sut = new LoginService({
+    userRepository: userRepoSpy,
+    encryptHelper: encrypterHelperSpy,
+    tokenGenerator: tokenGeneratorSpy
+  })
+
   return {
     sut,
     userRepoSpy,
-    encrypterHelperSpy
+    encrypterHelperSpy,
+    tokenGeneratorSpy
   }
 }
 
@@ -48,5 +63,12 @@ describe('LoginService', () => {
     const sut = new LoginService({ userRepository: userRepoSpy, encryptHelper: encrypterHelperSpy })
     const promise = sut.verifyLogin()
     await expect(promise).rejects.toEqual(new ServerError())
+  })
+
+  test('Should throw if no email is provided', async () => {
+    const { sut } = makeSut()
+
+    const promise = sut.verifyLogin(undefined, 'any_password')
+    await expect(promise).rejects.toEqual(new MissingParamError('email'))
   })
 })

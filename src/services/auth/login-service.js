@@ -16,7 +16,7 @@ class LoginService {
 
   async verifyLogin (email, password) {
     if (!this.verifyAllDependencyOfClass()) throw new ServerError()
-    if (!email) throw new MissingParamError('email is obrigatory')
+    if (!email) throw new MissingParamError('email')
     if (!password) throw new MissingParamError('password is obrigatory')
 
     const user = await this.userRepository.findOne({ email })
