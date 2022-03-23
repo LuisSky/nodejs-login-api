@@ -4,15 +4,20 @@ const LoginService = require('./login-service')
 const makeUserRepoSpy = () => {
   class UserRepositorySpy {
     async findOne () {
+      return this.foundUser
     }
   }
   const userRepoSpy = new UserRepositorySpy()
+  userRepoSpy.foundUser = true
+
   return userRepoSpy
 }
 
 const makeEncrypterHelperSpy = () => {
   class EncrypterHelperSpy {
-
+    async compare (string, hashString) {
+      return null
+    }
   }
   const encrypterHelperSpy = new EncrypterHelperSpy()
   return encrypterHelperSpy
@@ -80,6 +85,13 @@ describe('LoginService', () => {
   })
 
   test('Should return null if UserRepository do not found user', async () => {
+    const { sut, userRepoSpy } = makeSut()
+    userRepoSpy.foundUser = false
+    const user = await sut.verifyLogin('any_email@mail.com', 'any_password')
+    expect(user).toBeNull()
+  })
+
+  test('Should return null if EncrypterHelper returns null', async () => {
     const { sut } = makeSut()
 
     const user = await sut.verifyLogin('any_email@mail.com', 'any_password')
