@@ -16,16 +16,19 @@ const makeUserRepoSpy = () => {
 const makeEncrypterHelperSpy = () => {
   class EncrypterHelperSpy {
     async compare (string, hashString) {
-      return null
+      return this.validCase
     }
   }
   const encrypterHelperSpy = new EncrypterHelperSpy()
+  encrypterHelperSpy.validCase = true
   return encrypterHelperSpy
 }
 
 const makeTokenGeneratorSpy = () => {
   class TokenGeneratorSpy {
-
+    async generate (payload) {
+      return 'valid_token'
+    }
   }
   const tokenGeneratorSpy = new TokenGeneratorSpy()
   return tokenGeneratorSpy
@@ -92,9 +95,16 @@ describe('LoginService', () => {
   })
 
   test('Should return null if EncrypterHelper returns null', async () => {
+    const { sut, encrypterHelperSpy } = makeSut()
+    encrypterHelperSpy.validCase = false
+    const response = await sut.verifyLogin('invalid_email@mail.com', 'invalid_password')
+    expect(response).toBeNull()
+  })
+
+  test('Should return token if valid credentials are provided', async () => {
     const { sut } = makeSut()
 
-    const user = await sut.verifyLogin('any_email@mail.com', 'any_password')
-    expect(user).toBeNull()
+    const token = await sut.verifyLogin('valid_email@mail.com', 'valid_password')
+    expect(token).toBe('valid_token')
   })
 })
