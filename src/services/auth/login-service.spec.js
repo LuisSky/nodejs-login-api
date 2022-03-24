@@ -1,9 +1,12 @@
+// TODO: Create test's when an dependencys fail
+
 const { ServerError, MissingParamError } = require('../../utils/errors')
 const LoginService = require('./login-service')
 
 const makeUserRepoSpy = () => {
   class UserRepositorySpy {
-    async findOne () {
+    async findOne (user) {
+      this.email = user.email
       return this.foundUser
     }
   }
@@ -88,6 +91,14 @@ describe('LoginService', () => {
     await expect(promise).rejects.toEqual(new MissingParamError('password'))
   })
 
+  test('Should calls UserRepository with correct params', async () => {
+    const { sut, userRepoSpy } = makeSut()
+
+    await sut.verifyLogin('any_email@mail.com', 'any_password')
+
+    expect(userRepoSpy.email).toBe('any_email@mail.com')
+  })
+
   test('Should return null if UserRepository do not found user', async () => {
     const { sut, userRepoSpy } = makeSut()
     userRepoSpy.foundUser = false
@@ -116,7 +127,3 @@ describe('LoginService', () => {
     expect(token).toBe('valid_token')
   })
 })
-
-// TODO
-// CHAMAR DEPENDENCIAS COM OS DEVIDOS VALORES.
-// TESTAR CASOS DE FALHAS DAS DEPENDENCIAS
