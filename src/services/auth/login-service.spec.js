@@ -16,6 +16,7 @@ const makeUserRepoSpy = () => {
 const makeEncrypterHelperSpy = () => {
   class EncrypterHelperSpy {
     async compare (string, hashString) {
+      this.strWithoutHash = string
       return this.validCase
     }
   }
@@ -94,6 +95,13 @@ describe('LoginService', () => {
     expect(user).toBeNull()
   })
 
+  test('Should calls EncrypterHelper with correct params', async () => {
+    const { sut, encrypterHelperSpy } = makeSut()
+    await sut.verifyLogin('any_email@mail.com', 'any_password')
+
+    expect(encrypterHelperSpy.strWithoutHash).toBe('any_password')
+  })
+
   test('Should return null if EncrypterHelper returns null', async () => {
     const { sut, encrypterHelperSpy } = makeSut()
     encrypterHelperSpy.validCase = false
@@ -108,3 +116,7 @@ describe('LoginService', () => {
     expect(token).toBe('valid_token')
   })
 })
+
+// TODO
+// CHAMAR DEPENDENCIAS COM OS DEVIDOS VALORES.
+// TESTAR CASOS DE FALHAS DAS DEPENDENCIAS
