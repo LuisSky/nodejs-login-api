@@ -1,5 +1,5 @@
 
-const UserRepository = require('../repository/user-repository.js')
+const UserRepository = require('../../repository/user-repository.js')
 const TokenGenerator = require('../helpers/token-generator.js')
 
 class UserRouteGet {
