@@ -1,7 +1,7 @@
 
-const EncryptHelper = require('../helpers/encrypter')
-const UserRepository = require('../repository/user-repository.js')
-const RegisterUserService = require('../services/auth/register-user')
+const EncryptHelper = require('../../utils/helpers/encrypter')
+const UserRepository = require('../../infra/repository/user-repository')
+const RegisterUserService = require('../../services/auth/register-user')
 
 class SignupRoute {
   async route (httpRequest) {

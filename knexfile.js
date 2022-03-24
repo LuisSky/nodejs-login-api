@@ -20,7 +20,7 @@ module.exports = {
     },
     migrations: {
       // tableName: 'migrations',
-      directory: 'src/migrations'
+      directory: 'src/infra/migrations'
     }
   }
 
