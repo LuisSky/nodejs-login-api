@@ -8,12 +8,11 @@
 - Configure the .env
 - npm install
 - npm start
-- go to src/routes/index for look routes 
+- go to src/main/routes/index for look routes 
 
 ## Dependencies that's will installed after npm install
 
 - bcrypt
-- body-parser
 - dotenv
 - express
 - jsonwebtoken
