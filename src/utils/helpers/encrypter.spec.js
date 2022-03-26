@@ -6,6 +6,9 @@ jest.mock('bcrypt', () => {
     async hashSync (noHashString, number) {
       this.noHashString = noHashString
       return 'hash_string'
+    },
+    async compare (noHashString, hashString) {
+      return this.validHashString
     }
   }
 })
@@ -25,5 +28,12 @@ describe('EncrypterHelper', () => {
     const sut = makeSut()
     const hashString = await sut.hash('any_string')
     expect(hashString).toBe('hash_string')
+  })
+
+  test('Should return null if invalid string are provided', async () => {
+    const sut = makeSut()
+    bcrypt.validHashString = false
+    const hashString = await sut.compare('invalid_string', 'valid_hash')
+    expect(hashString).toBe(false)
   })
 })
