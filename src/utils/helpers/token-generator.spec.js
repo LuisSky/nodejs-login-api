@@ -1,11 +1,18 @@
 
 jest.mock('jsonwebtoken', () => {
   return {
+    tokenSecretCode: '',
+    payload: '',
+    token: '',
+
     sign (payload, secretTokenCode) {
       this.tokenSecretCode = secretTokenCode
       this.payload = payload
       this.token = 'any_token'
       return this.token
+    },
+    async verify (token) {
+      return this.payload
     }
   }
 })
@@ -67,5 +74,15 @@ describe('TokenGenerator', () => {
     const token = await sut.generate(payload)
 
     expect(token).toBe(jwt.token)
+  })
+
+  test('Should return null if no decode token is provided', async () => {
+    const { sut } = makeSut()
+
+    const payload = 'any_payload'
+    await sut.generate(payload)
+    const decodeToken = await sut.decode()
+
+    expect(decodeToken).toBeNull()
   })
 })

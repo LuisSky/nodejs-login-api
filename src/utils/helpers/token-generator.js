@@ -14,6 +14,7 @@ class TokenGenerator {
   }
 
   async decode (token) {
+    if (!token) return null
     const decoded = await jwt.verify(token, this.tokenSecretCode)
     return decoded
   }
