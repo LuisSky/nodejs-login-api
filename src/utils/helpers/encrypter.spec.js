@@ -21,12 +21,14 @@ describe('EncrypterHelper', () => {
   test('Should calls bcrypt with correct params', async () => {
     const sut = makeSut()
     await sut.hash('any_string')
+
     expect(bcrypt.noHashString).toBe('any_string')
   })
 
   test('Should string must be different from the encrypted string', async () => {
     const sut = makeSut()
     const hashString = await sut.hash('any_string')
+
     expect(hashString).toBe('hash_string')
   })
 
@@ -34,6 +36,15 @@ describe('EncrypterHelper', () => {
     const sut = makeSut()
     bcrypt.validHashString = false
     const hashString = await sut.compare('invalid_string', 'valid_hash')
+
     expect(hashString).toBe(false)
+  })
+
+  test('Should return true if valid string are provided', async () => {
+    const sut = makeSut()
+    bcrypt.validHashString = true
+    const hashString = await sut.compare('valid_string', 'valid_hash')
+
+    expect(hashString).toBe(true)
   })
 })
