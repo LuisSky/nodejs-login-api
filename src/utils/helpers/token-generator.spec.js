@@ -4,6 +4,7 @@ jest.mock('jsonwebtoken', () => {
     tokenSecretCode: '',
     payload: '',
     token: '',
+    isValidToken: true,
 
     sign (payload, secretTokenCode) {
       this.tokenSecretCode = secretTokenCode
@@ -12,7 +13,9 @@ jest.mock('jsonwebtoken', () => {
       return this.token
     },
     async verify (token) {
-      return this.payload
+      if (this.isValidToken) {
+        return this.payload
+      } else return this.isValidToken
     }
   }
 })
@@ -84,5 +87,16 @@ describe('TokenGenerator', () => {
     const decodeToken = await sut.decode()
 
     expect(decodeToken).toBeNull()
+  })
+
+  test('Should return false if invalid token is provided', async () => {
+    const { sut, jwt } = makeSut()
+
+    const payload = 'any_payload'
+    jwt.isValidToken = false
+    await sut.generate(payload)
+    const decodeToken = await sut.decode('invalid_token')
+
+    expect(decodeToken).toBe(false)
   })
 })
