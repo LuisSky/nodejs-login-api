@@ -37,4 +37,15 @@ describe('TokenGenerator', () => {
 
     expect(jwt.tokenSecretCode).toBe(secretTokenCode)
   })
+
+  test('Should call JWT with correct params', async () => {
+    const { sut } = makeSut()
+
+    const payload = {
+      anyObject: 'any_object'
+    }
+    await sut.generate(payload)
+
+    expect(jwt.payload).toBe(payload)
+  })
 })
