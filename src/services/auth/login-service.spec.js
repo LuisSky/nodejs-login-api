@@ -60,6 +60,7 @@ describe('LoginService', () => {
   test('Should throw if no UserRepository is provided', async () => {
     const sut = new LoginService()
     const promise = sut.verifyLogin()
+
     await expect(promise).rejects.toEqual(new ServerError())
   })
 
@@ -67,6 +68,7 @@ describe('LoginService', () => {
     const { userRepoSpy } = makeSut()
     const sut = new LoginService({ userRepository: userRepoSpy })
     const promise = sut.verifyLogin()
+
     await expect(promise).rejects.toEqual(new ServerError())
   })
 
@@ -74,6 +76,7 @@ describe('LoginService', () => {
     const { userRepoSpy, encrypterHelperSpy } = makeSut()
     const sut = new LoginService({ userRepository: userRepoSpy, encryptHelper: encrypterHelperSpy })
     const promise = sut.verifyLogin()
+
     await expect(promise).rejects.toEqual(new ServerError())
   })
 
@@ -81,6 +84,7 @@ describe('LoginService', () => {
     const { sut } = makeSut()
 
     const promise = sut.verifyLogin(undefined, 'any_password')
+
     await expect(promise).rejects.toEqual(new MissingParamError('email'))
   })
 
@@ -88,6 +92,7 @@ describe('LoginService', () => {
     const { sut } = makeSut()
 
     const promise = sut.verifyLogin('any_email@mail.com', undefined)
+
     await expect(promise).rejects.toEqual(new MissingParamError('password'))
   })
 
@@ -103,6 +108,7 @@ describe('LoginService', () => {
     const { sut, userRepoSpy } = makeSut()
     userRepoSpy.foundUser = false
     const user = await sut.verifyLogin('any_email@mail.com', 'any_password')
+
     expect(user).toBeNull()
   })
 
@@ -117,6 +123,7 @@ describe('LoginService', () => {
     const { sut, encrypterHelperSpy } = makeSut()
     encrypterHelperSpy.validCase = false
     const response = await sut.verifyLogin('invalid_email@mail.com', 'invalid_password')
+
     expect(response).toBeNull()
   })
 
@@ -124,6 +131,7 @@ describe('LoginService', () => {
     const { sut } = makeSut()
 
     const token = await sut.verifyLogin('valid_email@mail.com', 'valid_password')
+
     expect(token).toBe('valid_token')
   })
 })

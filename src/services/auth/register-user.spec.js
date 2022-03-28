@@ -53,6 +53,7 @@ describe('UserService', () => {
       password: 'any_password'
     }
     const promise = sut.execute(credentials)
+
     expect(promise).rejects.toThrowError(new MissingParamError('UserRepository'))
   })
 
@@ -64,6 +65,7 @@ describe('UserService', () => {
       password: 'any_password'
     }
     const promise = sut.execute(credentials)
+
     expect(promise).rejects.toThrowError(new MissingParamError('EncrypterHelper'))
   })
 
