@@ -4,20 +4,23 @@ jest.mock('jsonwebtoken', () => {
     sign (payload, secretTokenCode) {
       this.tokenSecretCode = secretTokenCode
       this.payload = payload
-      return 'any_token'
+      this.token = 'any_token'
+      return this.token
     }
   }
 })
 
 const TokenGenerator = require('./token-generator')
-const jwt = require('jsonwebtoken')
 
 const makeSut = () => {
+  const jwt = require('jsonwebtoken')
+
   const secretTokenCode = 'any_secret_token'
 
   const sut = new TokenGenerator(secretTokenCode)
   return {
     sut,
+    jwt,
     secretTokenCode
   }
 }
@@ -31,7 +34,7 @@ describe('TokenGenerator', () => {
   })
 
   test('Should call JWT with correct secret-token-code', async () => {
-    const { sut, secretTokenCode } = makeSut()
+    const { sut, secretTokenCode, jwt } = makeSut()
 
     await sut.generate('any')
 
@@ -39,7 +42,7 @@ describe('TokenGenerator', () => {
   })
 
   test('Should call JWT with correct params', async () => {
-    const { sut } = makeSut()
+    const { sut, jwt } = makeSut()
 
     const payload = {
       anyObject: 'any_object'
@@ -55,5 +58,14 @@ describe('TokenGenerator', () => {
     const token = await sut.generate()
 
     expect(token).toBeNull()
+  })
+
+  test('Should return an token if payload is provided', async () => {
+    const { sut, jwt } = makeSut()
+
+    const payload = 'any_payload'
+    const token = await sut.generate(payload)
+
+    expect(token).toBe(jwt.token)
   })
 })
