@@ -6,6 +6,7 @@ class TokenGenerator {
   }
 
   generate (payload) {
+    if (!payload) return null
     const token = jwt.sign(payload, this.tokenSecretCode, {
       expiresIn: 300
     })

@@ -48,4 +48,12 @@ describe('TokenGenerator', () => {
 
     expect(jwt.payload).toBe(payload)
   })
+
+  test('Should return null if no payload is provided', async () => {
+    const { sut } = makeSut()
+
+    const token = await sut.generate()
+
+    expect(token).toBeNull()
+  })
 })
