@@ -99,4 +99,14 @@ describe('TokenGenerator', () => {
 
     expect(decodeToken).toBe(false)
   })
+
+  test('Should return original payload if valid token is provided', async () => {
+    const { sut, jwt } = makeSut()
+    jwt.isValidToken = true
+    const payload = 'any_payload'
+    const token = await sut.generate(payload)
+    const decodeToken = await sut.decode(token)
+
+    expect(decodeToken).toBe(payload)
+  })
 })
