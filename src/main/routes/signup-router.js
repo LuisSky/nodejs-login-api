@@ -8,6 +8,7 @@ const { MissingParamError } = require('../../utils/errors')
 class SignupRoute {
   async route (httpRequest) {
     try {
+      if (!httpRequest.body) return HttpResponse.badRequest(new MissingParamError('body'))
       if (!httpRequest.body.email) return HttpResponse.badRequest(new MissingParamError('email'))
 
       const { email, password } = httpRequest.body
