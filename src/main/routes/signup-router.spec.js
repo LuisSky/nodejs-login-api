@@ -93,7 +93,7 @@ describe('SignupRouter', () => {
     const httpResponse = await sut.route(httpRequest)
 
     expect(httpResponse.statusCode).toBe(500)
-    expect(httpResponse.body).toEqual(new ServerError())
+    expect(httpResponse.body).toEqual(new Error())
   })
 
   test('Should return 201 if valid informations are provided', async () => {
