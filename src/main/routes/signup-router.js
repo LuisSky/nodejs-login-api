@@ -2,10 +2,14 @@
 const EncryptHelper = require('../../utils/helpers/encrypter')
 const UserRepository = require('../../infra/repository/user-repository')
 const RegisterUserService = require('../../services/auth/register-user')
+const HttpResponse = require('../../utils/helpers/http-response')
+const { MissingParamError } = require('../../utils/errors')
 
 class SignupRoute {
   async route (httpRequest) {
     try {
+      if (!httpRequest.body.email) return HttpResponse.badRequest(new MissingParamError('email'))
+
       const { email, password } = httpRequest.body
 
       const registerUserService = new RegisterUserService({ userRepository: new UserRepository(), encrypterHelper: new EncryptHelper() })
