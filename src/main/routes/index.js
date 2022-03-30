@@ -4,7 +4,7 @@ const routes = express.Router()
 const ExpressAdapter = require('./adapters/express-adapter')
 
 // Routes
-const SigninRouter = require('./signin.js')
+const SigninRouter = require('./signin-router.js')
 const SignupRouter = require('./signup.js')
 
 routes.post('/signup', ExpressAdapter.adapt(new SignupRouter()))
