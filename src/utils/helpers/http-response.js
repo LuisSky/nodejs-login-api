@@ -28,4 +28,11 @@ module.exports = class HttpResponse {
       body: body
     }
   }
+
+  static resourceCreated (body) {
+    return {
+      statusCode: 201,
+      body: body
+    }
+  }
 }

@@ -95,4 +95,18 @@ describe('SignupRouter', () => {
     expect(httpResponse.statusCode).toBe(500)
     expect(httpResponse.body).toEqual(new ServerError())
   })
+
+  test('Should return 201 if valid informations are provided', async () => {
+    const { sut } = makeSut()
+
+    const httpRequest = {
+      body: {
+        email: 'any_email@mail.com',
+        password: 'any_pass'
+      }
+    }
+    const httpResponse = await sut.route(httpRequest)
+
+    expect(httpResponse.statusCode).toBe(201)
+  })
 })

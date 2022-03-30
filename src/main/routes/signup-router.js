@@ -17,12 +17,7 @@ class SignupRoute {
 
       const user = await this.registerUserService.execute(email, password)
 
-      return {
-        statusCode: 201,
-        body: {
-          ...user
-        }
-      }
+      return HttpResponse.resourceCreated({ ...user })
     } catch (err) {
       return HttpResponse.serverError(err)
     }
