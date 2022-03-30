@@ -20,8 +20,8 @@ class SigninRoute {
       if (!token) return HttpResponse.unauthorized()
 
       return HttpResponse.validResponse(token)
-    } catch {
-      return HttpResponse.serverError()
+    } catch (err) {
+      return HttpResponse.serverError(err)
     }
   }
 }
