@@ -1,4 +1,4 @@
-const knex = require('../config/database/knex.js')
+const knex = require('../../main/config/database/knex')
 
 class UserRepository {
   createOne (user) {

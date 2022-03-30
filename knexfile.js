@@ -1,5 +1,5 @@
 // Update with your config settings.
-const env = require('./src/config/env')
+const env = require('./src/main/config/env')
 
 const { DB_CLIENT, DB_HOST, DB_DATABASE, DB_PASSWORD, DB_USER, DB_PORT } = env
 
