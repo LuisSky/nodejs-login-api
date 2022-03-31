@@ -1,7 +1,7 @@
 jest.mock('validator', () => {
   return {
-    isValidEmail: true,
     isEmail (email) {
+      this.email = email
       return this.isValidEmail
     }
   }
@@ -25,6 +25,9 @@ const makeSut = () => {
 }
 
 describe('EmailValidator', () => {
+  beforeEach(() => {
+    validator.isValidEmail = undefined
+  })
   test('Should throw if no email is provided', () => {
     const sut = makeSut()
 
@@ -40,5 +43,14 @@ describe('EmailValidator', () => {
     const isValidEmail = sut.isValid('invalidEmail')
 
     expect(isValidEmail).toBe(false)
+  })
+
+  test('Should return true if valid email is provided', () => {
+    const sut = makeSut()
+
+    validator.isValidEmail = true
+    const isValidEmail = sut.isValid('validEmail@mail.com')
+
+    expect(isValidEmail).toBe(true)
   })
 })
