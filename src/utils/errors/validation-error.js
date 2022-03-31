@@ -1,6 +1,6 @@
 module.exports = class ValidationError extends Error {
-  constructor (message) {
-    super('ValidationError')
-    this.error = message
+  constructor (param) {
+    super(param)
+    this.error = param
   }
 }

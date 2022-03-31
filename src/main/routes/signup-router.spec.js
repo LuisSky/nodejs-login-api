@@ -1,4 +1,4 @@
-const { MissingParamError } = require('../../utils/errors')
+const { MissingParamError, ValidationError } = require('../../utils/errors')
 const SignupRoute = require('./signup-router')
 
 const makeRegUserServiceSpy = () => {
@@ -8,7 +8,9 @@ const makeRegUserServiceSpy = () => {
       this.password = password
     }
   }
-  return new RegisterUserServiceSpy()
+  const regUserServiceSpy = new RegisterUserServiceSpy()
+  regUserServiceSpy.isValidEmail = true
+  return regUserServiceSpy
 }
 
 const makeRegUserServiceSpyWithError = () => {
@@ -20,13 +22,32 @@ const makeRegUserServiceSpyWithError = () => {
   return new RegisterUserServiceSpyWithError()
 }
 
+const makeEmailValidatorSpy = () => {
+  class EmailValidatorSpy {
+    isValid (email) {
+      return this.isValidEmail
+    }
+  }
+  const emailValidatorSpy = new EmailValidatorSpy()
+  emailValidatorSpy.isValidEmail = true
+  return emailValidatorSpy
+}
+
 const makeSut = () => {
-  const registerUserService = makeRegUserServiceSpy()
-  const sut = new SignupRoute(registerUserService)
+  const emailValidatorSpy = makeEmailValidatorSpy()
+  const registerUserServiceSpy = makeRegUserServiceSpy()
+
+  const compositionSignupRouter = {
+    emailValidator: emailValidatorSpy,
+    registerUserService: registerUserServiceSpy
+  }
+
+  const sut = new SignupRoute(compositionSignupRouter)
 
   return {
     sut,
-    registerUserService
+    registerUserServiceSpy,
+    emailValidatorSpy
   }
 }
 
@@ -53,6 +74,24 @@ describe('SignupRouter', () => {
     expect(httpResponse.body).toEqual(new MissingParamError('email'))
   })
 
+  test('Should return 400 if invalid email is provided', async () => {
+    const { sut, emailValidatorSpy } = makeSut()
+
+    emailValidatorSpy.isValidEmail = false
+
+    const httpRequest = {
+      body: {
+        email: 'invalid_email',
+        password: 'any_password'
+      }
+    }
+
+    const httpResponse = await sut.route(httpRequest)
+
+    expect(httpResponse.statusCode).toBe(400)
+    expect(httpResponse.body).toEqual(new ValidationError('email'))
+  })
+
   test('Should return 400 if no password is provided', async () => {
     const { sut } = makeSut()
 
@@ -67,7 +106,7 @@ describe('SignupRouter', () => {
   })
 
   test('Should call RegisterUserService with correct params', async () => {
-    const { sut, registerUserService } = makeSut()
+    const { sut, registerUserServiceSpy } = makeSut()
 
     const httpRequest = {
       body: {
@@ -76,13 +115,14 @@ describe('SignupRouter', () => {
       }
     }
     await sut.route(httpRequest)
-    expect(registerUserService.email).toBe(httpRequest.body.email)
-    expect(registerUserService.password).toBe(httpRequest.body.password)
+    expect(registerUserServiceSpy.email).toBe(httpRequest.body.email)
+    expect(registerUserServiceSpy.password).toBe(httpRequest.body.password)
   })
 
   test('Should return 500 if RegisterUserService throws', async () => {
     const regUserServiceWithError = makeRegUserServiceSpyWithError()
-    const sut = new SignupRoute(regUserServiceWithError)
+    const emailValidatorSpy = makeEmailValidatorSpy()
+    const sut = new SignupRoute({ registerUserService: regUserServiceWithError, emailValidator: emailValidatorSpy })
 
     const httpRequest = {
       body: {

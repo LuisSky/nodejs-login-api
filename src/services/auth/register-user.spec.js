@@ -86,7 +86,7 @@ describe('UserService', () => {
     }
     const promise = sut.execute(credentials)
 
-    expect(promise).rejects.toThrowError(new ValidationError('Password'))
+    expect(promise).rejects.toThrowError(new ValidationError('password'))
   })
 
   test('Should throw if no User alread exists', async () => {
