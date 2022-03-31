@@ -9,7 +9,9 @@
     "test": "jest"
   },
   "standard": {
-    "env": ["jest"]
+    "env": [
+      "jest"
+    ]
   },
   "keywords": [],
   "author": "Luis Sky",
@@ -20,7 +22,8 @@
     "express": "^4.17.2",
     "jsonwebtoken": "^8.5.1",
     "knex": "^0.95.15",
-    "pg": "^8.7.1"
+    "pg": "^8.7.1",
+    "validator": "^13.7.0"
   },
   "devDependencies": {
     "jest": "^27.5.1",
