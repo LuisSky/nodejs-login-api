@@ -36,6 +36,14 @@ describe('EmailValidator', () => {
     }).toThrow(new MissingParamError('email'))
   })
 
+  test('Should call validator if correct param', () => {
+    const sut = makeSut()
+
+    sut.isValid('any_email@mail.com')
+
+    expect(validator.email).toBe('any_email@mail.com')
+  })
+
   test('Should return false if invalid email is provided', () => {
     const sut = makeSut()
 
