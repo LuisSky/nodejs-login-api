@@ -25,6 +25,7 @@ const makeRegUserServiceSpyWithError = () => {
 const makeEmailValidatorSpy = () => {
   class EmailValidatorSpy {
     isValid (email) {
+      this.email = email
       return this.isValidEmail
     }
   }
@@ -90,6 +91,21 @@ describe('SignupRouter', () => {
 
     expect(httpResponse.statusCode).toBe(400)
     expect(httpResponse.body).toEqual(new ValidationError('email'))
+  })
+
+  test('Should call EmailValidator with correct param', async () => {
+    const { sut, emailValidatorSpy } = makeSut()
+
+    const httpRequest = {
+      body: {
+        email: 'any_email',
+        password: 'any_password'
+      }
+    }
+
+    await sut.route(httpRequest)
+
+    expect(emailValidatorSpy.email).toBe(httpRequest.body.email)
   })
 
   test('Should return 400 if no password is provided', async () => {
