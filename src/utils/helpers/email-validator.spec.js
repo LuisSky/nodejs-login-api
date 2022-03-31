@@ -8,16 +8,8 @@ jest.mock('validator', () => {
 })
 
 const validator = require('validator')
+const EmailValidator = require('./email-validator')
 const { MissingParamError } = require('../errors')
-
-class EmailValidator {
-  isValid (email) {
-    if (!email) {
-      throw new MissingParamError('email')
-    }
-    return validator.isEmail(email)
-  }
-}
 
 const makeSut = () => {
   const sut = new EmailValidator()
