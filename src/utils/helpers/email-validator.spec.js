@@ -1,3 +1,12 @@
+jest.mock('validator', () => {
+  return {
+    isValidEmail: true,
+    isEmail (email) {
+      return this.isValidEmail
+    }
+  }
+})
+
 const validator = require('validator')
 const { MissingParamError } = require('../errors')
 
@@ -22,5 +31,14 @@ describe('EmailValidator', () => {
     expect(() => {
       sut.isValid()
     }).toThrow(new MissingParamError('email'))
+  })
+
+  test('Should return false if invalid email is provided', () => {
+    const sut = makeSut()
+
+    validator.isValidEmail = false
+    const isValidEmail = sut.isValid('invalidEmail')
+
+    expect(isValidEmail).toBe(false)
   })
 })
