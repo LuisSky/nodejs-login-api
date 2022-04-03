@@ -3,10 +3,8 @@ const routes = express.Router()
 const ExpressAdapter = require('./adapters/express-adapter')
 
 // Routes
-const SigninRouter = require('./signin-router.js')
-const SignupRouter = require('./signup-router.js')
+const SigninRouterCompose = require('./composers/signin-composer.js')
 
-routes.post('/signup', ExpressAdapter.adapt(new SignupRouter()))
-routes.post('/signin', ExpressAdapter.adapt(new SigninRouter()))
+routes.post('/signin', ExpressAdapter.adapt(SigninRouterCompose.compose()))
 
 module.exports = routes
