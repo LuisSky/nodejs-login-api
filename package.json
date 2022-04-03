@@ -2,9 +2,9 @@
   "name": "login-api",
   "version": "1.0.0",
   "description": "",
-  "main": "src/main/",
+  "main": "src/main/server.js",
   "scripts": {
-    "start": "node ./src/main/",
+    "start": "node ./src/main/server",
     "dev": "jest --watch",
     "test": "jest"
   },
