@@ -3,7 +3,7 @@ const SignupRoute = require('./signup-router')
 
 const makeRegUserServiceSpy = () => {
   class RegisterUserServiceSpy {
-    async execute (email, password) {
+    async execute ({ email, password } = {}) {
       this.email = email
       this.password = password
     }
