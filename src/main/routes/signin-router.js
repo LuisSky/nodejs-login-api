@@ -1,5 +1,5 @@
 
-const { MissingParamError } = require('../../utils/errors')
+const { MissingParamError, ValidationError } = require('../../utils/errors')
 const HttpResponse = require('../../utils/helpers/http-response')
 
 class SigninRoute {
@@ -21,6 +21,9 @@ class SigninRoute {
 
       return HttpResponse.validResponse(token)
     } catch (err) {
+      if (err instanceof ValidationError || err instanceof MissingParamError) {
+        return HttpResponse.badRequest(err)
+      }
       return HttpResponse.serverError(err)
     }
   }

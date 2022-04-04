@@ -22,6 +22,9 @@ class SignupRoute {
 
       return HttpResponse.resourceCreated({ ...user })
     } catch (err) {
+      if (err instanceof ValidationError || err instanceof MissingParamError) {
+        return HttpResponse.badRequest(err)
+      }
       return HttpResponse.serverError(err)
     }
   }
