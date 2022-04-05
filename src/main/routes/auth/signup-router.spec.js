@@ -1,4 +1,4 @@
-const { MissingParamError, ValidationError } = require('../../utils/errors')
+const { MissingParamError, ValidationError } = require('../../../utils/errors')
 const SignupRoute = require('./signup-router')
 
 const makeRegUserServiceSpy = () => {

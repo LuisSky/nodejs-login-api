@@ -1,10 +1,11 @@
 
-const { MissingParamError, ValidationError } = require('../../utils/errors')
-const HttpResponse = require('../../utils/helpers/http-response')
+const HttpResponse = require('../../../utils/helpers/http-response')
+const { MissingParamError, ValidationError } = require('../../../utils/errors')
 
-class SigninRoute {
-  constructor (loginService) {
-    this.loginService = loginService
+class SignupRoute {
+  constructor ({ registerUserService, emailValidator } = {}) {
+    this.registerUserService = registerUserService
+    this.emailValidator = emailValidator
   }
 
   async route (httpRequest) {
@@ -15,11 +16,11 @@ class SigninRoute {
 
       const { email, password } = httpRequest.body
 
-      const token = await this.loginService.verifyLogin(email, password)
+      if (!this.emailValidator.isValid(email)) return HttpResponse.badRequest(new ValidationError('email'))
 
-      if (!token) return HttpResponse.unauthorized()
+      const user = await this.registerUserService.execute({ email, password })
 
-      return HttpResponse.validResponse(token)
+      return HttpResponse.resourceCreated({ ...user })
     } catch (err) {
       if (err instanceof ValidationError || err instanceof MissingParamError) {
         return HttpResponse.badRequest(err)
@@ -29,4 +30,4 @@ class SigninRoute {
   }
 }
 
-module.exports = SigninRoute
+module.exports = SignupRoute
