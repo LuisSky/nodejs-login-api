@@ -5,6 +5,8 @@
  
  All knowledge has applicated on my old login api for Nodejs! ( repository: <https://github.com/LuisSky/first-node-login-api> )
  
+ This project is not an example of good practices or architecture, it is just a practical application of good content that I have absorbed from great tutorials and tips spread over the internet, so there is still a lot to improve and I intend to update it whenever there is a need.
+ 
 ## **Special Thanks**
 
   - Rodrigo Manguinho - knowledges on Clean Architecture and best pratices
@@ -22,11 +24,15 @@
 ## **Dependencies that's will installed after npm install**
 
 - bcrypt
-- dotenv
 - express
 - jsonwebtoken
 - knex
 - pg
+- validator
+
+#### **Development libs**
+- jest 
+- dotenv 
   
 ## **ESLint and style guide**  
 - standard
