@@ -5,8 +5,8 @@ const LoginService = require('./login-service')
 
 const makeUserRepoSpy = () => {
   class UserRepositorySpy {
-    async findOne (user) {
-      this.email = user.email
+    async findByEmail (email) {
+      this.email = email
       return this.foundUser
     }
   }

@@ -5,7 +5,7 @@ const { MissingParamError, ValidationError } = require('../../utils/errors')
 // }
 const makeUserRepositorySpy = () => {
   class UserRepositorySpy {
-    async findOne ({ email }) {
+    async findByEmail (email) {
       return this.mockExistUser
     }
 

@@ -13,7 +13,7 @@ module.exports = class RegisterUserService {
     if (!email) throw new ValidationError('email')
     if (!password) throw new ValidationError('password')
 
-    const verifyExistsUser = await this.userRepository.findOne({ email })
+    const verifyExistsUser = await this.userRepository.findByEmail(email)
 
     if (verifyExistsUser) throw new ValidationError('this user alread exist')
 

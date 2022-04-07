@@ -19,7 +19,7 @@ class LoginService {
     if (!email) throw new MissingParamError('email')
     if (!password) throw new MissingParamError('password')
 
-    const user = await this.userRepository.findOne({ email })
+    const user = await this.userRepository.findByEmail(email)
 
     const passwordCompare = user && await this.encrypter.compare(password, user.password)
     if (passwordCompare) {

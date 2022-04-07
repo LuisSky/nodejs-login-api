@@ -5,12 +5,8 @@ class UserRepository {
     return knex('users').insert(user, ['id', 'email'])
   }
 
-  findOne (findUser) {
-    return knex('users').where({ email: findUser.email }).first()
-  }
-
-  findAll () {
-    return knex('users').select(['id', 'email'])
+  findByEmail (email) {
+    return knex('users').where({ email }).first()
   }
 }
 
