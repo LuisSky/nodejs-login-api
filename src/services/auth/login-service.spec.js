@@ -61,7 +61,7 @@ describe('LoginService', () => {
     const sut = new LoginService()
     const promise = sut.verifyLogin()
 
-    await expect(promise).rejects.toEqual(new ServerError())
+    await expect(promise).rejects.toEqual(new ServerError('LoginService has invoked without some on dependency'))
   })
 
   test('Should throw if no EncrypterHelper is provided', async () => {
@@ -69,7 +69,7 @@ describe('LoginService', () => {
     const sut = new LoginService({ userRepository: userRepoSpy })
     const promise = sut.verifyLogin()
 
-    await expect(promise).rejects.toEqual(new ServerError())
+    await expect(promise).rejects.toEqual(new ServerError('LoginService has invoked without some on dependency'))
   })
 
   test('Should throw if no TokenGenerator is provided', async () => {
@@ -77,7 +77,7 @@ describe('LoginService', () => {
     const sut = new LoginService({ userRepository: userRepoSpy, encryptHelper: encrypterHelperSpy })
     const promise = sut.verifyLogin()
 
-    await expect(promise).rejects.toEqual(new ServerError())
+    await expect(promise).rejects.toEqual(new ServerError('LoginService has invoked without some on dependency'))
   })
 
   test('Should throw if no email is provided', async () => {

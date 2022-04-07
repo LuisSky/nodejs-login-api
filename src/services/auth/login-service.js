@@ -15,7 +15,7 @@ class LoginService {
   }
 
   async verifyLogin (email, password) {
-    if (!this.verifyAllDependencyOfClass()) throw new ServerError()
+    if (!this.verifyAllDependencyOfClass()) throw new ServerError('LoginService has invoked without some on dependency')
     if (!email) throw new MissingParamError('email')
     if (!password) throw new MissingParamError('password')
 
