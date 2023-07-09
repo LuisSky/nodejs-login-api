@@ -1,0 +1,20 @@
+version: "3.9"
+services:
+  database:
+    container_name: any_name
+    image: "postgres"
+    ports:
+      - "${DB_PORT}:${DB_PORT}"
+      
+    restart: always
+    environment:
+      POSTGRES_PASSWORD: ${DB_PASSWORD}
+      POSTGRES_DB: ${DB_DATABASE}
+  web:
+    container_name: backend-api
+    build: .
+    ports:
+      - "${SERVER_PORT}:${SERVER_PORT}"
+    depends_on:
+      - database
+    command: npm start
