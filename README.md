@@ -19,7 +19,13 @@
 - Configure the .env
 - npm install
 - npm start
-- go to src/main/routes/index for look routes 
+- npx knex migrate:latest
+
+- you can use insomnia / postman or any another rest client to acess the endpoints
+
+## **Routes**
+/auth/signin - use to login 
+/auth/signup - use to register 
 
 ## **Dependencies that's will installed after npm install**
 
