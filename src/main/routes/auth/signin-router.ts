@@ -1,13 +1,15 @@
 
-const { MissingParamError, ValidationError } = require('../../../utils/errors')
-const HttpResponse = require('../../../utils/helpers/http-response')
+import { httpRequest } from '../../../services/auth/interfaces'
+import LoginService from '../../../services/auth/login-service'
+import { MissingParamError, ValidationError } from '../../../utils/errors'
+import HttpResponse from '../../../utils/helpers/http-response'
 
-class SigninRoute {
-  constructor (loginService) {
-    this.loginService = loginService
-  }
+export default class SigninRoute {
+  constructor (
+    private readonly loginService: LoginService
+  ) {}
 
-  async route (httpRequest) {
+  async route (httpRequest: httpRequest) {
     try {
       if (!httpRequest.body) return HttpResponse.badRequest(new MissingParamError('body'))
       if (!httpRequest.body.email) return HttpResponse.badRequest(new MissingParamError('email'))
@@ -28,5 +30,3 @@ class SigninRoute {
     }
   }
 }
-
-module.exports = SigninRoute

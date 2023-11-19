@@ -1,7 +1,7 @@
-const { UnauthorizedError } = require('../errors')
+import { UnauthorizedError } from '../errors'
 
-module.exports = class HttpResponse {
-  static badRequest (error) {
+export default class HttpResponse {
+  static badRequest (error: any) {
     return {
       statusCode: 400,
       body: error
@@ -15,21 +15,21 @@ module.exports = class HttpResponse {
     }
   }
 
-  static serverError (error) {
+  static serverError (error: any) {
     return {
       statusCode: 500,
       body: error
     }
   }
 
-  static validResponse (body) {
+  static validResponse (body: object) {
     return {
       statusCode: 200,
       body: body
     }
   }
 
-  static resourceCreated (body) {
+  static resourceCreated (body: object) {
     return {
       statusCode: 201,
       body: body

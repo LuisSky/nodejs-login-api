@@ -1,14 +1,18 @@
 
-const HttpResponse = require('../../../utils/helpers/http-response')
-const { MissingParamError, ValidationError } = require('../../../utils/errors')
+import HttpResponse from '../../../utils/helpers/http-response'
+import { MissingParamError, ValidationError } from '../../../utils/errors'
+import RegisterUserService from '../../../services/auth/register-user'
+import EmailValidator from '../../../utils/helpers/email-validator'
+import { httpRequest } from '../../../services/auth/interfaces'
 
-class SignupRoute {
-  constructor ({ registerUserService, emailValidator } = {}) {
-    this.registerUserService = registerUserService
-    this.emailValidator = emailValidator
-  }
 
-  async route (httpRequest) {
+export default class SignupRoute {
+  constructor (
+    private readonly registerUserService: RegisterUserService,
+    private readonly emailValidator: EmailValidator
+  ) {}
+
+  async route (httpRequest: httpRequest) {
     try {
       if (!httpRequest.body) return HttpResponse.badRequest(new MissingParamError('body'))
       if (!httpRequest.body.email) return HttpResponse.badRequest(new MissingParamError('email'))
@@ -18,7 +22,7 @@ class SignupRoute {
 
       if (!this.emailValidator.isValid(email)) return HttpResponse.badRequest(new ValidationError('email'))
 
-      const user = await this.registerUserService.execute({ email, password })
+      const user = await this.registerUserService.execute(email, password)
 
       return HttpResponse.resourceCreated({ ...user })
     } catch (err) {
@@ -30,4 +34,3 @@ class SignupRoute {
   }
 }
 
-module.exports = SignupRoute

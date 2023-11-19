@@ -1,9 +1,9 @@
 require('dotenv').config()
 
-module.exports = {
+export = {
   PORT: process.env.SERVER_PORT,
 
-  SECRET_TOKEN_PHRASE: process.env.SECRET_TOKEN_PHRASE,
+  SECRET_TOKEN_PHRASE: process.env.SECRET_TOKEN_PHRASE || "any_phrase",
 
   DB_CLIENT: process.env.DB_CLIENT,
   DB_HOST: process.env.DB_HOST,
