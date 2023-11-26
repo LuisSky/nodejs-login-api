@@ -6,13 +6,13 @@ jest.mock('jsonwebtoken', () => {
     token: '',
     isValidToken: true,
 
-    sign (payload, secretTokenCode) {
+    sign (payload: any, secretTokenCode: any) {
       this.tokenSecretCode = secretTokenCode
       this.payload = payload
       this.token = 'any_token'
       return this.token
     },
-    async verify (token) {
+    verify () {
       if (this.isValidToken) {
         return this.payload
       } else return this.isValidToken
@@ -20,7 +20,7 @@ jest.mock('jsonwebtoken', () => {
   }
 })
 
-const TokenGenerator = require('./token-generator')
+import TokenGenerator from './token-generator'
 
 const makeSut = () => {
   const jwt = require('jsonwebtoken')
@@ -65,7 +65,7 @@ describe('TokenGenerator', () => {
   test('Should return null if no payload is provided', async () => {
     const { sut } = makeSut()
 
-    const token = await sut.generate()
+    const token = sut.generate('')
 
     expect(token).toBeNull()
   })
@@ -74,7 +74,7 @@ describe('TokenGenerator', () => {
     const { sut, jwt } = makeSut()
 
     const payload = 'any_payload'
-    const token = await sut.generate(payload)
+    const token = sut.generate(payload)
 
     expect(token).toBe(jwt.token)
   })
@@ -84,7 +84,7 @@ describe('TokenGenerator', () => {
 
     const payload = 'any_payload'
     await sut.generate(payload)
-    const decodeToken = await sut.decode()
+    const decodeToken = await sut.decode('')
 
     expect(decodeToken).toBeNull()
   })
@@ -104,9 +104,9 @@ describe('TokenGenerator', () => {
     const { sut, jwt } = makeSut()
     jwt.isValidToken = true
     const payload = 'any_payload'
-    const token = await sut.generate(payload)
-    const decodeToken = await sut.decode(token)
-
+    const token = sut.generate(payload)
+    const decodeToken = sut.decode(token)
+    
     expect(decodeToken).toBe(payload)
   })
 })
