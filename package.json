@@ -17,8 +17,7 @@
     "express": "^4.17.2",
     "jsonwebtoken": "^9.0.2",
     "knex": "^3.0.1",
-    "pg": "^8.7.1",
-    "validator": "^13.7.0"
+    "pg": "^8.7.1"
   },
   "devDependencies": {
     "@types/bcrypt": "^5.0.2",
