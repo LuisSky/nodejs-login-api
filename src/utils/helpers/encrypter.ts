@@ -1,9 +1,8 @@
 import bcrypt from 'bcrypt'
-import { IEncryptHelper } from '../../services/auth/interfaces'
 
-
-export default class EncryptHelper implements IEncryptHelper {
-  hash (str: string) {
+export default class EncryptHelper {
+  hash (str: string): null | string {
+    if (!str) return null
     return bcrypt.hashSync(str, 10)
   }
 

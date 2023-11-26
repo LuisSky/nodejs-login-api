@@ -1,35 +1,36 @@
-const EncrypterHelper = require('./encrypter')
-const bcrypt = require('bcrypt')
+import {describe, expect, test} from '@jest/globals';
+import bcrypt from './__mocks__/bcrypt';
+import EncrypterHelper from './encrypter'
 
-jest.mock('bcrypt', () => {
-  return {
-    async hashSync (noHashString, number) {
-      this.noHashString = noHashString
-      return 'hash_string'
-    },
-    async compare (noHashString, hashString) {
-      return this.validHashString
-    }
-  }
-})
 
 const makeSut = () => {
   return new EncrypterHelper()
 }
 
 describe('EncrypterHelper', () => {
+  test('Should returns null if no param is provided', async () => {
+    const sut = makeSut()
+    
+    const result = sut.hash('')    
+    
+    expect(result).toBeNull()
+  })
   test('Should calls bcrypt with correct params', async () => {
     const sut = makeSut()
-    await sut.hash('any_string')
-
-    expect(bcrypt.noHashString).toBe('any_string')
+    
+    sut.hash('any_string')
+    
+    
+    expect(bcrypt.hashParam).toBe('any_string')
   })
 
-  test('Should string must be different from the encrypted string', async () => {
+  test('Should string be different from the encrypted string', async () => {
     const sut = makeSut()
-    const hashString = await sut.hash('any_string')
+    
+    const noHashString = 'any'
+    const hashString = sut.hash(noHashString)
 
-    expect(hashString).toBe('hash_string')
+    expect(noHashString).not.toBe(hashString)
   })
 
   test('Should return null if invalid string are provided', async () => {
