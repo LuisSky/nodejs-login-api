@@ -22,7 +22,7 @@ export default class SignupRoute {
 
       if (!this.emailValidator.isValid(email)) return HttpResponse.badRequest(new ValidationError('email'))
 
-      const user = await this.registerUserService.execute(email, password)
+      const user = await this.registerUserService.execute({ email, password })
 
       return HttpResponse.resourceCreated({ ...user })
     } catch (err) {

@@ -13,10 +13,10 @@ export default class LoginService {
   private readonly encrypter: IEncryptHelper
   private readonly tokenGenerator: ITokenGenerator
   
-  constructor ({ userRepository, encrypter, tokenGenerator }: LoginServiceParams) {
-    this.userRepository = userRepository   
-    this.encrypter = encrypter
-    this.tokenGenerator = tokenGenerator
+  constructor (private readonly params: LoginServiceParams) {
+    this.userRepository = params.userRepository   
+    this.encrypter = params.encrypter
+    this.tokenGenerator = params.tokenGenerator
   }
 
   async verifyLogin (email: string, password: string) {

@@ -4,7 +4,7 @@
   "description": "",
   "main": "src/main/server.js",
   "scripts": {
-    "start": "node ./src/main/server",
+    "start": "node ./dist/src/main/server",
     "dev": "jest --watch",
     "test": "jest"
   },
