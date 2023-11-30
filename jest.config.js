@@ -4,5 +4,6 @@ module.exports = {
   testEnvironment: 'node',
   moduleNameMapper: {
     '^bcrypt$': '<rootDir>/__mocks__/bcrypt.ts',
-  }
+  },
+  modulePathIgnorePatterns: ["<rootDir>/dist/"]  
 }  
