@@ -137,7 +137,8 @@ describe('SignupRouter', () => {
   test('Should return 500 if RegisterUserService throws', async () => {
     const regUserServiceWithError = makeRegUserServiceSpyWithError()
     const emailValidatorSpy = makeEmailValidatorSpy()
-    const sut = new SignupRoute( regUserServiceWithError, emailValidatorSpy)
+    const sut = new SignupRoute( regUserServiceWithError, emailValidatorSpy
+    )
 
     const httpRequest = {
       body: {
