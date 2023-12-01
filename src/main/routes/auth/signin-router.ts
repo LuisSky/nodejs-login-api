@@ -1,12 +1,12 @@
 
-import { httpRequest } from '../../../services/auth/interfaces'
+import { ILoginService, httpRequest } from '../../../services/auth/interfaces'
 import LoginService from '../../../services/auth/login-service'
 import { MissingParamError, ValidationError } from '../../../utils/errors'
 import HttpResponse from '../../../utils/helpers/http-response'
 
 export default class SigninRoute {
   constructor (
-    private readonly loginService: LoginService
+    private readonly loginService: ILoginService
   ) {}
 
   async route (httpRequest: httpRequest) {

@@ -56,11 +56,7 @@ const makeSut = () => {
   const encrypterHelperSpy = makeEncrypterHelperSpy()
   const tokenGeneratorSpy = makeTokenGeneratorSpy()
 
-  const sut = new LoginService({
-    userRepository: userRepoSpy,
-    encrypter: encrypterHelperSpy,
-    tokenGenerator: tokenGeneratorSpy
-  })
+  const sut = new LoginService(userRepoSpy, encrypterHelperSpy, tokenGeneratorSpy)
 
   return {
     sut,

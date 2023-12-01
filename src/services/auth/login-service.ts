@@ -1,23 +1,12 @@
 import { MissingParamError, ServerError } from '../../utils/errors'
-import { IEncryptHelper, ITokenGenerator, UserRepository } from './interfaces'
+import { IEncryptHelper, ITokenGenerator, IUserRepository, ILoginService } from './interfaces'
 
 
-type LoginServiceParams = {
-  userRepository: UserRepository,
-  encrypter: IEncryptHelper,
-  tokenGenerator: ITokenGenerator
-}
-
-export default class LoginService {
-  private readonly userRepository: UserRepository
-  private readonly encrypter: IEncryptHelper
-  private readonly tokenGenerator: ITokenGenerator
+export default class LoginService implements ILoginService {
   
-  constructor (private readonly params: LoginServiceParams) {
-    this.userRepository = params.userRepository   
-    this.encrypter = params.encrypter
-    this.tokenGenerator = params.tokenGenerator
-  }
+  constructor (private readonly userRepository: IUserRepository,
+    private readonly encrypter: IEncryptHelper,
+    private readonly tokenGenerator: ITokenGenerator){}
 
   async verifyLogin (email: string, password: string) {
     if (!email) throw new MissingParamError('email')
