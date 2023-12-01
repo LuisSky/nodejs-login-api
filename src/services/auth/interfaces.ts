@@ -14,6 +14,10 @@ export interface ILoginService {
   verifyLogin(email: string, password: string): Promise<null | any>
 }
 
+export interface IRegisterUserService {
+  execute ({ email, password }: Record<string, string> ): Promise<any>
+}
+
 export type IEncryptHelper = {
   hash: (pass: string) => any,
   compare: (hashPass: string, password: string) => any

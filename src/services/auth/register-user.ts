@@ -1,21 +1,13 @@
 import { ValidationError, MissingParamError } from '../../utils/errors'
 import EncryptHelper from '../../utils/helpers/encrypter'
-import { UserRepository } from './interfaces'
+import { IRegisterUserService, IUserRepository } from './interfaces'
 
 
-type RegisterUserServiceParams = {
-   userRepository: UserRepository,
-   encrypter: EncryptHelper 
-}
-
-export default class RegisterUserService {
-  private readonly userRepository: UserRepository 
-  private readonly encrypter: EncryptHelper 
-  
-  constructor ( { userRepository, encrypter }: RegisterUserServiceParams ) {
-    this.userRepository = userRepository
-    this.encrypter = encrypter
-  }
+export default class RegisterUserService implements IRegisterUserService {
+   
+  constructor ( private readonly userRepository: IUserRepository, 
+    private readonly encrypter: EncryptHelper){}
+    
   async execute ({ email, password }: Record<string, string> ) {
     if (!this.userRepository) throw new MissingParamError('UserRepository')
     if (!this.encrypter) throw new MissingParamError('EncrypterHelper')

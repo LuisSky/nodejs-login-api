@@ -3,12 +3,12 @@ import HttpResponse from '../../../utils/helpers/http-response'
 import { MissingParamError, ValidationError } from '../../../utils/errors'
 import RegisterUserService from '../../../services/auth/register-user'
 import EmailValidator from '../../../utils/helpers/email-validator'
-import { httpRequest } from '../../../services/auth/interfaces'
+import { IRegisterUserService, httpRequest } from '../../../services/auth/interfaces'
 
 
 export default class SignupRoute {
   constructor (
-    private readonly registerUserService: RegisterUserService,
+    private readonly registerUserService: IRegisterUserService,
     private readonly emailValidator: EmailValidator
   ) {}
 

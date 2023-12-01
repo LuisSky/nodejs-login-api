@@ -7,11 +7,7 @@ import env from '../config/env'
 
 export default class SigninRouterCompose {
   static compose () {
-    const loginService = new LoginService({
-      encrypter: new Encrypter(),
-      tokenGenerator: new TokenGenerator(env.SECRET_TOKEN_PHRASE),
-      userRepository: new UserRepository()
-    })
+    const loginService = new LoginService(new UserRepository(), new Encrypter(), new TokenGenerator(env.SECRET_TOKEN_PHRASE))
     return new SigninRouter(loginService)
   }
 }

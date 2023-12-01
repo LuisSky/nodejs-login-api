@@ -47,7 +47,7 @@ const makeEncrypterHelperSpy = () => {
 const makeSut = () => {
   const userRepoSpy = makeUserRepositorySpy()
   const encrypterHelperSpy = makeEncrypterHelperSpy()
-  const sut = new RegisterUserService({ userRepository: userRepoSpy, encrypter: encrypterHelperSpy })
+  const sut = new RegisterUserService(userRepoSpy, encrypterHelperSpy)
 
   return {
     userRepoSpy,
