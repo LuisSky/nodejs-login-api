@@ -1,11 +1,5 @@
-import ServerError from './server-error'
-import UnauthorizedError from './unauthorized-error'
-import ValidationError from './validation-error'
-import MissingParamError from './missing-param-error'
 
-export {
-  ServerError,
-  ValidationError,
-  UnauthorizedError,
-  MissingParamError
-}
+export * from './server-error'
+export * from './unauthorized-error'
+export * from './validation-error'
+export * from './missing-param-error'
