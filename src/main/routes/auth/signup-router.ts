@@ -1,9 +1,9 @@
 
-import HttpResponse from '../../../utils/helpers/http-response'
-import { MissingParamError, ValidationError } from '../../../utils/errors'
-import RegisterUserService from '../../../services/auth/register-user'
-import EmailValidator from '../../../utils/helpers/email-validator'
 import { IRegisterUserService, httpRequest } from '../../../services/auth/interfaces'
+import { MissingParamError, ValidationError } from '../../../utils/errors'
+
+import EmailValidator from '../../../utils/helpers/email-validator'
+import HttpResponse from '../../../utils/helpers/http-response'
 
 
 export default class SignupRoute {
