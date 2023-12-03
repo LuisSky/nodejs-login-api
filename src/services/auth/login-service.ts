@@ -1,5 +1,6 @@
 import { MissingParamError, ServerError } from '../../utils/errors'
-import { IEncryptHelper, ITokenGenerator, IUserRepository, ILoginService } from './interfaces'
+import { IEncryptHelper, ITokenGenerator } from '../../utils/helpers/protocols'
+import { IUserRepository, ILoginService } from './interfaces'
 
 
 export default class LoginService implements ILoginService {

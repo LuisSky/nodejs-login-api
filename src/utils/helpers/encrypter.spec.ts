@@ -1,4 +1,4 @@
-import {describe, expect, test} from '@jest/globals';
+import { describe, expect, test } from '@jest/globals';
 import bcrypt from './__mocks__/bcrypt';
 import EncrypterHelper from './encrypter'
 

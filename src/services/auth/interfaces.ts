@@ -18,16 +18,6 @@ export interface IRegisterUserService {
   execute ({ email, password }: Record<string, string> ): Promise<any>
 }
 
-export type IEncryptHelper = {
-  hash: (pass: string) => any,
-  compare: (hashPass: string, password: string) => any
-}
-
-export interface ITokenGenerator {
-  generate: (payload: object) => any,
-  decode: (token: string) => any
-}
-
 export type httpRequest = {
   body: any
 }
