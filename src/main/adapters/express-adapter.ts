@@ -1,6 +1,6 @@
 
 import { Response } from "express"
-import { httpRequest, httpResponse } from "../../services/auth/interfaces"
+import { httpRequest, httpResponse } from "../../domain/services/auth/interfaces"
 
 
 export default class ExpressAdapter {

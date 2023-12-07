@@ -1,4 +1,4 @@
-import LoginService from '../../services/auth/login-service'
+import LoginService from '../../domain/services/auth/login-service'
 import SigninRouter from '../routes/auth/signin-router'
 import UserRepository from '../../infra/repository/user-repository'
 import TokenGenerator from '../../utils/helpers/token-generator'

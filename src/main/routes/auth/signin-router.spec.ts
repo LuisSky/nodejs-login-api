@@ -1,5 +1,5 @@
-import { ILoginService, IUserRepository, User } from '../../../services/auth/interfaces'
-import LoginService from '../../../services/auth/login-service'
+import { ILoginService, IUserRepository, User } from '../../../domain/services/auth/interfaces'
+import LoginService from '../../../domain/services/auth/login-service'
 import { MissingParamError, ServerError, UnauthorizedError } from '../../../utils/errors'
 import SigninRoute from './signin-router'
 

@@ -1,6 +1,6 @@
 import RegisterUserService from './register-user'
-import { MissingParamError, ValidationError } from '../../utils/errors'
-import EncryptHelper from '../../utils/helpers/encrypter'
+import { MissingParamError, ValidationError } from '../../../utils/errors'
+import EncryptHelper from '../../../utils/helpers/encrypter'
 // const makeSut = () => {
 //   return new UserService()
 // }

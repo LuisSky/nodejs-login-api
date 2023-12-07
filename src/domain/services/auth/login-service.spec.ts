@@ -1,6 +1,6 @@
 // TODO: Create test's when an dependencys fail
 
-import { ServerError, MissingParamError } from '../../utils/errors'
+import { ServerError, MissingParamError } from '../../../utils/errors'
 import LoginService from './login-service'
 
 const makeUserRepoSpy = () => {

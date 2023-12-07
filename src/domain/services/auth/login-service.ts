@@ -1,5 +1,5 @@
-import { MissingParamError, ServerError } from '../../utils/errors'
-import { IEncryptHelper, ITokenGenerator } from '../../utils/helpers/protocols'
+import { MissingParamError, ServerError } from '../../../utils/errors'
+import { IEncryptHelper, ITokenGenerator } from '../../../utils/helpers/protocols'
 import { IUserRepository, ILoginService } from './interfaces'
 
 

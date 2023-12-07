@@ -1,4 +1,4 @@
-import { IRegisterUserService } from '../../../services/auth/interfaces'
+import { IRegisterUserService } from '../../../domain/services/auth/interfaces'
 import { MissingParamError, ValidationError } from '../../../utils/errors'
 import SignupRoute from './signup-router'
 

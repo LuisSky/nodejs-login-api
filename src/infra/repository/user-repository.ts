@@ -1,4 +1,4 @@
-import { User } from "../../services/auth/interfaces"
+import { User } from "../../domain/services/auth/interfaces"
 
 let users: User[] = []
 
