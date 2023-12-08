@@ -1,6 +1,6 @@
 
-import { ILoginService, httpRequest } from '../../../domain/services/auth/interfaces'
-import LoginService from '../../../domain/services/auth/login-service'
+import { httpRequest } from '../../../domain/services/auth/interfaces'
+import ILoginService from '../../../domain/services/protocols/login-service'
 import { MissingParamError, ValidationError } from '../../../utils/errors'
 import HttpResponse from '../../../utils/helpers/http-response'
 

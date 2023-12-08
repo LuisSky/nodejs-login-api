@@ -10,10 +10,6 @@ export type IUserRepository = {
   findByEmail: (email: string) => any
 }
 
-export interface ILoginService {
-  verifyLogin(email: string, password: string): Promise<null | any>
-}
-
 export interface IRegisterUserService {
   execute ({ email, password }: Record<string, string> ): Promise<any>
 }
