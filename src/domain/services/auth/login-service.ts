@@ -16,11 +16,11 @@ export default class LoginService implements ILoginService {
     const user = await this.userRepository.findByEmail(email)
 
     const passwordCompare = user && await this.encrypter.compare(password, user.password)
-    if (passwordCompare) {
-      const token = this.tokenGenerator.generate({ userid: user.id })
-      return token
-    }
-    return null
+    
+    if (!passwordCompare) return null;
+    
+    const token = this.tokenGenerator.generate({ userid: user.id })
+    return token
   }
 }
 
