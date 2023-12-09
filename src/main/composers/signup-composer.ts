@@ -1,4 +1,4 @@
-import SignupRoute from '../routes/auth/signup-router'
+import SignupRoute from '../../presentation/routes/auth/signup-router'
 
 import RegisterUserService from '../../domain/services/auth/register-user'
 import EmailValidator from '../../utils/helpers/email-validator'
