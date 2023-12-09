@@ -1,11 +1,11 @@
 import RegisterUserService from './register-user'
-import { MissingParamError, ValidationError } from '../../../utils/errors'
+import { ValidationError } from '../../../utils/errors'
 import EncryptHelper from '../../../utils/helpers/encrypter'
-// const makeSut = () => {
-//   return new UserService()
-// }
+import { IUserRepository } from './interfaces'
+
+
 const makeUserRepositorySpy = () => {
-  class UserRepositorySpy {
+  class UserRepositorySpy implements IUserRepository {
     mockExistUser=false
     email = ''
     password = ''
