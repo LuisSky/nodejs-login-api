@@ -1,15 +1,15 @@
-import { User } from "../../domain/services/auth/interfaces"
+import { User } from '../../domain/services/auth/interfaces'
 
-let users: User[] = []
+const users: User[] = []
 
 export default class UserRepository {
-  createOne (user: User) {
+  createOne (user: User): any {
     users.push(user)
     const { password, ...newUser } = user
     return newUser
   }
-  findByEmail (email: string) {
+
+  findByEmail (email: string): any {
     return users.find((user) => user.email === email)
   }
 }
-

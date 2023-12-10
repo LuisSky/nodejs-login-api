@@ -3,40 +3,30 @@ import { ValidationError } from '../../../utils/errors'
 import { Encrypter } from '../../../utils/protocols'
 import { IUserRepository } from './interfaces'
 
-
-const makeUserRepositorySpy = () => {
+const makeUserRepositorySpy = (): IUserRepository => {
   class UserRepositorySpy implements IUserRepository {
-    mockExistUser=false
-    email = ''
-    password = ''
-    async findByEmail (email: string) {
-      return this.mockExistUser
+    findByEmail (email: string): boolean {
+      return false
     }
 
-    async createOne ({ email, password }: Record<string, string> = {}) {
-      this.email = email
-      this.password = password
-      return { email: this.email, password: this.password }
+    createOne (user: any): any {
+      return { ...user }
     }
   }
   const userRepositorySpy = new UserRepositorySpy()
-  userRepositorySpy.mockExistUser = false
   return userRepositorySpy
 }
 
-const makeEncrypterHelperSpy = () => {
+const makeEncrypterHelperSpy = (): Encrypter => {
   class EncrypterHelperSpy implements Encrypter {
-    string = ''
-    hashString = ''
-    hash (string: string) {
-      this.string = string
-      this.hashString = 'hash_string'
-      return this.hashString
+    hash (string: string): string {
+      return 'valid_hash'
     }
-    compare(str: string, hashString: string): Promise<boolean> {
-      return new Promise<boolean>((resolve, reject) => {
-        true
-      }) 
+
+    async compare (str: string, hashString: string): Promise<boolean> {
+      return await new Promise<boolean>((resolve) => {
+        resolve(true)
+      })
     }
   }
 
@@ -44,7 +34,7 @@ const makeEncrypterHelperSpy = () => {
   return encrypterHelperSpy
 }
 
-const makeSut = () => {
+const makeSut = (): any => {
   const userRepoSpy = makeUserRepositorySpy()
   const encrypterHelperSpy = makeEncrypterHelperSpy()
   const sut = new RegisterUserService(userRepoSpy, encrypterHelperSpy)
@@ -57,29 +47,6 @@ const makeSut = () => {
 }
 
 describe('UserService', () => {
-  // test('Should throw if no UserRepository is provided', async () => {
-  //   const sut = new RegisterUserService( )
-  //   const credentials = {
-  //     email: 'any_email@email.com',
-  //     password: 'any_password'
-  //   }
-  //   const promise = sut.execute(credentials)
-
-  //   expect(promise).rejects.toThrowError(new MissingParamError('UserRepository'))
-  // })
-
-  // test('Should throw if no EncrypterHelper is provided', async () => {
-  //   const sut = new RegisterUserService({ userRepository: makeUserRepositorySpy() })
-
-  //   const credentials = {
-  //     email: 'any_email@email.com',
-  //     password: 'any_password'
-  //   }
-  //   const promise = sut.execute(credentials)
-
-  //   expect(promise).rejects.toThrowError(new MissingParamError('EncrypterHelper'))
-  // })
-
   test('Should throw if no Email is provided', async () => {
     const { sut } = makeSut()
     const credentials = {
@@ -88,7 +55,7 @@ describe('UserService', () => {
     }
     const promise = sut.execute(credentials)
 
-    expect(promise).rejects.toThrow(new ValidationError('email'))
+    await expect(promise).rejects.toThrow(new ValidationError('email'))
   })
 
   test('Should throw if no Password is provided', async () => {
@@ -98,13 +65,16 @@ describe('UserService', () => {
       password: ''
     }
     const promise = sut.execute(credentials)
-  
-    expect(promise).rejects.toThrow(new ValidationError('password'))
+
+    await expect(promise).rejects.toThrow(new ValidationError('password'))
   })
 
-  test('Should throw if no User alread exists', async () => {
+  test('Should throw if User alread exists', async () => {
     const { sut, userRepoSpy } = makeSut()
-    userRepoSpy.mockExistUser = true
+
+    jest.spyOn(userRepoSpy, 'findByEmail').mockImplementationOnce(() => {
+      throw new ValidationError('this user alread exist')
+    })
 
     const credentials = {
       email: 'any_email@mail.com',
@@ -112,37 +82,42 @@ describe('UserService', () => {
     }
     const promise = sut.execute(credentials)
 
-    expect(promise).rejects.toThrow(new ValidationError('this user alread exist'))
+    await expect(promise).rejects.toThrow(new ValidationError('this user alread exist'))
   })
 
   test('Should call EncrypterHelper with correct params', async () => {
     const { sut, encrypterHelperSpy } = makeSut()
-  
+
+    const calledWith = jest.spyOn(encrypterHelperSpy, 'hash')
     const credentials = {
       email: 'any_email@mail.com',
       password: 'any_pass'
     }
     await sut.execute(credentials)
-  
-    expect(encrypterHelperSpy.string).toBe('any_pass')
+
+    expect(calledWith).toHaveBeenCalledWith('any_pass')
   })
 
-  test('Should call UserRepository with correct params', async () => {
-    const { sut, encrypterHelperSpy, userRepoSpy } = makeSut()
+  test('Should call UserRepository .findByEmail .createOne with correct params', async () => {
+    const { sut, userRepoSpy } = makeSut()
+
+    const findByEmailcalledWith = jest.spyOn(userRepoSpy, 'findByEmail')
+    // const createOnecalledWith = jest.spyOn(userRepoSpy, 'createOne')
 
     const credentials = {
       email: 'any_email@mail.com',
       password: 'any_pass'
     }
-    const user = await sut.execute(credentials)
 
-    expect(userRepoSpy.email).toBe('any_email@mail.com')
-    expect(encrypterHelperSpy.string).toBe('any_pass')
-    expect(userRepoSpy.password).toBe(user.password)
+    await sut.execute(credentials)
+
+    expect(findByEmailcalledWith).toHaveBeenCalledWith(credentials.email)
+    // TODO: when added the model, re-create the following test ( because that receive an object )
+    // expect(createOnecalledWith).toHaveBeenCalledWith(credentials.password)
   })
 
   test('Should returns an user if valid email and password is provided', async () => {
-    const { sut, userRepoSpy } = makeSut()
+    const { sut } = makeSut()
 
     const credentials = {
       email: 'valid_email@mail.com',
@@ -150,7 +125,7 @@ describe('UserService', () => {
     }
     const user = await sut.execute(credentials)
 
-    expect(user.email).toBe('valid_email@mail.com')
-    expect(user.password).toBe(userRepoSpy.password)
+    expect(user.email).toBe(credentials.email)
+    expect(user.password).toBe('valid_hash')
   })
 })

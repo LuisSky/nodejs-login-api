@@ -1,7 +1,6 @@
-import { MissingParamError, ValidationError } from "../../../utils/errors"
-import { EmailValidator, HttpResponse } from "../../../utils/helpers"
-import { Service, HttpRequest, Controller } from "../../../utils/protocols"
-
+import { MissingParamError, ValidationError } from '../../../utils/errors'
+import { EmailValidator, HttpResponse } from '../../../utils/helpers'
+import { Service, HttpRequest, Controller, HttpResponse as httpRes } from '../../../utils/protocols'
 
 export class SignupController implements Controller {
   constructor (
@@ -9,19 +8,18 @@ export class SignupController implements Controller {
     private readonly emailValidator: EmailValidator
   ) {}
 
-  async handle (httpRequest: HttpRequest<any>) {
+  async handle (httpRequest: HttpRequest<any>): Promise<httpRes> {
     try {
-    
-      if (!httpRequest.body) return HttpResponse.badRequest(new MissingParamError('body')) 
-      
+      if (!httpRequest.body) return HttpResponse.badRequest(new MissingParamError('body'))
+
       const fields = ['email', 'password']
-      for(const field of fields) {
-        if (!httpRequest.body[field]) return HttpResponse.badRequest(new MissingParamError(field))      
+      for (const field of fields) {
+        if (!httpRequest.body[field]) return HttpResponse.badRequest(new MissingParamError(field))
       }
-      
+
       const { email, password } = httpRequest.body
 
-      if (!this.emailValidator.isValid(email)) return HttpResponse.badRequest(new ValidationError('email'))
+      if (!this.emailValidator.isValid(email as string)) return HttpResponse.badRequest(new ValidationError('email'))
 
       const user = await this.registerUserService.execute({ email, password })
 
@@ -34,4 +32,3 @@ export class SignupController implements Controller {
     }
   }
 }
-

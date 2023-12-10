@@ -1,4 +1,3 @@
-
 import { EmailValidator } from './email-validator'
 import { MissingParamError } from '../errors'
 
@@ -8,7 +7,6 @@ const makeSut = () => {
 }
 
 describe('EmailValidator', () => {
- 
   test('Should throw if no email is provided', () => {
     const sut = makeSut()
 
@@ -28,7 +26,7 @@ describe('EmailValidator', () => {
   test('Should return true if valid email is provided', () => {
     const sut = makeSut()
     const isValidEmail = sut.isValid('validEmail@mail.com')
-    
+
     expect(isValidEmail).toBe(true)
   })
 })

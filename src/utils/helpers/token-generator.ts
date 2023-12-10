@@ -1,10 +1,9 @@
 import jwt, { JwtPayload } from 'jsonwebtoken'
 import { ITokenGenerator } from '../protocols'
 
-
 export class TokenGenerator implements ITokenGenerator {
   constructor (
-    readonly tokenSecretCode: any
+    readonly tokenSecretCode: string
   ) {}
 
   generate (payload: unknown): string | null {
@@ -15,7 +14,7 @@ export class TokenGenerator implements ITokenGenerator {
     return token
   }
 
-  decode (token: any): JwtPayload | null | string {
+  decode (token: string): JwtPayload | null | string {
     if (!token) return null
     const decoded = jwt.verify(token, this.tokenSecretCode)
     return decoded

@@ -1,22 +1,21 @@
-import { MissingParamError, ValidationError } from "../../../utils/errors"
-import { HttpResponse } from "../../../utils/helpers"
-import { Service, HttpRequest, Controller } from "../../../utils/protocols"
+import { MissingParamError, ValidationError } from '../../../utils/errors'
+import { HttpResponse } from '../../../utils/helpers'
+import { Service, HttpRequest, Controller, HttpResponse as httpResp } from '../../../utils/protocols'
 
 export class SigninController implements Controller {
   constructor (
     private readonly loginService: Service
   ) {}
 
-  async handle (httpRequest: HttpRequest<any>) {
+  async handle (httpRequest: HttpRequest<any>): Promise<httpResp> {
     try {
-    
       if (!httpRequest.body) return HttpResponse.badRequest(new MissingParamError('body'))
-      
+
       const fields = ['email', 'password']
-      for(const field of fields) {
-        if (!httpRequest.body[field]) return HttpResponse.badRequest(new MissingParamError(field))      
+      for (const field of fields) {
+        if (!httpRequest.body[field]) return HttpResponse.badRequest(new MissingParamError(field))
       }
-      
+
       const { email, password } = httpRequest.body
 
       const token = await this.loginService.execute(email, password)

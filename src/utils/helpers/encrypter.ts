@@ -7,7 +7,7 @@ export class EncrypterHelper implements Encrypter {
     return bcrypt.hashSync(str, 10)
   }
 
-  compare (str: string, hashString: string) {
-    return bcrypt.compare(str, hashString)
+  async compare (str: string, hashString: string) {
+    return await bcrypt.compare(str, hashString)
   }
 }

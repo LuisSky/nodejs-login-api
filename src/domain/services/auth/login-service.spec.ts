@@ -1,18 +1,20 @@
 // TODO: Create test's when an dependencys fail
 
 import { MissingParamError } from '../../../utils/errors'
+import { Encrypter, ITokenGenerator } from '../../../utils/protocols'
+import { IUserRepository } from './interfaces'
 import LoginService from './login-service'
 
-const makeUserRepoSpy = () => {
-  
+const makeUserRepoSpy = (): IUserRepository => {
   class UserRepositorySpy {
     email = ''
     foundUser = false
-    async findByEmail (email: string) {
+    async findByEmail (email: string): Promise<any> {
       this.email = email
       return this.foundUser
     }
-    createOne() {
+
+    createOne (): any {
       return ''
     }
   }
@@ -22,13 +24,14 @@ const makeUserRepoSpy = () => {
   return userRepoSpy
 }
 
-const makeEncrypterHelperSpy = () => {
+const makeEncrypterHelperSpy = (): Encrypter => {
   class EncrypterHelperSpy {
     strWithoutHash = ''
     validCase = false
-    hash(){
+    hash (): void {
     }
-    async compare (string: string, hashString: string) {
+
+    compare (string: string, hashString: string): boolean {
       this.strWithoutHash = string
       return this.validCase
     }
@@ -38,20 +41,20 @@ const makeEncrypterHelperSpy = () => {
   return encrypterHelperSpy
 }
 
-const makeTokenGeneratorSpy = () => {
-  
+const makeTokenGeneratorSpy = (): ITokenGenerator => {
   class TokenGeneratorSpy {
-    async generate (payload: any) {
+    async generate (payload: any): Promise<any> {
       return 'valid_token'
     }
-    decode() {
-      
+
+    decode (): void {
+
     }
   }
   const tokenGeneratorSpy = new TokenGeneratorSpy()
   return tokenGeneratorSpy
 }
-const makeSut = () => {
+const makeSut = (): any => {
   const userRepoSpy = makeUserRepoSpy()
   const encrypterHelperSpy = makeEncrypterHelperSpy()
   const tokenGeneratorSpy = makeTokenGeneratorSpy()
@@ -67,7 +70,6 @@ const makeSut = () => {
 }
 
 describe('LoginService', () => {
-  
   test('Should throw if no email is provided', async () => {
     const { sut } = makeSut()
 

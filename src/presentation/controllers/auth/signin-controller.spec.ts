@@ -1,34 +1,18 @@
-import { IUserRepository, User } from '../../../domain/services/auth/interfaces'
 import { Service } from '../../../utils/protocols'
 import { MissingParamError, UnauthorizedError } from '../../../utils/errors'
 import { SigninController } from './signin-controller'
 
-
-
-const makeLoginServiceSpy = () => {
-  const userRepositorySpy = makeUserRepositorySpy()
-  
-  class LoginServiceSpy implements Service {  
+const makeLoginServiceSpy = (): Service => {
+  class LoginServiceSpy implements Service {
     async execute (email: string, password: string): Promise<string | boolean> {
       return 'valid_token'
     }
-  }  
+  }
   const loginService = new LoginServiceSpy()
   return loginService
 }
 
-// TODO: make refactor to this function, create a factory to compose LoginService
-const makeUserRepositorySpy = () => {
-  class UserRepositorySpy implements IUserRepository {
-    createOne(user: User) {}
-    findByEmail(email: string) {}
-  }
-  const userRepositorySpy = new UserRepositorySpy()
-  return userRepositorySpy
-
-}
-
-const makeSut = () => {
+const makeSut = (): any => {
   const loginServiceSpy = makeLoginServiceSpy()
   const sut = new SigninController(loginServiceSpy)
   return {
@@ -78,8 +62,8 @@ describe('SigninControllerr', () => {
   test('Should calls LoginService with correct params', async () => {
     const { sut, loginServiceSpy } = makeSut()
 
-    const execute = jest.spyOn(loginServiceSpy, "execute")
-    
+    const execute = jest.spyOn(loginServiceSpy, 'execute')
+
     const httpRequest = {
       body: {
         email: 'any_mail@mail.com',
@@ -87,17 +71,16 @@ describe('SigninControllerr', () => {
       }
     }
     await sut.handle(httpRequest)
-    
+
     const { email, password } = httpRequest.body
     expect(execute).toHaveBeenCalledWith(email, password)
-  
   })
 
   test('Should returns 500 if LoginService throws', async () => {
     const { sut, loginServiceSpy } = makeSut()
-    
-    jest.spyOn(loginServiceSpy, "execute").mockRejectedValueOnce(new Error())
-    
+
+    jest.spyOn(loginServiceSpy, 'execute').mockRejectedValueOnce(new Error())
+
     const httpRequest = {
       body: {
         email: 'any_mail@mail.com',
@@ -105,15 +88,15 @@ describe('SigninControllerr', () => {
       }
     }
     const httpResponse = await sut.handle(httpRequest)
-    
+
     expect(httpResponse.statusCode).toBe(500)
   })
 
   test('Should return 401 if invalid crendentials are provided', async () => {
     const { sut, loginServiceSpy } = makeSut()
 
-    jest.spyOn(loginServiceSpy, "execute").mockResolvedValueOnce(false)
-    
+    jest.spyOn(loginServiceSpy, 'execute').mockResolvedValueOnce(false)
+
     const httpRequest = {
       body: {
         email: 'invalid_mail@mail.com',
@@ -125,9 +108,8 @@ describe('SigninControllerr', () => {
     expect(httpResponse.statusCode).toBe(401)
     expect(httpResponse.body).toEqual(new UnauthorizedError())
   })
-  
+
   test('Should return a token if valid crendentials are provided', async () => {
-  
     const { sut } = makeSut()
     const httpRequest = {
       body: {
@@ -135,7 +117,7 @@ describe('SigninControllerr', () => {
         password: 'valid_password'
       }
     }
-    
+
     const httpResponse = await sut.handle(httpRequest)
 
     expect(httpResponse.statusCode).toBe(200)
