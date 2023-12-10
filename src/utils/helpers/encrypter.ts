@@ -1,5 +1,5 @@
 import bcrypt from 'bcrypt'
-import { IEncryptHelper } from './protocols'
+import { IEncryptHelper } from '../protocols'
 
 export default class EncryptHelper implements IEncryptHelper {
   hash (str: string): null | string {
