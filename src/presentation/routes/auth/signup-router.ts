@@ -29,7 +29,7 @@ export default class SignupRoute {
       if (err instanceof ValidationError || err instanceof MissingParamError) {
         return HttpResponse.badRequest(err)
       }
-      return HttpResponse.serverError(err)
+      return HttpResponse.serverError(err as Error)
     }
   }
 }

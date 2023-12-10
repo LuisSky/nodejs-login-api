@@ -1,66 +1,49 @@
 import { IUserRepository, User } from '../../../domain/services/auth/interfaces'
 import ILoginService from '../../../domain/services/protocols/login-service'
-import { MissingParamError, ServerError, UnauthorizedError } from '../../../utils/errors'
-import SigninRoute from './signin-router'
+import { MissingParamError, ServerError, UnauthorizedError, ValidationError } from '../../../utils/errors'
+import { SigninController } from './signin-controller'
 
 
 
-const makeAuthUseCaseSpy = () => {
+const makeLoginServiceSpy = () => {
   const userRepositorySpy = makeUserRepositorySpy()
-  class LoginServiceSpy implements ILoginService {
   
-    email = ''
-    password = ''
-    validCredentials = true
-    
-    async verifyLogin (email: string, password: string) {
-      this.email = email
-      this.password = password
-      return this.validCredentials
+  class LoginServiceSpy implements ILoginService {  
+    async verifyLogin (email: string, password: string): Promise<string | boolean> {
+      return 'valid_token'
     }
-  }
+  }  
   const loginService = new LoginServiceSpy()
   return loginService
 }
 
-
+// TODO: make refactor to this function, create a factory to compose LoginService
 const makeUserRepositorySpy = () => {
   class UserRepositorySpy implements IUserRepository {
-    createOne(user: User) {
-    }
-    findByEmail(email: string){
-    }
+    createOne(user: User) {}
+    findByEmail(email: string) {}
   }
   const userRepositorySpy = new UserRepositorySpy()
   return userRepositorySpy
 
 }
 
-const makeAuthUseCaseSpyWithError = () => {
-  class LoginServiceSpyWithError implements ILoginService {
-    async verifyLogin (email: string, password: string) {
-      throw new ServerError('')
-    }
-  }
-  return new LoginServiceSpyWithError()
-}
-
 const makeSut = () => {
-  const loginService = makeAuthUseCaseSpy()
-  const sut = new SigninRoute(loginService)
+  const loginServiceSpy = makeLoginServiceSpy()
+  const sut = new SigninController(loginServiceSpy)
   return {
     sut,
-    loginService
+    loginServiceSpy
   }
 }
 
-describe('SigninRouter', () => {
+describe('SigninControllerr', () => {
   test('Should return 400 if no body is provided', async () => {
     const { sut } = makeSut()
     const httpRequest = {
       body: ''
     }
-    const httpResponse = await sut.route(httpRequest)
+    const httpResponse = await sut.handle(httpRequest)
 
     expect(httpResponse.statusCode).toBe(400)
     expect(httpResponse.body).toEqual(new MissingParamError('body'))
@@ -73,7 +56,7 @@ describe('SigninRouter', () => {
         password: 'any_pass'
       }
     }
-    const httpResponse = await sut.route(httpRequest)
+    const httpResponse = await sut.handle(httpRequest)
 
     expect(httpResponse.statusCode).toBe(400)
     expect(httpResponse.body).toEqual(new MissingParamError('email'))
@@ -86,60 +69,65 @@ describe('SigninRouter', () => {
         email: 'any_mail@mail.com'
       }
     }
-    const httpResponse = await sut.route(httpRequest)
+    const httpResponse = await sut.handle(httpRequest)
 
     expect(httpResponse.statusCode).toBe(400)
     expect(httpResponse.body).toEqual(new MissingParamError('password'))
   })
 
-  test('Should calls AuthUseCase with correct params', async () => {
-    const { sut, loginService } = makeSut()
+  test('Should calls LoginService with correct params', async () => {
+    const { sut, loginServiceSpy } = makeSut()
 
+    const execute = jest.spyOn(loginServiceSpy, "verifyLogin")
+    
     const httpRequest = {
       body: {
         email: 'any_mail@mail.com',
         password: 'any_password'
       }
     }
-    await sut.route(httpRequest)
-
-    expect(loginService.email).toBe(httpRequest.body.email)
-    expect(loginService.password).toBe(httpRequest.body.password)
+    await sut.handle(httpRequest)
+    
+    const { email, password } = httpRequest.body
+    expect(execute).toHaveBeenCalledWith(email, password)
+  
   })
 
-  test('Should returns 500 if AuthUseCase throws', async () => {
-    const authUseCaseWithError = makeAuthUseCaseSpyWithError()
-    const sut = new SigninRoute(authUseCaseWithError)
-
+  test('Should returns 500 if LoginService throws', async () => {
+    const { sut, loginServiceSpy } = makeSut()
+    
+    jest.spyOn(loginServiceSpy, "verifyLogin").mockRejectedValueOnce(new Error())
+    
     const httpRequest = {
       body: {
         email: 'any_mail@mail.com',
         password: 'any_password'
       }
     }
-    const httpResponse = await sut.route(httpRequest)
-    expect(httpResponse.body).toEqual(new ServerError(''))
+    const httpResponse = await sut.handle(httpRequest)
+    
     expect(httpResponse.statusCode).toBe(500)
   })
 
   test('Should return 401 if invalid crendentials are provided', async () => {
-    const { sut, loginService } = makeSut()
+    const { sut, loginServiceSpy } = makeSut()
 
-    loginService.validCredentials = false
-
+    jest.spyOn(loginServiceSpy, "verifyLogin").mockResolvedValueOnce(false)
+    
     const httpRequest = {
       body: {
         email: 'invalid_mail@mail.com',
         password: 'invalid_password'
       }
     }
-    const httpResponse = await sut.route(httpRequest)
+    const httpResponse = await sut.handle(httpRequest)
 
     expect(httpResponse.statusCode).toBe(401)
     expect(httpResponse.body).toEqual(new UnauthorizedError())
   })
-
-  test('Should return 200 if valid crendentials are provided', async () => {
+  
+  test('Should return a token if valid crendentials are provided', async () => {
+  
     const { sut } = makeSut()
     const httpRequest = {
       body: {
@@ -147,8 +135,10 @@ describe('SigninRouter', () => {
         password: 'valid_password'
       }
     }
-    const httpResponse = await sut.route(httpRequest)
+    
+    const httpResponse = await sut.handle(httpRequest)
 
     expect(httpResponse.statusCode).toBe(200)
+    expect(httpResponse.body).toBe('valid_token')
   })
 })

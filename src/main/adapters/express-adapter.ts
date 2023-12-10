@@ -9,7 +9,7 @@ export default class ExpressAdapter {
       const httpRequest = {
         body: req.body
       }
-      const httpResponse: httpResponse = await route.route(httpRequest)
+      const httpResponse: httpResponse = await route.handle(httpRequest)
       return res.status(httpResponse.statusCode).json(httpResponse.body)
     }
   }
