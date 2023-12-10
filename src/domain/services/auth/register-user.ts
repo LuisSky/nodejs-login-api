@@ -1,5 +1,5 @@
 import { ValidationError, MissingParamError } from '../../../utils/errors'
-import { EncryptHelper } from '../../../utils/helpers'
+import { Encrypter } from '../../../utils/protocols'
 import { IUserRepository } from './interfaces'
 import { Service } from '../../../utils/protocols'
 
@@ -7,7 +7,7 @@ import { Service } from '../../../utils/protocols'
 export default class RegisterUserService implements Service {
    
   constructor ( private readonly userRepository: IUserRepository, 
-    private readonly encrypter: EncryptHelper){}
+    private readonly encrypter: Encrypter){}
     
   async execute ({ email, password }: Record<string, string> ) {
     if (!this.userRepository) throw new MissingParamError('UserRepository')

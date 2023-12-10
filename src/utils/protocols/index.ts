@@ -1,4 +1,4 @@
-export * from './encrypt-helper'
+export * from './encrypter'
 export * from './token-generator'
 export * from './controller'
 export * from './service'

@@ -1,5 +1,5 @@
 import { describe, expect, test } from '@jest/globals';
-import { EncryptHelper as EncrypterHelper  } from './encrypter'
+import { EncrypterHelper } from './encrypter'
 import bcrypt from 'bcrypt';
 
 

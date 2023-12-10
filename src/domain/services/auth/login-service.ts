@@ -1,5 +1,5 @@
 import { MissingParamError } from '../../../utils/errors'
-import { IEncryptHelper, ITokenGenerator } from '../../../utils/protocols'
+import { Encrypter, ITokenGenerator } from '../../../utils/protocols'
 import { Service } from '../../../utils/protocols'
 import { IUserRepository } from './interfaces'
 
@@ -8,7 +8,7 @@ import { IUserRepository } from './interfaces'
 export default class LoginService implements Service {
   
   constructor (private readonly userRepository: IUserRepository,
-    private readonly encrypter: IEncryptHelper,
+    private readonly encrypter: Encrypter,
     private readonly tokenGenerator: ITokenGenerator){}
 
   async execute (email: string, password: string) {

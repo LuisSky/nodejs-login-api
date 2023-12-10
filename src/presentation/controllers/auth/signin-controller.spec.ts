@@ -1,6 +1,6 @@
 import { IUserRepository, User } from '../../../domain/services/auth/interfaces'
 import { Service } from '../../../utils/protocols'
-import { MissingParamError, ServerError, UnauthorizedError, ValidationError } from '../../../utils/errors'
+import { MissingParamError, UnauthorizedError } from '../../../utils/errors'
 import { SigninController } from './signin-controller'
 
 

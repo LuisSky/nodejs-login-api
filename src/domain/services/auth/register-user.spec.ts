@@ -1,6 +1,6 @@
 import RegisterUserService from './register-user'
 import { ValidationError } from '../../../utils/errors'
-import { EncryptHelper } from '../../../utils/helpers'
+import { Encrypter } from '../../../utils/protocols'
 import { IUserRepository } from './interfaces'
 
 
@@ -25,7 +25,7 @@ const makeUserRepositorySpy = () => {
 }
 
 const makeEncrypterHelperSpy = () => {
-  class EncrypterHelperSpy implements EncryptHelper {
+  class EncrypterHelperSpy implements Encrypter {
     string = ''
     hashString = ''
     hash (string: string) {
