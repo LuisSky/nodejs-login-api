@@ -2,7 +2,7 @@ import { Service } from "../../../utils/protocols"
 import { MissingParamError, ValidationError } from "../../../utils/errors"
 import EmailValidator from "../../../utils/helpers/email-validator"
 import HttpResponse from "../../../utils/helpers/http-response"
-import HttpRequest from "../../../utils/helpers/http-request"
+import { HttpRequest } from "../../../utils/protocols"
 import { Controller } from "../../../utils/protocols"
 
 

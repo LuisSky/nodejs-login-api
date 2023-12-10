@@ -1,7 +1,7 @@
 import { Service } from "../../../utils/protocols"
 import { MissingParamError, UnauthorizedError, ValidationError } from "../../../utils/errors"
 import HttpResponse from "../../../utils/helpers/http-response"
-import HttpRequest from "../../../utils/helpers/http-request"
+import { HttpRequest } from "../../../utils/protocols"
 import { Controller } from "../../../utils/protocols"
 
 export class SigninController implements Controller {

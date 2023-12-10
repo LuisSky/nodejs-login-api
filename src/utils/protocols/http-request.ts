@@ -1,3 +1,3 @@
-export default interface HttpRequest<T> {
+export interface HttpRequest<T> {
   body: T
 }
