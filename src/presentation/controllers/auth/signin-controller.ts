@@ -2,8 +2,9 @@ import ILoginService from "../../../domain/services/protocols/login-service"
 import { MissingParamError, UnauthorizedError, ValidationError } from "../../../utils/errors"
 import HttpResponse from "../../../utils/helpers/http-response"
 import HttpRequest from "../../../utils/helpers/http-request"
+import { Controller } from "../../../utils/protocols"
 
-export class SigninController {
+export class SigninController implements Controller {
   constructor (
     private readonly loginService: ILoginService
   ) {}

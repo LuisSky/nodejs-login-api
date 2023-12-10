@@ -3,9 +3,10 @@ import { MissingParamError, ValidationError } from "../../../utils/errors"
 import EmailValidator from "../../../utils/helpers/email-validator"
 import HttpResponse from "../../../utils/helpers/http-response"
 import HttpRequest from "../../../utils/helpers/http-request"
+import { Controller } from "../../../utils/protocols"
 
 
-export class SignupController {
+export class SignupController implements Controller {
   constructor (
     private readonly registerUserService: IRegisterUserService,
     private readonly emailValidator: EmailValidator
