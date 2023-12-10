@@ -1,5 +1,5 @@
 import { IUserRepository, User } from '../../../domain/services/auth/interfaces'
-import { ILoginService } from '../../../utils/protocols'
+import { Service } from '../../../utils/protocols'
 import { MissingParamError, ServerError, UnauthorizedError, ValidationError } from '../../../utils/errors'
 import { SigninController } from './signin-controller'
 
@@ -8,8 +8,8 @@ import { SigninController } from './signin-controller'
 const makeLoginServiceSpy = () => {
   const userRepositorySpy = makeUserRepositorySpy()
   
-  class LoginServiceSpy implements ILoginService {  
-    async verifyLogin (email: string, password: string): Promise<string | boolean> {
+  class LoginServiceSpy implements Service {  
+    async execute (email: string, password: string): Promise<string | boolean> {
       return 'valid_token'
     }
   }  
@@ -78,7 +78,7 @@ describe('SigninControllerr', () => {
   test('Should calls LoginService with correct params', async () => {
     const { sut, loginServiceSpy } = makeSut()
 
-    const execute = jest.spyOn(loginServiceSpy, "verifyLogin")
+    const execute = jest.spyOn(loginServiceSpy, "execute")
     
     const httpRequest = {
       body: {
@@ -96,7 +96,7 @@ describe('SigninControllerr', () => {
   test('Should returns 500 if LoginService throws', async () => {
     const { sut, loginServiceSpy } = makeSut()
     
-    jest.spyOn(loginServiceSpy, "verifyLogin").mockRejectedValueOnce(new Error())
+    jest.spyOn(loginServiceSpy, "execute").mockRejectedValueOnce(new Error())
     
     const httpRequest = {
       body: {
@@ -112,7 +112,7 @@ describe('SigninControllerr', () => {
   test('Should return 401 if invalid crendentials are provided', async () => {
     const { sut, loginServiceSpy } = makeSut()
 
-    jest.spyOn(loginServiceSpy, "verifyLogin").mockResolvedValueOnce(false)
+    jest.spyOn(loginServiceSpy, "execute").mockResolvedValueOnce(false)
     
     const httpRequest = {
       body: {

@@ -1,6 +1,6 @@
 // TODO: Create test's when an dependencys fail
 
-import { ServerError, MissingParamError } from '../../../utils/errors'
+import { MissingParamError } from '../../../utils/errors'
 import LoginService from './login-service'
 
 const makeUserRepoSpy = () => {
@@ -67,33 +67,11 @@ const makeSut = () => {
 }
 
 describe('LoginService', () => {
-  // test('Should throw if no UserRepository is provided', async () => {
-  //   const sut = new LoginService({})
-  //   const promise = sut.verifyLogin()
-
-  //   await expect(promise).rejects.toEqual(new ServerError('LoginService has invoked without some on dependency'))
-  // })
-
-  // test('Should throw if no EncrypterHelper is provided', async () => {
-  //   const { userRepoSpy } = makeSut()
-  //   const sut = new LoginService({ userRepository: userRepoSpy })
-  //   const promise = sut.verifyLogin()
-
-  //   await expect(promise).rejects.toEqual(new ServerError('LoginService has invoked without some on dependency'))
-  // })
-
-  // test('Should throw if no TokenGenerator is provided', async () => {
-  //   const { userRepoSpy, encrypterHelperSpy } = makeSut()
-  //   const sut = new LoginService({ userRepository: userRepoSpy, encryptHelper: encrypterHelperSpy })
-  //   const promise = sut.verifyLogin()
-
-  //   await expect(promise).rejects.toEqual(new ServerError('LoginService has invoked without some on dependency'))
-  // })
-
+  
   test('Should throw if no email is provided', async () => {
     const { sut } = makeSut()
 
-    const promise = sut.verifyLogin('', 'any_password')
+    const promise = sut.execute('', 'any_password')
 
     await expect(promise).rejects.toThrow(new MissingParamError('email'))
   })
@@ -101,7 +79,7 @@ describe('LoginService', () => {
   test('Should throw if no password is provided', async () => {
     const { sut } = makeSut()
 
-    const promise = sut.verifyLogin('any_email@mail.com', '')
+    const promise = sut.execute('any_email@mail.com', '')
 
     await expect(promise).rejects.toThrow(new MissingParamError('password'))
   })
@@ -109,7 +87,7 @@ describe('LoginService', () => {
   test('Should calls UserRepository with correct params', async () => {
     const { sut, userRepoSpy } = makeSut()
 
-    await sut.verifyLogin('any_email@mail.com', 'any_password')
+    await sut.execute('any_email@mail.com', 'any_password')
 
     expect(userRepoSpy.email).toBe('any_email@mail.com')
   })
@@ -117,14 +95,14 @@ describe('LoginService', () => {
   test('Should return null if UserRepository do not found user', async () => {
     const { sut, userRepoSpy } = makeSut()
     userRepoSpy.foundUser = false
-    const user = await sut.verifyLogin('any_email@mail.com', 'any_password')
+    const user = await sut.execute('any_email@mail.com', 'any_password')
 
     expect(user).toBeNull()
   })
 
   test('Should calls EncrypterHelper with correct params', async () => {
     const { sut, encrypterHelperSpy } = makeSut()
-    await sut.verifyLogin('any_email@mail.com', 'any_password')
+    await sut.execute('any_email@mail.com', 'any_password')
 
     expect(encrypterHelperSpy.strWithoutHash).toBe('any_password')
   })
@@ -132,7 +110,7 @@ describe('LoginService', () => {
   test('Should return null if EncrypterHelper returns null', async () => {
     const { sut, encrypterHelperSpy } = makeSut()
     encrypterHelperSpy.validCase = false
-    const response = await sut.verifyLogin('invalid_email@mail.com', 'invalid_password')
+    const response = await sut.execute('invalid_email@mail.com', 'invalid_password')
 
     expect(response).toBeNull()
   })
@@ -140,7 +118,7 @@ describe('LoginService', () => {
   test('Should return token if valid credentials are provided', async () => {
     const { sut } = makeSut()
 
-    const token = await sut.verifyLogin('valid_email@mail.com', 'valid_password')
+    const token = await sut.execute('valid_email@mail.com', 'valid_password')
 
     expect(token).toBe('valid_token')
   })

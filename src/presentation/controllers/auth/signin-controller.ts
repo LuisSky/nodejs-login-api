@@ -1,4 +1,4 @@
-import { ILoginService } from "../../../utils/protocols"
+import { Service } from "../../../utils/protocols"
 import { MissingParamError, UnauthorizedError, ValidationError } from "../../../utils/errors"
 import HttpResponse from "../../../utils/helpers/http-response"
 import HttpRequest from "../../../utils/helpers/http-request"
@@ -6,7 +6,7 @@ import { Controller } from "../../../utils/protocols"
 
 export class SigninController implements Controller {
   constructor (
-    private readonly loginService: ILoginService
+    private readonly loginService: Service
   ) {}
 
   async handle (httpRequest: HttpRequest<any>) {
@@ -21,7 +21,7 @@ export class SigninController implements Controller {
       
       const { email, password } = httpRequest.body
 
-      const token = await this.loginService.verifyLogin(email, password)
+      const token = await this.loginService.execute(email, password)
 
       if (!token) return HttpResponse.unauthorized()
 

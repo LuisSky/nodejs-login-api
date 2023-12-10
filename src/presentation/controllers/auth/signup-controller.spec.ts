@@ -1,10 +1,10 @@
-import { IRegisterUserService } from '../../../utils/protocols'
+import { Service } from '../../../utils/protocols'
 import { MissingParamError, ValidationError } from '../../../utils/errors'
 import EmailValidator from '../../../utils/helpers/email-validator'
 import { SignupController } from './signup-controller'
 
 const makeRegUserServiceSpy = () => {
-  class RegisterUserServiceSpy implements IRegisterUserService {
+  class RegisterUserServiceSpy implements Service {
     async execute ({ email, password }: Record<string, string>): Promise<any> {
       return new Promise(resolve => resolve(''))
     }

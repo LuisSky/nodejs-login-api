@@ -1,10 +1,10 @@
 import { ValidationError, MissingParamError } from '../../../utils/errors'
 import EncryptHelper from '../../../utils/helpers/encrypter'
 import { IUserRepository } from './interfaces'
-import { IRegisterUserService } from '../../../utils/protocols'
+import { Service } from '../../../utils/protocols'
 
 
-export default class RegisterUserService implements IRegisterUserService {
+export default class RegisterUserService implements Service {
    
   constructor ( private readonly userRepository: IUserRepository, 
     private readonly encrypter: EncryptHelper){}
