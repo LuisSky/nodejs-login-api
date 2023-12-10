@@ -1,9 +1,6 @@
-import { Service } from "../../../utils/protocols"
 import { MissingParamError, ValidationError } from "../../../utils/errors"
-import { EmailValidator } from "../../../utils/helpers"
-import { HttpResponse } from "../../../utils/helpers"
-import { HttpRequest } from "../../../utils/protocols"
-import { Controller } from "../../../utils/protocols"
+import { EmailValidator, HttpResponse } from "../../../utils/helpers"
+import { Service, HttpRequest, Controller } from "../../../utils/protocols"
 
 
 export class SignupController implements Controller {
