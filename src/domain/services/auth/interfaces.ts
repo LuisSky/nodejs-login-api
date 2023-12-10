@@ -10,9 +10,7 @@ export type IUserRepository = {
   findByEmail: (email: string) => any
 }
 
-export interface IRegisterUserService {
-  execute ({ email, password }: Record<string, string> ): Promise<any>
-}
+
 
 export type httpRequest = {
   body: any

@@ -1,4 +1,4 @@
-import { IRegisterUserService } from "../../../domain/services/auth/interfaces"
+import { IRegisterUserService } from "../../../utils/protocols"
 import { MissingParamError, ValidationError } from "../../../utils/errors"
 import EmailValidator from "../../../utils/helpers/email-validator"
 import HttpResponse from "../../../utils/helpers/http-response"

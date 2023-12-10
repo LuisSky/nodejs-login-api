@@ -1,6 +1,7 @@
 import { ValidationError, MissingParamError } from '../../../utils/errors'
 import EncryptHelper from '../../../utils/helpers/encrypter'
-import { IRegisterUserService, IUserRepository } from './interfaces'
+import { IUserRepository } from './interfaces'
+import { IRegisterUserService } from '../../../utils/protocols'
 
 
 export default class RegisterUserService implements IRegisterUserService {

@@ -1,4 +1,4 @@
-import ILoginService from "../../../domain/services/protocols/login-service"
+import { ILoginService } from "../../../utils/protocols"
 import { MissingParamError, UnauthorizedError, ValidationError } from "../../../utils/errors"
 import HttpResponse from "../../../utils/helpers/http-response"
 import HttpRequest from "../../../utils/helpers/http-request"
