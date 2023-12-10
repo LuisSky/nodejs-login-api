@@ -1,6 +1,6 @@
 import { describe, expect, test } from '@jest/globals';
-import bcrypt from './__mocks__/bcrypt';
 import EncrypterHelper from './encrypter'
+import bcrypt from 'bcrypt';
 
 
 const makeSut = () => {
@@ -15,27 +15,33 @@ describe('EncrypterHelper', () => {
     
     expect(result).toBeNull()
   })
+  
   test('Should calls bcrypt with correct params', async () => {
     const sut = makeSut()
     
-    sut.hash('any_string')
+    const receivedHashParam = jest.spyOn(bcrypt, "hashSync")
     
+    sut.hash('any_string')    
     
-    expect(bcrypt.hashParam).toBe('any_string')
+    expect(receivedHashParam).toHaveBeenCalledWith('any_string', 10)
   })
 
   test('Should string be different from the encrypted string', async () => {
     const sut = makeSut()
     
-    const noHashString = 'any'
-    const hashString = sut.hash(noHashString)
+    jest.spyOn(bcrypt, "hashSync").mockImplementationOnce(() => 'hash_str')
+    
+    const noHashString = 'no_hash_str'
+    const hashedString = sut.hash(noHashString)
 
-    expect(noHashString).not.toBe(hashString)
+    expect(noHashString).not.toBe(hashedString)
   })
 
-  test('Should return null if invalid string are provided', async () => {
+  test('Should return false if invalid string are provided', async () => {
     const sut = makeSut()
-    bcrypt.validHashString = false
+    
+    jest.spyOn(bcrypt, "compare").mockImplementationOnce(() => false)
+    
     const hashString = await sut.compare('invalid_string', 'valid_hash')
 
     expect(hashString).toBe(false)
@@ -43,7 +49,8 @@ describe('EncrypterHelper', () => {
 
   test('Should return true if valid string are provided', async () => {
     const sut = makeSut()
-    bcrypt.validHashString = true
+    jest.spyOn(bcrypt, "compare").mockImplementationOnce(() => true)
+    
     const hashString = await sut.compare('valid_string', 'valid_hash')
 
     expect(hashString).toBe(true)
