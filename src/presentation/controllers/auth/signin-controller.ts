@@ -1,8 +1,6 @@
-import { Service } from "../../../utils/protocols"
-import { MissingParamError, UnauthorizedError, ValidationError } from "../../../utils/errors"
+import { MissingParamError, ValidationError } from "../../../utils/errors"
 import { HttpResponse } from "../../../utils/helpers"
-import { HttpRequest } from "../../../utils/protocols"
-import { Controller } from "../../../utils/protocols"
+import { Service, HttpRequest, Controller } from "../../../utils/protocols"
 
 export class SigninController implements Controller {
   constructor (
