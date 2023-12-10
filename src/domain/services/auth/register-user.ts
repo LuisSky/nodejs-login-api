@@ -1,5 +1,5 @@
 import { ValidationError, MissingParamError } from '../../../utils/errors'
-import EncryptHelper from '../../../utils/helpers/encrypter'
+import { EncryptHelper } from '../../../utils/helpers'
 import { IUserRepository } from './interfaces'
 import { Service } from '../../../utils/protocols'
 

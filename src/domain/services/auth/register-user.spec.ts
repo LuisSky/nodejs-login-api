@@ -1,6 +1,6 @@
 import RegisterUserService from './register-user'
 import { ValidationError } from '../../../utils/errors'
-import EncryptHelper from '../../../utils/helpers/encrypter'
+import { EncryptHelper } from '../../../utils/helpers'
 import { IUserRepository } from './interfaces'
 
 

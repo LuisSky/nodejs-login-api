@@ -1,6 +1,6 @@
 import { Service } from "../../../utils/protocols"
 import { MissingParamError, UnauthorizedError, ValidationError } from "../../../utils/errors"
-import HttpResponse from "../../../utils/helpers/http-response"
+import { HttpResponse } from "../../../utils/helpers"
 import { HttpRequest } from "../../../utils/protocols"
 import { Controller } from "../../../utils/protocols"
 

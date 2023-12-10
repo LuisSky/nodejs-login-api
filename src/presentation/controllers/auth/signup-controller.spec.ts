@@ -1,6 +1,6 @@
 import { Service } from '../../../utils/protocols'
 import { MissingParamError, ValidationError } from '../../../utils/errors'
-import EmailValidator from '../../../utils/helpers/email-validator'
+import { EmailValidator } from '../../../utils/helpers'
 import { SignupController } from './signup-controller'
 
 const makeRegUserServiceSpy = () => {

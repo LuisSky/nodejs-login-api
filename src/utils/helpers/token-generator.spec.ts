@@ -20,7 +20,7 @@ jest.mock('jsonwebtoken', () => {
   }
 })
 
-import TokenGenerator from './token-generator'
+import { TokenGenerator } from './token-generator'
 
 const makeSut = () => {
   const jwt = require('jsonwebtoken')

@@ -5,7 +5,7 @@ function isValidEmailAdress(email: string) {
   return testEmailRegex.test(email);
 }
 
-export default class EmailValidator {
+export class EmailValidator {
   isValid (email: string) {
     if (!email) {
       throw new MissingParamError('email')

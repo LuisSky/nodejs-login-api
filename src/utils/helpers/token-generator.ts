@@ -2,7 +2,7 @@ import jwt, { JwtPayload } from 'jsonwebtoken'
 import { ITokenGenerator } from '../protocols'
 
 
-export default class TokenGenerator implements ITokenGenerator {
+export class TokenGenerator implements ITokenGenerator {
   constructor (
     readonly tokenSecretCode: any
   ) {}
