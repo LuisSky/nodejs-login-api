@@ -6,7 +6,7 @@ export class TokenGenerator implements ITokenGenerator {
     readonly tokenSecretCode: string
   ) {}
 
-  generate (payload: unknown): string | null {
+  generate (payload: object): string | null {
     if (!payload) return null
     const token = jwt.sign(payload, this.tokenSecretCode, {
       expiresIn: 300

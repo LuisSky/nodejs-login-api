@@ -19,41 +19,29 @@ describe('TokenGenerator', () => {
     expect(sut.tokenSecretCode).toBe(secretCode)
   })
 
-  // TODO: remember to refactor this test
-  // test('Should call JWT with correct secret-token-code', () => {
-  //   const { sut, secretTokenCode } = makeSut()
+  test('Should call JWT with correct params', () => {
+    const { sut, secretTokenCode } = makeSut()
 
-  //   const jwtCalledWith = jest.spyOn(jwt, 'sign')
+    const jwtCalledWith = jest.spyOn(jwt, 'sign')
 
-  //   sut.generate('any')
+    sut.generate({ payload: 'any_value' })
 
-  //   expect(jwtCalledWith).toHaveBeenCalledWith('any', secretTokenCode, { expiresIn: 300 })
-  // })
-
-  // test('Should call JWT with correct params', async () => {
-  //   const { sut, jwt } = makeSut()
-
-  //   const payload = {
-  //     anyObject: 'any_object'
-  //   }
-  //   await sut.generate(payload)
-
-  //   expect(jwt.payload).toBe(payload)
-  // })
-
-  test('Should return null if no payload is provided', async () => {
-    const { sut } = makeSut()
-
-    const token = sut.generate('')
-
-    expect(token).toBeNull()
+    expect(jwtCalledWith).toHaveBeenCalledWith({ payload: 'any_value' }, secretTokenCode, { expiresIn: 300 })
   })
+
+  // test('Should return null if no payload is provided', async () => {
+  //   const { sut } = makeSut()
+
+  //   const token = sut.generate(null)
+
+  //   expect(token).toBeNull()
+  // })
 
   test('Should return an token if payload is provided', async () => {
     const { sut } = makeSut()
 
     jest.spyOn(jwt, 'sign').mockImplementationOnce(() => 'any_token')
-    const payload = 'any_payload'
+    const payload = { any_payload: 'any_payload' }
     const token = sut.generate(payload)
 
     expect(token).toBe('any_token')
