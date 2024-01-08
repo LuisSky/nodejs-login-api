@@ -1,4 +1,4 @@
-import jwt, { JwtPayload } from 'jsonwebtoken'
+import jwt from 'jsonwebtoken'
 import { ITokenGenerator } from '../protocols'
 
 export class TokenGenerator implements ITokenGenerator {
@@ -12,11 +12,5 @@ export class TokenGenerator implements ITokenGenerator {
       expiresIn: 300
     })
     return token
-  }
-
-  decode (token: string): JwtPayload | null | string {
-    if (!token) return null
-    const decoded = jwt.verify(token, this.tokenSecretCode)
-    return decoded
   }
 }

@@ -29,14 +29,6 @@ describe('TokenGenerator', () => {
     expect(jwtCalledWith).toHaveBeenCalledWith({ payload: 'any_value' }, secretTokenCode, { expiresIn: 300 })
   })
 
-  // test('Should return null if no payload is provided', async () => {
-  //   const { sut } = makeSut()
-
-  //   const token = sut.generate(null)
-
-  //   expect(token).toBeNull()
-  // })
-
   test('Should return an token if payload is provided', async () => {
     const { sut } = makeSut()
 
@@ -47,32 +39,44 @@ describe('TokenGenerator', () => {
     expect(token).toBe('any_token')
   })
 
-  test('Should return null if no decode token is provided', async () => {
-    const { sut } = makeSut()
+  // test('Should throw if jwt sign throw', () => {
+  //   const { sut } = makeSut()
 
-    const decodeToken = sut.decode('')
+  //   jest.spyOn(jwt, 'sign').mockImplementationOnce(() => new Error())
 
-    expect(decodeToken).toBeNull()
-  })
+  //   const token = sut.generate({ any_token: 'any' })
 
-  test('Should return undefined if invalid token is provided', async () => {
-    const { sut } = makeSut()
+  //   console.log(token)
 
-    jest.spyOn(jwt, 'verify').mockImplementationOnce(() => undefined)
+  //   expect(token).toThrow()
+  // })
 
-    const decodeToken = sut.decode('invalid_token')
+  // test('Should return null if no decode token is provided', async () => {
+  //   const { sut } = makeSut()
 
-    expect(decodeToken).toBe(undefined)
-  })
+  //   const decodeToken = sut.decode('')
 
-  test('Should return original payload if valid token is provided', async () => {
-    const { sut } = makeSut()
+  //   expect(decodeToken).toBeNull()
+  // })
 
-    const payload = 'any_payload'
+  // test('Should return undefined if invalid token is provided', async () => {
+  //   const { sut } = makeSut()
 
-    jest.spyOn(jwt, 'verify').mockImplementationOnce(() => payload)
-    const decodeToken = sut.decode('valid_token')
+  //   jest.spyOn(jwt, 'verify').mockImplementationOnce(() => undefined)
 
-    expect(decodeToken).toBe(payload)
-  })
+  //   const decodeToken = sut.decode('invalid_token')
+
+  //   expect(decodeToken).toBe(undefined)
+  // })
+
+  // test('Should return original payload if valid token is provided', async () => {
+  //   const { sut } = makeSut()
+
+  //   const payload = 'any_payload'
+
+  //   jest.spyOn(jwt, 'verify').mockImplementationOnce(() => payload)
+  //   const decodeToken = sut.decode('valid_token')
+
+  //   expect(decodeToken).toBe(payload)
+  // })
 })

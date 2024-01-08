@@ -46,10 +46,6 @@ const makeTokenGeneratorSpy = (): ITokenGenerator => {
     async generate (payload: any): Promise<any> {
       return 'valid_token'
     }
-
-    decode (): void {
-
-    }
   }
   const tokenGeneratorSpy = new TokenGeneratorSpy()
   return tokenGeneratorSpy
