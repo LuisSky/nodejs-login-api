@@ -9,7 +9,7 @@ export class SignupRouterComposer {
     const encrypter = new EncrypterHelper()
     const userRepository = new UserRepository()
     return new SignupController(
-      new RegisterUserService(userRepository, encrypter),
+      new RegisterUserService(userRepository, userRepository, encrypter),
       new EmailValidator()
     )
   }

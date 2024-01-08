@@ -1,9 +1,12 @@
 import { ValidationError, MissingParamError } from '../../../utils/errors'
 import { Encrypter, Service } from '../../../utils/protocols'
-import { IUserRepository } from './interfaces'
+import { ICreateUserRepository, IFindUserByEmailRepository } from './interfaces'
 
 export default class RegisterUserService implements Service {
-  constructor (private readonly userRepository: IUserRepository,
+  constructor (
+
+    private readonly findUserByEmailRepository: IFindUserByEmailRepository,
+    private readonly userRepository: ICreateUserRepository,
     private readonly encrypter: Encrypter) {}
 
   async execute ({ email, password }: Record<string, string>): Promise<any> {
@@ -13,7 +16,7 @@ export default class RegisterUserService implements Service {
     if (!email) throw new ValidationError('email')
     if (!password) throw new ValidationError('password')
 
-    const verifyExistsUser = await this.userRepository.findByEmail(email)
+    const verifyExistsUser = await this.findUserByEmailRepository.findByEmail(email)
 
     if (verifyExistsUser) throw new ValidationError('this user alread exist')
 

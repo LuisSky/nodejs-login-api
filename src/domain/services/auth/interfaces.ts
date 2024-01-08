@@ -4,7 +4,10 @@ export interface User {
   password: string
 }
 
-export interface IUserRepository {
-  createOne: (user: User) => any
+export interface IFindUserByEmailRepository {
   findByEmail: (email: string) => any
+}
+
+export interface ICreateUserRepository {
+  createOne: (user: User) => any
 }

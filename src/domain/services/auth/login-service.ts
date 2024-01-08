@@ -1,9 +1,9 @@
 import { MissingParamError } from '../../../utils/errors'
 import { Encrypter, ITokenGenerator, Service } from '../../../utils/protocols'
-import { IUserRepository, User } from './interfaces'
+import { IFindUserByEmailRepository, User } from './interfaces'
 
 export default class LoginService implements Service {
-  constructor (private readonly userRepository: IUserRepository,
+  constructor (private readonly findUserByEmailRepository: IFindUserByEmailRepository,
     private readonly encrypter: Encrypter,
     private readonly tokenGenerator: ITokenGenerator) {}
 
@@ -11,7 +11,7 @@ export default class LoginService implements Service {
     if (!email) throw new MissingParamError('email')
     if (!password) throw new MissingParamError('password')
 
-    const user = await this.userRepository.findByEmail(email) as User
+    const user = await this.findUserByEmailRepository.findByEmail(email) as User
 
     const passwordCompare = user && await this.encrypter.compare(password, user.password)
 

@@ -1,20 +1,26 @@
 import RegisterUserService from './register-user'
 import { ValidationError } from '../../../utils/errors'
 import { Encrypter } from '../../../utils/protocols'
-import { IUserRepository } from './interfaces'
+import { ICreateUserRepository, IFindUserByEmailRepository } from './interfaces'
 
-const makeUserRepositorySpy = (): IUserRepository => {
-  class UserRepositorySpy implements IUserRepository {
+const makeFindUserByEmailRepository = (): IFindUserByEmailRepository => {
+  class FindUserByEmailRepositorySpy implements IFindUserByEmailRepository {
     findByEmail (email: string): boolean {
       return false
     }
+  }
+  const findUserByEmailRepositorySpy = new FindUserByEmailRepositorySpy()
+  return findUserByEmailRepositorySpy
+}
 
+const makeCreateUserRepositorySpy = (): ICreateUserRepository => {
+  class CreateUserRepositorySpy implements ICreateUserRepository {
     createOne (user: any): any {
       return { ...user }
     }
   }
-  const userRepositorySpy = new UserRepositorySpy()
-  return userRepositorySpy
+  const createUserRepoSpy = new CreateUserRepositorySpy()
+  return createUserRepoSpy
 }
 
 const makeEncrypterHelperSpy = (): Encrypter => {
@@ -35,12 +41,14 @@ const makeEncrypterHelperSpy = (): Encrypter => {
 }
 
 const makeSut = (): any => {
-  const userRepoSpy = makeUserRepositorySpy()
+  const findUserByEmailRepoSpy = makeFindUserByEmailRepository()
+  const createUserRepoSpy = makeCreateUserRepositorySpy()
   const encrypterHelperSpy = makeEncrypterHelperSpy()
-  const sut = new RegisterUserService(userRepoSpy, encrypterHelperSpy)
+  const sut = new RegisterUserService(findUserByEmailRepoSpy, createUserRepoSpy, encrypterHelperSpy)
 
   return {
-    userRepoSpy,
+    findUserByEmailRepoSpy,
+    createUserRepoSpy,
     encrypterHelperSpy,
     sut
   }
@@ -70,9 +78,9 @@ describe('UserService', () => {
   })
 
   test('Should throw if User alread exists', async () => {
-    const { sut, userRepoSpy } = makeSut()
+    const { sut, findUserByEmailRepoSpy } = makeSut()
 
-    jest.spyOn(userRepoSpy, 'findByEmail').mockImplementationOnce(() => {
+    jest.spyOn(findUserByEmailRepoSpy, 'findByEmail').mockImplementationOnce(() => {
       throw new ValidationError('this user alread exist')
     })
 
@@ -98,10 +106,10 @@ describe('UserService', () => {
     expect(calledWith).toHaveBeenCalledWith('any_pass')
   })
 
-  test('Should call UserRepository .findByEmail .createOne with correct params', async () => {
-    const { sut, userRepoSpy } = makeSut()
+  test('Should call FindUserByEmailRepository .findByEmail .createOne with correct params', async () => {
+    const { sut, findUserByEmailRepoSpy } = makeSut()
 
-    const findByEmailcalledWith = jest.spyOn(userRepoSpy, 'findByEmail')
+    const findByEmailcalledWith = jest.spyOn(findUserByEmailRepoSpy, 'findByEmail')
     // const createOnecalledWith = jest.spyOn(userRepoSpy, 'createOne')
 
     const credentials = {

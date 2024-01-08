@@ -2,26 +2,22 @@
 
 import { MissingParamError } from '../../../utils/errors'
 import { Encrypter, ITokenGenerator } from '../../../utils/protocols'
-import { IUserRepository } from './interfaces'
+import { IFindUserByEmailRepository } from './interfaces'
 import LoginService from './login-service'
 
-const makeUserRepoSpy = (): IUserRepository => {
-  class UserRepositorySpy {
+const makeFindUserByEmailRepoSpy = (): IFindUserByEmailRepository => {
+  class FindUserByEmailRepositorySpy implements IFindUserByEmailRepository {
     email = ''
     foundUser = false
     async findByEmail (email: string): Promise<any> {
       this.email = email
       return this.foundUser
     }
-
-    createOne (): any {
-      return ''
-    }
   }
-  const userRepoSpy = new UserRepositorySpy()
-  userRepoSpy.foundUser = true
+  const findUserByEmailRepositorySpy = new FindUserByEmailRepositorySpy()
+  findUserByEmailRepositorySpy.foundUser = true
 
-  return userRepoSpy
+  return findUserByEmailRepositorySpy
 }
 
 const makeEncrypterHelperSpy = (): Encrypter => {
@@ -51,15 +47,15 @@ const makeTokenGeneratorSpy = (): ITokenGenerator => {
   return tokenGeneratorSpy
 }
 const makeSut = (): any => {
-  const userRepoSpy = makeUserRepoSpy()
+  const findUserByEmailRepositorySpy = makeFindUserByEmailRepoSpy()
   const encrypterHelperSpy = makeEncrypterHelperSpy()
   const tokenGeneratorSpy = makeTokenGeneratorSpy()
 
-  const sut = new LoginService(userRepoSpy, encrypterHelperSpy, tokenGeneratorSpy)
+  const sut = new LoginService(findUserByEmailRepositorySpy, encrypterHelperSpy, tokenGeneratorSpy)
 
   return {
     sut,
-    userRepoSpy,
+    findUserByEmailRepositorySpy,
     encrypterHelperSpy,
     tokenGeneratorSpy
   }
@@ -83,16 +79,16 @@ describe('LoginService', () => {
   })
 
   test('Should calls UserRepository with correct params', async () => {
-    const { sut, userRepoSpy } = makeSut()
+    const { sut, findUserByEmailRepositorySpy } = makeSut()
 
     await sut.execute('any_email@mail.com', 'any_password')
 
-    expect(userRepoSpy.email).toBe('any_email@mail.com')
+    expect(findUserByEmailRepositorySpy.email).toBe('any_email@mail.com')
   })
 
   test('Should return null if UserRepository do not found user', async () => {
-    const { sut, userRepoSpy } = makeSut()
-    userRepoSpy.foundUser = false
+    const { sut, findUserByEmailRepositorySpy } = makeSut()
+    findUserByEmailRepositorySpy.foundUser = false
     const user = await sut.execute('any_email@mail.com', 'any_password')
 
     expect(user).toBeNull()
