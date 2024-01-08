@@ -1,6 +1,7 @@
 import { MissingParamError } from '../../../utils/errors'
 import { Encrypter, ITokenGenerator, Service } from '../../../utils/protocols'
-import { IFindUserByEmailRepository, User } from './interfaces'
+import { User } from '../../entities/user'
+import { IFindUserByEmailRepository } from './interfaces'
 
 export default class LoginService implements Service {
   constructor (private readonly findUserByEmailRepository: IFindUserByEmailRepository,

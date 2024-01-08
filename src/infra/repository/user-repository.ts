@@ -1,4 +1,4 @@
-import { User } from '../../domain/services/auth/interfaces'
+import { User } from '../../domain/entities/user'
 
 const users: User[] = []
 

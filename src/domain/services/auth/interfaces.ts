@@ -1,8 +1,4 @@
-export interface User {
-  id: string
-  email: string
-  password: string
-}
+import { User } from '../../entities/user'
 
 export interface IFindUserByEmailRepository {
   findByEmail: (email: string) => any
