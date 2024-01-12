@@ -1,14 +1,15 @@
+import { AddUserAccount } from '../../../domain/auth/add-user-account'
 import { MissingParamError, ValidationError } from '../../../utils/errors'
 import { EmailValidator, HttpResponse } from '../../../utils/helpers'
 import { Service, HttpRequest, Controller, HttpResponse as httpRes } from '../../../utils/protocols'
 
 export class SignupController implements Controller {
   constructor (
-    private readonly registerUserService: Service,
+    private readonly addUserAccount: AddUserAccount,
     private readonly emailValidator: EmailValidator
   ) {}
 
-  async handle (httpRequest: HttpRequest<any>): Promise<httpRes> {
+  async handle (httpRequest: HttpRequest): Promise<httpRes> {
     try {
       if (!httpRequest.body) return HttpResponse.badRequest(new MissingParamError('body'))
 
@@ -21,7 +22,7 @@ export class SignupController implements Controller {
 
       if (!this.emailValidator.isValid(email as string)) return HttpResponse.badRequest(new ValidationError('email'))
 
-      const user = await this.registerUserService.execute({ email, password })
+      const user = await this.addUserAccount.add({ email, password })
 
       return HttpResponse.resourceCreated({ ...user })
     } catch (err) {

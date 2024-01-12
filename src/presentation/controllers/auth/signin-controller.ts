@@ -7,7 +7,7 @@ export class SigninController implements Controller {
     private readonly loginService: Service
   ) {}
 
-  async handle (httpRequest: HttpRequest<any>): Promise<httpResp> {
+  async handle (httpRequest: HttpRequest): Promise<httpResp> {
     try {
       if (!httpRequest.body) return HttpResponse.badRequest(new MissingParamError('body'))
 

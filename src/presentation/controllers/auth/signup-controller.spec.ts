@@ -2,16 +2,22 @@ import { Service } from '../../../utils/protocols'
 import { MissingParamError, ValidationError } from '../../../utils/errors'
 import { EmailValidator } from '../../../utils/helpers'
 import { SignupController } from './signup-controller'
+import { AddUserAccount, AddUserAccountParams } from '../../../domain/auth/add-user-account'
+import { User } from '../../../domain/entities/user'
 
-const makeRegUserServiceSpy = () => {
-  class RegisterUserServiceSpy implements Service {
-    async execute ({ email, password }: Record<string, string>): Promise<any> {
-      return await new Promise(resolve => { resolve('') })
+const mockNewUser: User = {
+  id: 'any_id',
+  email: 'any_email@mail.com',
+  password: 'any_hash_pass'
+}
+
+const mockAddUserAccountStub = (): AddUserAccount => {
+  class AddUserAccountStub implements AddUserAccount {
+    async add (user: AddUserAccountParams): Promise<User> {
+      return await Promise.resolve(mockNewUser)
     }
   }
-  const regUserServiceSpy = new RegisterUserServiceSpy()
-
-  return regUserServiceSpy
+  return new AddUserAccountStub()
 }
 
 const makeEmailValidatorSpy = (): EmailValidator => {
@@ -26,13 +32,13 @@ const makeEmailValidatorSpy = (): EmailValidator => {
 
 const makeSut = () => {
   const emailValidatorSpy = makeEmailValidatorSpy()
-  const registerUserServiceSpy = makeRegUserServiceSpy()
+  const addUserAccountStub = mockAddUserAccountStub()
 
-  const sut = new SignupController(registerUserServiceSpy, emailValidatorSpy)
+  const sut = new SignupController(addUserAccountStub, emailValidatorSpy)
 
   return {
     sut,
-    registerUserServiceSpy,
+    addUserAccountStub,
     emailValidatorSpy
   }
 }
@@ -108,9 +114,9 @@ describe('SignupController', () => {
   })
 
   test('Should call RegisterUserService with correct params', async () => {
-    const { sut, registerUserServiceSpy } = makeSut()
+    const { sut, addUserAccountStub } = makeSut()
 
-    const execute = jest.spyOn(registerUserServiceSpy, 'execute')
+    const execute = jest.spyOn(addUserAccountStub, 'add')
 
     const httpRequest = {
       body: {
@@ -123,9 +129,9 @@ describe('SignupController', () => {
   })
 
   test('Should return 500 if RegisterUserService throws', async () => {
-    const { sut, registerUserServiceSpy } = makeSut()
+    const { sut, addUserAccountStub } = makeSut()
 
-    jest.spyOn(registerUserServiceSpy, 'execute').mockRejectedValue(new Error())
+    jest.spyOn(addUserAccountStub, 'add').mockRejectedValue(new Error())
 
     const httpRequest = {
       body: {
