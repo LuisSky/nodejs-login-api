@@ -1,6 +1,6 @@
 import { UnauthorizedError } from '../errors'
 
-export class HttpResponse {
+export class HttpHelper {
   static badRequest (error: Error): any {
     return {
       statusCode: 400,
