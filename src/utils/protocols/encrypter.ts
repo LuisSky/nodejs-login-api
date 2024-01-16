@@ -1,4 +1,4 @@
 export interface Encrypter {
-  hash: (pass: string) => any
+  hash: (pass: string) => string
   compare: (hashPass: string, password: string) => any
 }

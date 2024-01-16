@@ -20,7 +20,7 @@ export class DbAddUserAccount implements AddUserAccount {
 
     if (verifyExistsUser) throw new ValidationError('this user alread exist')
 
-    const hashPass = this.encrypter.hash(password) as string
+    const hashPass = this.encrypter.hash(password)
     const user = await this.userRepository.createOne({ id: 'asdsfasfas', email, password: hashPass })
     return user
   }

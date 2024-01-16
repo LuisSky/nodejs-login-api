@@ -7,14 +7,6 @@ const makeSut = () => {
 }
 
 describe('EncrypterHelper', () => {
-  test('Should returns null if no param is provided', async () => {
-    const sut = makeSut()
-
-    const result = sut.hash('')
-
-    expect(result).toBeNull()
-  })
-
   test('Should calls bcrypt with correct params', async () => {
     const sut = makeSut()
 
