@@ -1,7 +1,7 @@
-import RegisterUserService from './register-user'
-import { ValidationError } from '../../../utils/errors'
-import { Encrypter } from '../../../utils/protocols'
-import { ICreateUserRepository, IFindUserByEmailRepository } from './interfaces'
+import RegisterUserService from '../../domain/services/auth/register-user'
+import { ValidationError } from '../../utils/errors'
+import { Encrypter } from '../../utils/protocols'
+import { ICreateUserRepository, IFindUserByEmailRepository } from '../../domain/services/auth/interfaces'
 
 const makeFindUserByEmailRepository = (): IFindUserByEmailRepository => {
   class FindUserByEmailRepositorySpy implements IFindUserByEmailRepository {
