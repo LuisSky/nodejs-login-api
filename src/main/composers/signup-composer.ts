@@ -1,4 +1,3 @@
-import RegisterUserService from '../../domain/services/auth/register-user'
 import UserRepository from '../../infra/repository/user-repository'
 import { Controller } from '../../utils/protocols'
 import { DbAddUserAccount } from '../../data/auth/db-add-user-account'
