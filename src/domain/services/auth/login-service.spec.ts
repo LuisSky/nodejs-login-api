@@ -7,34 +7,24 @@ import LoginService from './login-service'
 
 const makeFindUserByEmailRepoSpy = (): IFindUserByEmailRepository => {
   class FindUserByEmailRepositorySpy implements IFindUserByEmailRepository {
-    email = ''
-    foundUser = false
     async findByEmail (email: string): Promise<any> {
-      this.email = email
-      return this.foundUser
+      return { email, password: 'any_hash' }
     }
   }
-  const findUserByEmailRepositorySpy = new FindUserByEmailRepositorySpy()
-  findUserByEmailRepositorySpy.foundUser = true
-
-  return findUserByEmailRepositorySpy
+  return new FindUserByEmailRepositorySpy()
 }
 
 const makeEncrypterHelperSpy = (): Encrypter => {
-  class EncrypterHelperSpy {
-    strWithoutHash = ''
-    validCase = false
-    hash (): void {
+  class EncrypterHelperSpy implements Encrypter {
+    hash (): string {
+      return 'any_hash'
     }
 
-    compare (string: string, hashString: string): boolean {
-      this.strWithoutHash = string
-      return this.validCase
+    compare (): boolean {
+      return true
     }
   }
-  const encrypterHelperSpy = new EncrypterHelperSpy()
-  encrypterHelperSpy.validCase = true
-  return encrypterHelperSpy
+  return new EncrypterHelperSpy()
 }
 
 const makeTokenGeneratorSpy = (): ITokenGenerator => {
@@ -46,7 +36,15 @@ const makeTokenGeneratorSpy = (): ITokenGenerator => {
   const tokenGeneratorSpy = new TokenGeneratorSpy()
   return tokenGeneratorSpy
 }
-const makeSut = (): any => {
+
+type SutTypes = {
+  sut: LoginService
+  findUserByEmailRepositorySpy: IFindUserByEmailRepository
+  encrypterHelperSpy: Encrypter
+  tokenGeneratorSpy: ITokenGenerator
+}
+
+const makeSut = (): SutTypes => {
   const findUserByEmailRepositorySpy = makeFindUserByEmailRepoSpy()
   const encrypterHelperSpy = makeEncrypterHelperSpy()
   const tokenGeneratorSpy = makeTokenGeneratorSpy()
@@ -64,49 +62,52 @@ const makeSut = (): any => {
 describe('LoginService', () => {
   test('Should throw if no email is provided', async () => {
     const { sut } = makeSut()
-
     const promise = sut.execute('', 'any_password')
-
     await expect(promise).rejects.toThrow(new MissingParamError('email'))
   })
 
   test('Should throw if no password is provided', async () => {
     const { sut } = makeSut()
-
     const promise = sut.execute('any_email@mail.com', '')
-
     await expect(promise).rejects.toThrow(new MissingParamError('password'))
   })
 
   test('Should calls UserRepository with correct params', async () => {
     const { sut, findUserByEmailRepositorySpy } = makeSut()
 
+    const findUserByEmailRepoSpyCalledWith = jest.spyOn(findUserByEmailRepositorySpy, 'findByEmail')
+
     await sut.execute('any_email@mail.com', 'any_password')
 
-    expect(findUserByEmailRepositorySpy.email).toBe('any_email@mail.com')
+    expect(findUserByEmailRepoSpyCalledWith).toHaveBeenCalledWith('any_email@mail.com')
   })
 
   test('Should return null if UserRepository do not found user', async () => {
     const { sut, findUserByEmailRepositorySpy } = makeSut()
-    findUserByEmailRepositorySpy.foundUser = false
-    const user = await sut.execute('any_email@mail.com', 'any_password')
+    jest.spyOn(findUserByEmailRepositorySpy, 'findByEmail').mockReturnValueOnce(null)
 
-    expect(user).toBeNull()
+    const token = await sut.execute('any_email@mail.com', 'any_password')
+
+    expect(token).toBeNull()
   })
 
   test('Should calls EncrypterHelper with correct params', async () => {
     const { sut, encrypterHelperSpy } = makeSut()
+
+    const hashCalledWith = jest.spyOn(encrypterHelperSpy, 'compare')
     await sut.execute('any_email@mail.com', 'any_password')
 
-    expect(encrypterHelperSpy.strWithoutHash).toBe('any_password')
+    expect(hashCalledWith).toHaveBeenCalledWith('any_password', 'any_hash')
   })
 
   test('Should return null if EncrypterHelper returns null', async () => {
     const { sut, encrypterHelperSpy } = makeSut()
-    encrypterHelperSpy.validCase = false
-    const response = await sut.execute('invalid_email@mail.com', 'invalid_password')
 
-    expect(response).toBeNull()
+    jest.spyOn(encrypterHelperSpy, 'compare').mockReturnValueOnce(null)
+
+    const token = await sut.execute('invalid_email@mail.com', 'invalid_password')
+
+    expect(token).toBeNull()
   })
 
   test('Should return token if valid credentials are provided', async () => {
