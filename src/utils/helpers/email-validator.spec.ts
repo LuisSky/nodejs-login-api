@@ -1,12 +1,13 @@
-import { EmailValidator } from './email-validator'
+import { RegExpEmailValidator } from './email-validator'
 import { MissingParamError } from '../errors'
+import { EmailValidator } from '../../presentation/protocols/email-validator'
 
-const makeSut = () => {
-  const sut = new EmailValidator()
+const makeSut = (): EmailValidator => {
+  const sut = new RegExpEmailValidator()
   return sut
 }
 
-describe('EmailValidator', () => {
+describe('RegExpEmailValidator', () => {
   test('Should throw if no email is provided', () => {
     const sut = makeSut()
 

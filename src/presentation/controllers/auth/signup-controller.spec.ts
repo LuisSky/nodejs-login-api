@@ -1,8 +1,8 @@
 import { MissingParamError, ValidationError } from '../../../utils/errors'
-import { EmailValidator } from '../../../utils/helpers'
 import { SignupController } from './signup-controller'
 import { AddUserAccount, AddUserAccountParams } from '../../../domain/auth/add-user-account'
 import { User } from '../../../domain/entities/user'
+import { EmailValidator } from '../../protocols/email-validator'
 
 const mockNewUser: User = {
   id: 'any_id',

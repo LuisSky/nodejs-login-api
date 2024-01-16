@@ -1,3 +1,4 @@
+import { EmailValidator } from '../../presentation/protocols/email-validator'
 import { MissingParamError } from '../errors'
 
 function isValidEmailAdress (email: string) {
@@ -5,7 +6,7 @@ function isValidEmailAdress (email: string) {
   return testEmailRegex.test(email)
 }
 
-export class EmailValidator {
+export class RegExpEmailValidator implements EmailValidator {
   isValid (email: string) {
     if (!email) {
       throw new MissingParamError('email')
