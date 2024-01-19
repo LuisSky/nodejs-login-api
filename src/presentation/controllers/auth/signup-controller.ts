@@ -1,4 +1,4 @@
-import { AddUserAccount } from '../../../domain/auth/add-user-account'
+import { IAddUserAccount } from '../../../domain/auth/add-user-account'
 import { MissingParamError, ValidationError } from '../../../utils/errors'
 import { HttpHelper } from '../../../utils/helpers'
 import { IHttpRequest, IController, IHttpResponse } from '../../../utils/protocols'
@@ -6,7 +6,7 @@ import { IEmailValidator } from '../../../utils/protocols/email-validator'
 
 export class SignupController implements IController {
   constructor (
-    private readonly addUserAccount: AddUserAccount,
+    private readonly addUserAccount: IAddUserAccount,
     private readonly emailValidator: IEmailValidator
   ) {}
 

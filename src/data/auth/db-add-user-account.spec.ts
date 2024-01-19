@@ -2,6 +2,7 @@ import { ValidationError } from '../../utils/errors'
 import { IEncrypter } from '../../utils/protocols'
 import { ICreateUserRepository, IFindUserByEmailRepository } from '../../domain/services/auth/interfaces'
 import { DbAddUserAccount } from './db-add-user-account'
+import { IAddUserAccount } from '../../domain/auth/add-user-account'
 
 const makeFindUserByEmailRepository = (): IFindUserByEmailRepository => {
   class FindUserByEmailRepositorySpy implements IFindUserByEmailRepository {
@@ -40,7 +41,14 @@ const makeEncrypterHelperSpy = (): IEncrypter => {
   return encrypterHelperSpy
 }
 
-const makeSut = (): any => {
+type SutTypes = {
+  findUserByEmailRepoSpy: IFindUserByEmailRepository
+  createUserRepoSpy: ICreateUserRepository
+  encrypterHelperSpy: IEncrypter
+  sut: IAddUserAccount
+}
+
+const makeSut = (): SutTypes => {
   const findUserByEmailRepoSpy = makeFindUserByEmailRepository()
   const createUserRepoSpy = makeCreateUserRepositorySpy()
   const encrypterHelperSpy = makeEncrypterHelperSpy()

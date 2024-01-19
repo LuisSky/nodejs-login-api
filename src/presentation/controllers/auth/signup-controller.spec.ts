@@ -1,6 +1,6 @@
 import { MissingParamError, ValidationError } from '../../../utils/errors'
 import { SignupController } from './signup-controller'
-import { AddUserAccount, AddUserAccountParams } from '../../../domain/auth/add-user-account'
+import { IAddUserAccount, IAddUserAccountParams } from '../../../domain/auth/add-user-account'
 import { User } from '../../../domain/entities/user'
 import { IEmailValidator } from '../../../utils/protocols/email-validator'
 
@@ -10,9 +10,9 @@ const mockNewUser: User = {
   password: 'any_hash_pass'
 }
 
-const mockAddUserAccountStub = (): AddUserAccount => {
-  class AddUserAccountStub implements AddUserAccount {
-    async add (user: AddUserAccountParams): Promise<User> {
+const mockAddUserAccountStub = (): IAddUserAccount => {
+  class AddUserAccountStub implements IAddUserAccount {
+    async add (user: IAddUserAccountParams): Promise<User> {
       return await Promise.resolve(mockNewUser)
     }
   }

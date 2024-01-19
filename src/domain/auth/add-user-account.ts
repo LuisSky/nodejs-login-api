@@ -1,7 +1,7 @@
 import { User } from '../entities/user'
 
-export interface AddUserAccount {
-  add: (user: AddUserAccountParams) => Promise<User>
+export interface IAddUserAccount {
+  add: (user: IAddUserAccountParams) => Promise<User>
 }
 
-export type AddUserAccountParams = Omit<User, 'id'>
+export type IAddUserAccountParams = Omit<User, 'id'>
