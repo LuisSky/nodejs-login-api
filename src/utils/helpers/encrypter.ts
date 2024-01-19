@@ -1,7 +1,7 @@
 import bcrypt from 'bcrypt'
-import { Encrypter } from '../protocols'
+import { IEncrypter } from '../protocols'
 
-export class EncrypterHelper implements Encrypter {
+export class EncrypterHelper implements IEncrypter {
   hash (str: string): string {
     return bcrypt.hashSync(str, 10)
   }

@@ -1,13 +1,13 @@
 import { Response, Request } from 'express'
-import { Controller, HttpResponse } from '../../utils/protocols'
+import { IController, IHttpResponse } from '../../utils/protocols'
 
 export default class ExpressAdapter {
-  static adapt (controller: Controller) {
-    return async (req: Request, res: Response) => {
+  static adapt (controller: IController) {
+    return async (req: Request, res: Response): Promise<Response> => {
       const httpRequest = {
         body: req.body
       }
-      const httpResponse: HttpResponse = await controller.handle(httpRequest)
+      const httpResponse: IHttpResponse = await controller.handle(httpRequest)
       return res.status(httpResponse.statusCode).json(httpResponse.body)
     }
   }

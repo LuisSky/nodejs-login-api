@@ -1,3 +1,3 @@
-export interface HttpRequest {
+export interface IHttpRequest {
   body?: any
 }

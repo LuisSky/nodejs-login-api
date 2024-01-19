@@ -1,6 +1,6 @@
 import RegisterUserService from '../../domain/services/auth/register-user'
 import { ValidationError } from '../../utils/errors'
-import { Encrypter } from '../../utils/protocols'
+import { IEncrypter } from '../../utils/protocols'
 import { ICreateUserRepository, IFindUserByEmailRepository } from '../../domain/services/auth/interfaces'
 
 const makeFindUserByEmailRepository = (): IFindUserByEmailRepository => {
@@ -23,8 +23,8 @@ const makeCreateUserRepositorySpy = (): ICreateUserRepository => {
   return createUserRepoSpy
 }
 
-const makeEncrypterHelperSpy = (): Encrypter => {
-  class EncrypterHelperSpy implements Encrypter {
+const makeEncrypterHelperSpy = (): IEncrypter => {
+  class EncrypterHelperSpy implements IEncrypter {
     hash (string: string): string {
       return 'valid_hash'
     }

@@ -4,10 +4,10 @@ import { TokenGenerator, EncrypterHelper } from '../../utils/helpers'
 import env from '../config/env'
 
 import { SigninController } from '../../presentation/controllers/auth'
-import { Controller } from '../../utils/protocols'
+import { IController } from '../../utils/protocols'
 
 export class SigninRouterCompose {
-  static compose (): Controller {
+  static compose (): IController {
     const loginService = new LoginService(new UserRepository(), new EncrypterHelper(), new TokenGenerator(env.SECRET_TOKEN_PHRASE))
     return new SigninController(loginService)
   }

@@ -2,7 +2,7 @@ import { MissingParamError, ValidationError } from '../../../utils/errors'
 import { SignupController } from './signup-controller'
 import { AddUserAccount, AddUserAccountParams } from '../../../domain/auth/add-user-account'
 import { User } from '../../../domain/entities/user'
-import { EmailValidator } from '../../../utils/protocols/email-validator'
+import { IEmailValidator } from '../../../utils/protocols/email-validator'
 
 const mockNewUser: User = {
   id: 'any_id',
@@ -19,8 +19,8 @@ const mockAddUserAccountStub = (): AddUserAccount => {
   return new AddUserAccountStub()
 }
 
-const makeEmailValidatorSpy = (): EmailValidator => {
-  class EmailValidatorSpy implements EmailValidator {
+const makeEmailValidatorSpy = (): IEmailValidator => {
+  class EmailValidatorSpy implements IEmailValidator {
     isValid (email: string): boolean {
       return true
     }

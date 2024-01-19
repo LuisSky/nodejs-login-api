@@ -1,13 +1,13 @@
 import { MissingParamError, ValidationError } from '../../../utils/errors'
 import { HttpHelper } from '../../../utils/helpers'
-import { Service, HttpRequest, Controller, HttpResponse } from '../../../utils/protocols'
+import { Service, IHttpRequest, IController, IHttpResponse } from '../../../utils/protocols'
 
-export class SigninController implements Controller {
+export class SigninController implements IController {
   constructor (
     private readonly loginService: Service
   ) {}
 
-  async handle (httpRequest: HttpRequest): Promise<HttpResponse> {
+  async handle (httpRequest: IHttpRequest): Promise<IHttpResponse> {
     try {
       if (!httpRequest.body) return HttpHelper.badRequest(new MissingParamError('body'))
 

@@ -1,11 +1,11 @@
 import { MissingParamError } from '../../../utils/errors'
-import { Encrypter, ITokenGenerator, Service } from '../../../utils/protocols'
+import { IEncrypter, ITokenGenerator, Service } from '../../../utils/protocols'
 import { User } from '../../entities/user'
 import { IFindUserByEmailRepository } from './interfaces'
 
 export default class LoginService implements Service {
   constructor (private readonly findUserByEmailRepository: IFindUserByEmailRepository,
-    private readonly encrypter: Encrypter,
+    private readonly encrypter: IEncrypter,
     private readonly tokenGenerator: ITokenGenerator) {}
 
   async execute (email: string, password: string): Promise<string | null > {

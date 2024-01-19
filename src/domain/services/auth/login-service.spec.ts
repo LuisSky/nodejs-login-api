@@ -1,7 +1,7 @@
 // TODO: Create test's when an dependencys fail
 
 import { MissingParamError } from '../../../utils/errors'
-import { Encrypter, ITokenGenerator } from '../../../utils/protocols'
+import { IEncrypter, ITokenGenerator } from '../../../utils/protocols'
 import { IFindUserByEmailRepository } from './interfaces'
 import LoginService from './login-service'
 
@@ -14,8 +14,8 @@ const makeFindUserByEmailRepoSpy = (): IFindUserByEmailRepository => {
   return new FindUserByEmailRepositorySpy()
 }
 
-const makeEncrypterHelperSpy = (): Encrypter => {
-  class EncrypterHelperSpy implements Encrypter {
+const makeEncrypterHelperSpy = (): IEncrypter => {
+  class EncrypterHelperSpy implements IEncrypter {
     hash (): string {
       return 'any_hash'
     }
@@ -40,7 +40,7 @@ const makeTokenGeneratorSpy = (): ITokenGenerator => {
 type SutTypes = {
   sut: LoginService
   findUserByEmailRepositorySpy: IFindUserByEmailRepository
-  encrypterHelperSpy: Encrypter
+  encrypterHelperSpy: IEncrypter
   tokenGeneratorSpy: ITokenGenerator
 }
 
