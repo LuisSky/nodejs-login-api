@@ -1,7 +1,7 @@
-import RegisterUserService from '../../domain/services/auth/register-user'
 import { ValidationError } from '../../utils/errors'
 import { IEncrypter } from '../../utils/protocols'
 import { ICreateUserRepository, IFindUserByEmailRepository } from '../../domain/services/auth/interfaces'
+import { DbAddUserAccount } from './db-add-user-account'
 
 const makeFindUserByEmailRepository = (): IFindUserByEmailRepository => {
   class FindUserByEmailRepositorySpy implements IFindUserByEmailRepository {
@@ -44,7 +44,7 @@ const makeSut = (): any => {
   const findUserByEmailRepoSpy = makeFindUserByEmailRepository()
   const createUserRepoSpy = makeCreateUserRepositorySpy()
   const encrypterHelperSpy = makeEncrypterHelperSpy()
-  const sut = new RegisterUserService(findUserByEmailRepoSpy, createUserRepoSpy, encrypterHelperSpy)
+  const sut = new DbAddUserAccount(findUserByEmailRepoSpy, createUserRepoSpy, encrypterHelperSpy)
 
   return {
     findUserByEmailRepoSpy,
@@ -57,22 +57,22 @@ const makeSut = (): any => {
 describe('UserService', () => {
   test('Should throw if no Email is provided', async () => {
     const { sut } = makeSut()
-    const credentials = {
+    const mockUser = {
       email: '',
       password: 'any_password'
     }
-    const promise = sut.execute(credentials)
+    const promise = sut.add(mockUser)
 
     await expect(promise).rejects.toThrow(new ValidationError('email'))
   })
 
   test('Should throw if no Password is provided', async () => {
     const { sut } = makeSut()
-    const credentials = {
+    const mockUser = {
       email: 'any_email@mail.com',
       password: ''
     }
-    const promise = sut.execute(credentials)
+    const promise = sut.add(mockUser)
 
     await expect(promise).rejects.toThrow(new ValidationError('password'))
   })
@@ -84,11 +84,11 @@ describe('UserService', () => {
       throw new ValidationError('this user alread exist')
     })
 
-    const credentials = {
+    const mockUser = {
       email: 'any_email@mail.com',
       password: 'any_pass'
     }
-    const promise = sut.execute(credentials)
+    const promise = sut.add(mockUser)
 
     await expect(promise).rejects.toThrow(new ValidationError('this user alread exist'))
   })
@@ -97,29 +97,29 @@ describe('UserService', () => {
     const { sut, encrypterHelperSpy } = makeSut()
 
     const calledWith = jest.spyOn(encrypterHelperSpy, 'hash')
-    const credentials = {
+    const mockUser = {
       email: 'any_email@mail.com',
       password: 'any_pass'
     }
-    await sut.execute(credentials)
+    await sut.add(mockUser)
 
     expect(calledWith).toHaveBeenCalledWith('any_pass')
   })
 
-  test('Should call FindUserByEmailRepository .findByEmail .createOne with correct params', async () => {
+  test('Should call FindUserByEmailRepository .findByEmail with correct params', async () => {
     const { sut, findUserByEmailRepoSpy } = makeSut()
 
     const findByEmailcalledWith = jest.spyOn(findUserByEmailRepoSpy, 'findByEmail')
     // const createOnecalledWith = jest.spyOn(userRepoSpy, 'createOne')
 
-    const credentials = {
+    const mockUser = {
       email: 'any_email@mail.com',
       password: 'any_pass'
     }
 
-    await sut.execute(credentials)
+    await sut.add(mockUser)
 
-    expect(findByEmailcalledWith).toHaveBeenCalledWith(credentials.email)
+    expect(findByEmailcalledWith).toHaveBeenCalledWith(mockUser.email)
     // TODO: when added the model, re-create the following test ( because that receive an object )
     // expect(createOnecalledWith).toHaveBeenCalledWith(credentials.password)
   })
@@ -127,13 +127,13 @@ describe('UserService', () => {
   test('Should returns an user if valid email and password is provided', async () => {
     const { sut } = makeSut()
 
-    const credentials = {
+    const mockUser = {
       email: 'valid_email@mail.com',
       password: 'valid_pass'
     }
-    const user = await sut.execute(credentials)
+    const user = await sut.add(mockUser)
 
-    expect(user.email).toBe(credentials.email)
+    expect(user.email).toBe(mockUser.email)
     expect(user.password).toBe('valid_hash')
   })
 })

@@ -1,4 +1,5 @@
 import { AddUserAccount, AddUserAccountParams } from '../../domain/auth/add-user-account'
+import { User } from '../../domain/entities/user'
 import { ICreateUserRepository, IFindUserByEmailRepository } from '../../domain/services/auth/interfaces'
 import { MissingParamError, ValidationError } from '../../utils/errors'
 import { IEncrypter } from '../../utils/protocols'
@@ -9,7 +10,7 @@ export class DbAddUserAccount implements AddUserAccount {
     private readonly userRepository: ICreateUserRepository,
     private readonly encrypter: IEncrypter) {}
 
-  async add ({ email, password }: AddUserAccountParams): Promise<any> {
+  async add ({ email, password }: AddUserAccountParams): Promise<User> {
     if (!this.userRepository) throw new MissingParamError('UserRepository')
     if (!this.encrypter) throw new MissingParamError('EncrypterHelper')
 
