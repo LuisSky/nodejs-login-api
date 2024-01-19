@@ -1,4 +1,4 @@
-import { RegExpEmailValidator } from './email-validator'
+import { RegExpEmailValidator } from './regexp-email-validator'
 import { MissingParamError } from '../errors'
 import { IEmailValidator } from '../protocols/email-validator'
 
