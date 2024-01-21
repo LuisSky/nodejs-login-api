@@ -63,25 +63,30 @@ const makeSut = (): SutTypes => {
   }
 }
 
+const mockValidUser = {
+  email: 'any_email',
+  password: 'any_password'
+}
+
 describe('DbAddUserAccount', () => {
   test('Should throw if no Email is provided', async () => {
     const { sut } = makeSut()
-    const mockUser = {
+    const mockInvalidUser = {
       email: '',
       password: 'any_password'
     }
-    const promise = sut.add(mockUser)
+    const promise = sut.add(mockInvalidUser)
 
     await expect(promise).rejects.toThrow(new MissingParamError('email'))
   })
 
   test('Should throw if no Password is provided', async () => {
     const { sut } = makeSut()
-    const mockUser = {
+    const mockInvalidUser = {
       email: 'any_email@mail.com',
       password: ''
     }
-    const promise = sut.add(mockUser)
+    const promise = sut.add(mockInvalidUser)
 
     await expect(promise).rejects.toThrow(new MissingParamError('password'))
   })
@@ -89,15 +94,9 @@ describe('DbAddUserAccount', () => {
   test('Should throw if User alread exists', async () => {
     const { sut, loadUserByEmailRepositoryStub } = makeSut()
 
-    jest.spyOn(loadUserByEmailRepositoryStub, 'findByEmail').mockImplementationOnce(async () => {
-      throw new ValidationError('this user alread exist')
-    })
+    jest.spyOn(loadUserByEmailRepositoryStub, 'findByEmail').mockResolvedValueOnce(mockValidUser)
 
-    const mockUser = {
-      email: 'any_email@mail.com',
-      password: 'any_pass'
-    }
-    const promise = sut.add(mockUser)
+    const promise = sut.add(mockValidUser)
 
     await expect(promise).rejects.toThrow(new ValidationError('this user alread exist'))
   })
@@ -106,43 +105,28 @@ describe('DbAddUserAccount', () => {
     const { sut, encrypterHelperSpy } = makeSut()
 
     const calledWith = jest.spyOn(encrypterHelperSpy, 'hash')
-    const mockUser = {
-      email: 'any_email@mail.com',
-      password: 'any_pass'
-    }
-    await sut.add(mockUser)
 
-    expect(calledWith).toHaveBeenCalledWith('any_pass')
+    await sut.add(mockValidUser)
+
+    expect(calledWith).toHaveBeenCalledWith('any_password')
   })
 
   test('Should call LoadUserByEmailRepository .findByEmail with correct params', async () => {
     const { sut, loadUserByEmailRepositoryStub } = makeSut()
 
     const findByEmailcalledWith = jest.spyOn(loadUserByEmailRepositoryStub, 'findByEmail')
-    // const createOnecalledWith = jest.spyOn(userRepoSpy, 'createOne')
 
-    const mockUser = {
-      email: 'any_email@mail.com',
-      password: 'any_pass'
-    }
+    await sut.add(mockValidUser)
 
-    await sut.add(mockUser)
-
-    expect(findByEmailcalledWith).toHaveBeenCalledWith(mockUser.email)
-    // TODO: when added the model, re-create the following test ( because that receive an object )
-    // expect(createOnecalledWith).toHaveBeenCalledWith(credentials.password)
+    expect(findByEmailcalledWith).toHaveBeenCalledWith(mockValidUser.email)
   })
 
-  test('Should returns an user if valid email and password is provided', async () => {
+  test('Should return an user if valid email and password is provided', async () => {
     const { sut } = makeSut()
 
-    const mockUser = {
-      email: 'valid_email@mail.com',
-      password: 'valid_pass'
-    }
-    const user = await sut.add(mockUser)
+    const user = await sut.add(mockValidUser)
 
-    expect(user.email).toBe(mockUser.email)
+    expect(user.email).toBe(mockValidUser.email)
     expect(user.password).toBe('valid_hash')
   })
 })

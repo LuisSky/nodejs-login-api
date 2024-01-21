@@ -18,7 +18,7 @@ export class HttpHelper {
   static serverError (error: Error): any {
     return {
       statusCode: 500,
-      body: new ServerError(error.stack)
+      body: new ServerError(error.message)
     }
   }
 
