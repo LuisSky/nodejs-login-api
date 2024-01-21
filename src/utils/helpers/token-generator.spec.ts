@@ -1,6 +1,16 @@
 import { TokenGenerator } from './token-generator'
 import jwt from 'jsonwebtoken'
 
+jest.mock('jsonwebtoken', () => ({
+  sign (): string {
+    return 'any_token'
+  },
+
+  verify (): string {
+    return 'any_value'
+  }
+}))
+
 const makeSut = () => {
   const secretTokenCode = 'any_secret_token'
 
@@ -19,37 +29,35 @@ describe('TokenGenerator', () => {
     expect(sut.tokenSecretCode).toBe(secretCode)
   })
 
-  test('Should call JWT with correct params', () => {
+  test('Should call JWT with correct params', async () => {
     const { sut, secretTokenCode } = makeSut()
 
     const jwtCalledWith = jest.spyOn(jwt, 'sign')
 
-    sut.generate({ payload: 'any_value' })
+    await sut.generate({ payload: 'any_value' })
 
     expect(jwtCalledWith).toHaveBeenCalledWith({ payload: 'any_value' }, secretTokenCode, { expiresIn: 300 })
+  })
+
+  test('Should throw if jwt sign throw', async () => {
+    const { sut } = makeSut()
+
+    jest.spyOn(jwt, 'sign').mockImplementationOnce(() => {
+      throw new Error()
+    })
+
+    const promise = sut.generate({ any_data: 'any' })
+
+    await expect(promise).rejects.toThrow(new Error())
   })
 
   test('Should return an token if payload is provided', async () => {
     const { sut } = makeSut()
 
-    jest.spyOn(jwt, 'sign').mockImplementationOnce(() => 'any_token')
-    const payload = { any_payload: 'any_payload' }
-    const token = sut.generate(payload)
+    const token = await sut.generate({ any_data: 'any_payload' })
 
     expect(token).toBe('any_token')
   })
-
-  // test('Should throw if jwt sign throw', () => {
-  //   const { sut } = makeSut()
-
-  //   jest.spyOn(jwt, 'sign').mockImplementationOnce(() => new Error())
-
-  //   const token = sut.generate({ any_token: 'any' })
-
-  //   console.log(token)
-
-  //   expect(token).toThrow()
-  // })
 
   // test('Should return null if no decode token is provided', async () => {
   //   const { sut } = makeSut()
