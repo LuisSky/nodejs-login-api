@@ -1,4 +1,4 @@
-import { ValidationError } from '../../utils/errors'
+import { MissingParamError, ValidationError } from '../../utils/errors'
 import { IEncrypter } from '../../utils/protocols'
 import { DbAddUserAccount } from './db-add-user-account'
 import { IAddUserAccount } from '../../domain/usecases/auth/add-user-account'
@@ -72,7 +72,7 @@ describe('DbAddUserAccount', () => {
     }
     const promise = sut.add(mockUser)
 
-    await expect(promise).rejects.toThrow(new ValidationError('email'))
+    await expect(promise).rejects.toThrow(new MissingParamError('email'))
   })
 
   test('Should throw if no Password is provided', async () => {
@@ -83,13 +83,13 @@ describe('DbAddUserAccount', () => {
     }
     const promise = sut.add(mockUser)
 
-    await expect(promise).rejects.toThrow(new ValidationError('password'))
+    await expect(promise).rejects.toThrow(new MissingParamError('password'))
   })
 
   test('Should throw if User alread exists', async () => {
     const { sut, loadUserByEmailRepositoryStub } = makeSut()
 
-    jest.spyOn(loadUserByEmailRepositoryStub, 'findByEmail').mockImplementationOnce(() => {
+    jest.spyOn(loadUserByEmailRepositoryStub, 'findByEmail').mockImplementationOnce(async () => {
       throw new ValidationError('this user alread exist')
     })
 
