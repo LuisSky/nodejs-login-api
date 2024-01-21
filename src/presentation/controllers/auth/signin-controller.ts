@@ -1,10 +1,11 @@
+import { IUserAuthenticate } from '../../../domain/usecases/auth/user-authenticate'
 import { MissingParamError, ValidationError } from '../../../utils/errors'
 import { HttpHelper } from '../../../utils/helpers'
-import { Service, IHttpRequest, IController, IHttpResponse } from '../../../utils/protocols'
+import { IHttpRequest, IController, IHttpResponse } from '../../../utils/protocols'
 
 export class SigninController implements IController {
   constructor (
-    private readonly loginService: Service
+    private readonly userAuthenticate: IUserAuthenticate
   ) {}
 
   async handle (httpRequest: IHttpRequest): Promise<IHttpResponse> {
@@ -18,7 +19,7 @@ export class SigninController implements IController {
 
       const { email, password } = httpRequest.body
 
-      const token = await this.loginService.execute(email, password)
+      const token = await this.userAuthenticate.auth({ email, password })
 
       if (!token) return HttpHelper.unauthorized()
 

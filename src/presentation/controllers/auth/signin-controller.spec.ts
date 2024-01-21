@@ -1,23 +1,27 @@
-import { Service } from '../../../utils/protocols'
 import { MissingParamError, UnauthorizedError } from '../../../utils/errors'
 import { SigninController } from './signin-controller'
+import { IUserAuthenticate, IUserAuthenticateParams } from '../../../domain/usecases/auth/user-authenticate'
 
-const makeLoginServiceSpy = (): Service => {
-  class LoginServiceSpy implements Service {
-    async execute (email: string, password: string): Promise<string | boolean> {
+const mockAuthenticateUserStub = (): IUserAuthenticate => {
+  class AuthenticateUserStub implements IUserAuthenticate {
+    async auth (user: IUserAuthenticateParams): Promise<any> {
       return 'valid_token'
     }
   }
-  const loginService = new LoginServiceSpy()
-  return loginService
+  return new AuthenticateUserStub()
 }
 
-const makeSut = (): any => {
-  const loginServiceSpy = makeLoginServiceSpy()
-  const sut = new SigninController(loginServiceSpy)
+type SutTypes = {
+  sut: SigninController
+  authenticateUserStub: IUserAuthenticate
+}
+
+const makeSut = (): SutTypes => {
+  const authenticateUserStub = mockAuthenticateUserStub()
+  const sut = new SigninController(authenticateUserStub)
   return {
     sut,
-    loginServiceSpy
+    authenticateUserStub
   }
 }
 
@@ -59,10 +63,10 @@ describe('SigninControllerr', () => {
     expect(httpResponse.body).toEqual(new MissingParamError('password'))
   })
 
-  test('Should calls LoginService with correct params', async () => {
-    const { sut, loginServiceSpy } = makeSut()
+  test('Should calls UserAuthenticate with correct params', async () => {
+    const { sut, authenticateUserStub } = makeSut()
 
-    const execute = jest.spyOn(loginServiceSpy, 'execute')
+    const execute = jest.spyOn(authenticateUserStub, 'auth')
 
     const httpRequest = {
       body: {
@@ -73,13 +77,13 @@ describe('SigninControllerr', () => {
     await sut.handle(httpRequest)
 
     const { email, password } = httpRequest.body
-    expect(execute).toHaveBeenCalledWith(email, password)
+    expect(execute).toHaveBeenCalledWith({ email, password })
   })
 
-  test('Should returns 500 if LoginService throws', async () => {
-    const { sut, loginServiceSpy } = makeSut()
+  test('Should returns 500 if UserAuthenticate throws', async () => {
+    const { sut, authenticateUserStub } = makeSut()
 
-    jest.spyOn(loginServiceSpy, 'execute').mockRejectedValueOnce(new Error())
+    jest.spyOn(authenticateUserStub, 'auth').mockRejectedValueOnce(new Error())
 
     const httpRequest = {
       body: {
@@ -93,9 +97,9 @@ describe('SigninControllerr', () => {
   })
 
   test('Should return 401 if invalid crendentials are provided', async () => {
-    const { sut, loginServiceSpy } = makeSut()
+    const { sut, authenticateUserStub } = makeSut()
 
-    jest.spyOn(loginServiceSpy, 'execute').mockResolvedValueOnce(false)
+    jest.spyOn(authenticateUserStub, 'auth').mockResolvedValueOnce(false)
 
     const httpRequest = {
       body: {

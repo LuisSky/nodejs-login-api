@@ -1,6 +1,6 @@
 import { MissingParamError, ValidationError } from '../../../utils/errors'
 import { SignupController } from './signup-controller'
-import { IAddUserAccount, IAddUserAccountParams } from '../../../domain/auth/add-user-account'
+import { IAddUserAccount, IAddUserAccountParams } from '../../../domain/usecases/auth/add-user-account'
 import { User } from '../../../domain/entities/user'
 import { IEmailValidator } from '../../../utils/protocols/email-validator'
 

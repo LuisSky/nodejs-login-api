@@ -1,17 +1,18 @@
 import { ValidationError } from '../../utils/errors'
 import { IEncrypter } from '../../utils/protocols'
-import { ICreateUserRepository, IFindUserByEmailRepository } from '../../domain/services/auth/interfaces'
 import { DbAddUserAccount } from './db-add-user-account'
-import { IAddUserAccount } from '../../domain/auth/add-user-account'
+import { IAddUserAccount } from '../../domain/usecases/auth/add-user-account'
+import { ICreateUserRepository } from '../protocols/create-user-repository'
+import { ILoadUserByEmailRepository } from '../protocols/load-user-by-email-repository'
+import { User } from '../../domain/entities/user'
 
-const makeFindUserByEmailRepository = (): IFindUserByEmailRepository => {
-  class FindUserByEmailRepositorySpy implements IFindUserByEmailRepository {
-    findByEmail (email: string): boolean {
-      return false
+const mockLoadUserByEmailRepository = (): ILoadUserByEmailRepository => {
+  class LoadUserByEmailRepositoryStub implements ILoadUserByEmailRepository {
+    async findByEmail (email: string): Promise<User | null> {
+      return null
     }
   }
-  const findUserByEmailRepositorySpy = new FindUserByEmailRepositorySpy()
-  return findUserByEmailRepositorySpy
+  return new LoadUserByEmailRepositoryStub()
 }
 
 const makeCreateUserRepositorySpy = (): ICreateUserRepository => {
@@ -42,27 +43,27 @@ const makeEncrypterHelperSpy = (): IEncrypter => {
 }
 
 type SutTypes = {
-  findUserByEmailRepoSpy: IFindUserByEmailRepository
+  loadUserByEmailRepositoryStub: ILoadUserByEmailRepository
   createUserRepoSpy: ICreateUserRepository
   encrypterHelperSpy: IEncrypter
   sut: IAddUserAccount
 }
 
 const makeSut = (): SutTypes => {
-  const findUserByEmailRepoSpy = makeFindUserByEmailRepository()
+  const loadUserByEmailRepositoryStub = mockLoadUserByEmailRepository()
   const createUserRepoSpy = makeCreateUserRepositorySpy()
   const encrypterHelperSpy = makeEncrypterHelperSpy()
-  const sut = new DbAddUserAccount(findUserByEmailRepoSpy, createUserRepoSpy, encrypterHelperSpy)
+  const sut = new DbAddUserAccount(loadUserByEmailRepositoryStub, createUserRepoSpy, encrypterHelperSpy)
 
   return {
-    findUserByEmailRepoSpy,
+    loadUserByEmailRepositoryStub,
     createUserRepoSpy,
     encrypterHelperSpy,
     sut
   }
 }
 
-describe('UserService', () => {
+describe('DbAddUserAccount', () => {
   test('Should throw if no Email is provided', async () => {
     const { sut } = makeSut()
     const mockUser = {
@@ -86,9 +87,9 @@ describe('UserService', () => {
   })
 
   test('Should throw if User alread exists', async () => {
-    const { sut, findUserByEmailRepoSpy } = makeSut()
+    const { sut, loadUserByEmailRepositoryStub } = makeSut()
 
-    jest.spyOn(findUserByEmailRepoSpy, 'findByEmail').mockImplementationOnce(() => {
+    jest.spyOn(loadUserByEmailRepositoryStub, 'findByEmail').mockImplementationOnce(() => {
       throw new ValidationError('this user alread exist')
     })
 
@@ -114,10 +115,10 @@ describe('UserService', () => {
     expect(calledWith).toHaveBeenCalledWith('any_pass')
   })
 
-  test('Should call FindUserByEmailRepository .findByEmail with correct params', async () => {
-    const { sut, findUserByEmailRepoSpy } = makeSut()
+  test('Should call LoadUserByEmailRepository .findByEmail with correct params', async () => {
+    const { sut, loadUserByEmailRepositoryStub } = makeSut()
 
-    const findByEmailcalledWith = jest.spyOn(findUserByEmailRepoSpy, 'findByEmail')
+    const findByEmailcalledWith = jest.spyOn(loadUserByEmailRepositoryStub, 'findByEmail')
     // const createOnecalledWith = jest.spyOn(userRepoSpy, 'createOne')
 
     const mockUser = {

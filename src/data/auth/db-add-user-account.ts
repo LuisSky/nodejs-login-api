@@ -1,12 +1,13 @@
 import { User } from '../../domain/entities/user'
-import { IAddUserAccount, IAddUserAccountParams } from '../../domain/auth/add-user-account'
-import { ICreateUserRepository, IFindUserByEmailRepository } from '../../domain/services/auth/interfaces'
+import { IAddUserAccount, IAddUserAccountParams } from '../../domain/usecases/auth/add-user-account'
+import { ICreateUserRepository } from '../protocols/create-user-repository'
+import { ILoadUserByEmailRepository } from '../protocols/load-user-by-email-repository'
 import { MissingParamError, ValidationError } from '../../utils/errors'
 import { IEncrypter } from '../../utils/protocols'
 
 export class DbAddUserAccount implements IAddUserAccount {
   constructor (
-    private readonly findUserByEmailRepository: IFindUserByEmailRepository,
+    private readonly findUserByEmailRepository: ILoadUserByEmailRepository,
     private readonly userRepository: ICreateUserRepository,
     private readonly encrypter: IEncrypter) {}
 
