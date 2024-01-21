@@ -19,26 +19,26 @@ const mockAddUserAccountStub = (): IAddUserAccount => {
   return new AddUserAccountStub()
 }
 
-const makeEmailValidatorSpy = (): IEmailValidator => {
-  class EmailValidatorSpy implements IEmailValidator {
+const mockEmailValidatorStub = (): IEmailValidator => {
+  class EmailValidatorStub implements IEmailValidator {
     isValid (email: string): boolean {
       return true
     }
   }
-  const emailValidatorSpy = new EmailValidatorSpy()
-  return emailValidatorSpy
+  const emailValidatorStub = new EmailValidatorStub()
+  return emailValidatorStub
 }
 
 const makeSut = () => {
-  const emailValidatorSpy = makeEmailValidatorSpy()
+  const emailValidatorStub = mockEmailValidatorStub()
   const addUserAccountStub = mockAddUserAccountStub()
 
-  const sut = new SignupController(addUserAccountStub, emailValidatorSpy)
+  const sut = new SignupController(addUserAccountStub, emailValidatorStub)
 
   return {
     sut,
     addUserAccountStub,
-    emailValidatorSpy
+    emailValidatorStub
   }
 }
 
@@ -66,9 +66,9 @@ describe('SignupController', () => {
   })
 
   test('Should return 400 if invalid email is provided', async () => {
-    const { sut, emailValidatorSpy } = makeSut()
+    const { sut, emailValidatorStub } = makeSut()
 
-    jest.spyOn(emailValidatorSpy, 'isValid').mockImplementationOnce(() => false)
+    jest.spyOn(emailValidatorStub, 'isValid').mockImplementationOnce(() => false)
 
     const httpRequest = {
       body: {
@@ -84,9 +84,9 @@ describe('SignupController', () => {
   })
 
   test('Should call EmailValidator with correct param', async () => {
-    const { sut, emailValidatorSpy } = makeSut()
+    const { sut, emailValidatorStub } = makeSut()
 
-    const isValid = jest.spyOn(emailValidatorSpy, 'isValid')
+    const isValid = jest.spyOn(emailValidatorStub, 'isValid')
 
     const httpRequest = {
       body: {
@@ -145,9 +145,9 @@ describe('SignupController', () => {
   })
 
   test('Should return 500 if EmailValidator throws', async () => {
-    const { sut, emailValidatorSpy } = makeSut()
+    const { sut, emailValidatorStub } = makeSut()
 
-    jest.spyOn(emailValidatorSpy, 'isValid').mockImplementationOnce(() => {
+    jest.spyOn(emailValidatorStub, 'isValid').mockImplementationOnce(() => {
       throw new Error()
     })
 

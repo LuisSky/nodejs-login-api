@@ -15,7 +15,7 @@ const mockLoadUserByEmailRepository = (): ILoadUserByEmailRepository => {
   return new LoadUserByEmailRepositoryStub()
 }
 
-const makeCreateUserRepositorySpy = (): ICreateUserRepository => {
+const mockCreateUserRepositorySpy = (): ICreateUserRepository => {
   class CreateUserRepositorySpy implements ICreateUserRepository {
     createOne (user: any): any {
       return { ...user }
@@ -25,7 +25,7 @@ const makeCreateUserRepositorySpy = (): ICreateUserRepository => {
   return createUserRepoSpy
 }
 
-const makeEncrypterHelperSpy = (): IEncrypter => {
+const mockEncrypterHelperSpy = (): IEncrypter => {
   class EncrypterHelperSpy implements IEncrypter {
     hash (string: string): string {
       return 'valid_hash'
@@ -51,8 +51,8 @@ type SutTypes = {
 
 const makeSut = (): SutTypes => {
   const loadUserByEmailRepositoryStub = mockLoadUserByEmailRepository()
-  const createUserRepoSpy = makeCreateUserRepositorySpy()
-  const encrypterHelperSpy = makeEncrypterHelperSpy()
+  const createUserRepoSpy = mockCreateUserRepositorySpy()
+  const encrypterHelperSpy = mockEncrypterHelperSpy()
   const sut = new DbAddUserAccount(loadUserByEmailRepositoryStub, createUserRepoSpy, encrypterHelperSpy)
 
   return {

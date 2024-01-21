@@ -14,8 +14,8 @@ const mockLoadUserByEmailRepository = (): ILoadUserByEmailRepository => {
   return new LoadUserByEmailRepositoryStub()
 }
 
-const makeEncrypterHelperSpy = (): IEncrypter => {
-  class EncrypterHelperSpy implements IEncrypter {
+const mockEncrypterHelperStub = (): IEncrypter => {
+  class EncrypterHelperStub implements IEncrypter {
     hash (): string {
       return 'any_hash'
     }
@@ -24,37 +24,37 @@ const makeEncrypterHelperSpy = (): IEncrypter => {
       return true
     }
   }
-  return new EncrypterHelperSpy()
+  return new EncrypterHelperStub()
 }
 
-const makeTokenGeneratorSpy = (): ITokenGenerator => {
-  class TokenGeneratorSpy {
+const mockTokenGeneratorStub = (): ITokenGenerator => {
+  class TokenGeneratorStub {
     async generate (payload: any): Promise<any> {
       return 'valid_token'
     }
   }
-  return new TokenGeneratorSpy()
+  return new TokenGeneratorStub()
 }
 
 type SutTypes = {
   sut: IUserAuthenticate
   loadUserByEmailRepositoryStub: ILoadUserByEmailRepository
-  encrypterHelperSpy: IEncrypter
-  tokenGeneratorSpy: ITokenGenerator
+  encrypterHelperStub: IEncrypter
+  tokenGeneratorStub: ITokenGenerator
 }
 
 const makeSut = (): SutTypes => {
   const loadUserByEmailRepositoryStub = mockLoadUserByEmailRepository()
-  const encrypterHelperSpy = makeEncrypterHelperSpy()
-  const tokenGeneratorSpy = makeTokenGeneratorSpy()
+  const encrypterHelperStub = mockEncrypterHelperStub()
+  const tokenGeneratorStub = mockTokenGeneratorStub()
 
-  const sut = new DbUserAuthenticate(loadUserByEmailRepositoryStub, encrypterHelperSpy, tokenGeneratorSpy)
+  const sut = new DbUserAuthenticate(loadUserByEmailRepositoryStub, encrypterHelperStub, tokenGeneratorStub)
 
   return {
     sut,
     loadUserByEmailRepositoryStub,
-    encrypterHelperSpy,
-    tokenGeneratorSpy
+    encrypterHelperStub,
+    tokenGeneratorStub
   }
 }
 
@@ -96,18 +96,18 @@ describe('DbUserAuthenticate', () => {
   })
 
   test('Should calls EncrypterHelper with correct params', async () => {
-    const { sut, encrypterHelperSpy } = makeSut()
+    const { sut, encrypterHelperStub } = makeSut()
 
-    const hashCalledWith = jest.spyOn(encrypterHelperSpy, 'compare')
+    const hashCalledWith = jest.spyOn(encrypterHelperStub, 'compare')
     await sut.auth(mockCredentials)
 
     expect(hashCalledWith).toHaveBeenCalledWith('any_password', 'any_hash')
   })
 
   test('Should return null if EncrypterHelper returns null', async () => {
-    const { sut, encrypterHelperSpy } = makeSut()
+    const { sut, encrypterHelperStub } = makeSut()
 
-    jest.spyOn(encrypterHelperSpy, 'compare').mockReturnValueOnce(null)
+    jest.spyOn(encrypterHelperStub, 'compare').mockReturnValueOnce(null)
 
     const token = await sut.auth(mockCredentials)
 
