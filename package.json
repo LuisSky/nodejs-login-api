@@ -6,7 +6,8 @@
   "scripts": {
     "start": "node ./dist/src/main/server",
     "dev:unity": "JEST_TYPE_TEST=unity jest --watch --passWithNoTests --runInBand",
-    "dev:integration": "JEST_TYPE_TEST=integration jest --passWithNoTests --watch --runInBand"
+    "dev:integration": "JEST_TYPE_TEST=integration jest --passWithNoTests --watch --runInBand",
+    "dev:coverage": "JEST_TYPE_TEST=unity jest --passWithNoTests --runInBand --coverage"
   },
   "keywords": [],
   "author": "Luis Sky",
