@@ -1,35 +1,36 @@
 import { ServerError, UnauthorizedError } from '../errors'
+import { IHttpResponse } from '../protocols'
 
 export class HttpHelper {
-  static badRequest (error: Error): any {
+  static badRequest (error: Error): IHttpResponse {
     return {
       statusCode: 400,
       body: error
     }
   }
 
-  static unauthorized (): any {
+  static unauthorized (): IHttpResponse {
     return {
       statusCode: 401,
       body: new UnauthorizedError()
     }
   }
 
-  static serverError (error: Error): any {
+  static serverError (error: Error): IHttpResponse {
     return {
       statusCode: 500,
       body: new ServerError(error.message)
     }
   }
 
-  static validResponse (body: any): any {
+  static validResponse (body: any): IHttpResponse {
     return {
       statusCode: 200,
       body
     }
   }
 
-  static resourceCreated (body: any): any {
+  static resourceCreated (body: any): IHttpResponse {
     return {
       statusCode: 201,
       body
