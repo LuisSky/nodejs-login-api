@@ -3,6 +3,7 @@ import { SignupController } from './signup-controller'
 import { IAddUserAccount, IAddUserAccountParams } from '../../../domain/usecases/auth/add-user-account'
 import { User } from '../../../domain/entities/user'
 import { IEmailValidator } from '../../../utils/protocols/email-validator'
+import { HttpHelper } from '../../../utils/helpers'
 
 const mockNewUser: User = {
   id: 'any_id',
@@ -130,7 +131,10 @@ describe('SignupController', () => {
   test('Should return 500 if RegisterUserService throws', async () => {
     const { sut, addUserAccountStub } = makeSut()
 
-    jest.spyOn(addUserAccountStub, 'add').mockRejectedValue(new Error())
+    jest.spyOn(addUserAccountStub, 'add')
+      .mockImplementationOnce(() => {
+        throw new Error()
+      })
 
     const httpRequest = {
       body: {
@@ -141,7 +145,7 @@ describe('SignupController', () => {
     const httpResponse = await sut.handle(httpRequest)
 
     expect(httpResponse.statusCode).toBe(500)
-    expect(httpResponse.body).toEqual(new Error())
+    expect(httpResponse).toEqual(HttpHelper.serverError(new Error()))
   })
 
   test('Should return 500 if EmailValidator throws', async () => {
@@ -160,7 +164,7 @@ describe('SignupController', () => {
     const httpResponse = await sut.handle(httpRequest)
 
     expect(httpResponse.statusCode).toBe(500)
-    expect(httpResponse.body).toEqual(new Error())
+    expect(httpResponse).toEqual(HttpHelper.serverError(new Error()))
   })
 
   test('Should return 201 if valid informations are provided', async () => {

@@ -1,5 +1,5 @@
 import { IUserAuthenticate } from '../../../domain/usecases/auth/user-authenticate'
-import { MissingParamError, ValidationError } from '../../../utils/errors'
+import { MissingParamError } from '../../../utils/errors'
 import { HttpHelper } from '../../../utils/helpers'
 import { IHttpRequest, IController, IHttpResponse } from '../../../utils/protocols'
 
@@ -24,11 +24,8 @@ export class SigninController implements IController {
       if (!token) return HttpHelper.unauthorized()
 
       return HttpHelper.validResponse(token)
-    } catch (err) {
-      if (err instanceof ValidationError || err instanceof MissingParamError) {
-        return HttpHelper.badRequest(err)
-      }
-      return HttpHelper.serverError(err as Error)
+    } catch (error) {
+      return HttpHelper.serverError(error as Error)
     }
   }
 }

@@ -26,11 +26,8 @@ export class SignupController implements IController {
       const user = await this.addUserAccount.add({ email, password })
 
       return HttpHelper.resourceCreated({ ...user })
-    } catch (err) {
-      if (err instanceof ValidationError || err instanceof MissingParamError) {
-        return HttpHelper.badRequest(err)
-      }
-      return HttpHelper.serverError(err as Error)
+    } catch (error) {
+      return HttpHelper.serverError(error as Error)
     }
   }
 }

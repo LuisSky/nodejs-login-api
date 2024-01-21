@@ -1,4 +1,4 @@
-import { UnauthorizedError } from '../errors'
+import { ServerError, UnauthorizedError } from '../errors'
 
 export class HttpHelper {
   static badRequest (error: Error): any {
@@ -18,7 +18,7 @@ export class HttpHelper {
   static serverError (error: Error): any {
     return {
       statusCode: 500,
-      body: error
+      body: new ServerError(error.stack)
     }
   }
 
