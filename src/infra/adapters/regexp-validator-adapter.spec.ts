@@ -1,6 +1,6 @@
-import { RegExpEmailValidator } from './regexp-email-validator'
-import { MissingParamError } from '../errors'
-import { IEmailValidator } from '../protocols/email-validator'
+import { RegExpEmailValidator } from './regexp-validator-adapter'
+import { MissingParamError } from '../../utils/errors'
+import { IEmailValidator } from '../../utils/protocols/email-validator'
 
 const makeSut = (): IEmailValidator => {
   const sut = new RegExpEmailValidator()

@@ -1,5 +1,5 @@
-import { IEmailValidator } from '../protocols/email-validator'
-import { MissingParamError } from '../errors'
+import { IEmailValidator } from '../../utils/protocols/email-validator'
+import { MissingParamError } from '../../utils/errors'
 
 function isValidEmailAdress (email: string) {
   const testEmailRegex = /^[a-zA-Z0-9._%+-]+@[a-zA-Z0-9.-]+\.[a-zA-Z]{2,}$/

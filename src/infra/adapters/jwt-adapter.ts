@@ -1,5 +1,5 @@
 import jwt from 'jsonwebtoken'
-import { ITokenGenerator } from '../protocols'
+import { ITokenGenerator } from '../../utils/protocols'
 
 export class TokenGenerator implements ITokenGenerator {
   constructor (
