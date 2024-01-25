@@ -148,6 +148,26 @@ describe('SignupController', () => {
     expect(httpResponse).toEqual(HttpHelper.serverError(new Error()))
   })
 
+  test('Should return 400 if User is already exists', async () => {
+    const { sut, addUserAccountStub } = makeSut()
+
+    jest.spyOn(addUserAccountStub, 'add')
+      .mockImplementationOnce(() => {
+        throw new ValidationError('user already exists')
+      })
+
+    const httpRequest = {
+      body: {
+        email: 'any_email@mail.com',
+        password: 'any_pass'
+      }
+    }
+    const httpResponse = await sut.handle(httpRequest)
+
+    expect(httpResponse.statusCode).toBe(400)
+    expect(httpResponse).toEqual(HttpHelper.badRequest(new ValidationError('user already exists')))
+  })
+
   test('Should return 500 if EmailValidator throws', async () => {
     const { sut, emailValidatorStub } = makeSut()
 

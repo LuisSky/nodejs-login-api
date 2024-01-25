@@ -27,6 +27,7 @@ export class SignupController implements IController {
 
       return HttpHelper.resourceCreated({ ...user })
     } catch (error) {
+      if (error instanceof ValidationError) return HttpHelper.badRequest(new ValidationError(error.message))
       return HttpHelper.serverError(error as Error)
     }
   }
