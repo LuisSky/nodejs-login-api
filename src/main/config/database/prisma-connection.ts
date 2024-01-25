@@ -1,17 +1,13 @@
 import { PrismaClient } from '@prisma/client'
 
-export const prisma = new PrismaClient()
+export class PrismaService extends PrismaClient {
+  private static instance: PrismaClient
 
-// async function main () {
+  public static getInstance (): PrismaClient {
+    if (!PrismaService.instance) {
+      PrismaService.instance = new PrismaClient()
+    }
 
-// }
-
-// main()
-//   .then(async () => {
-//     await prisma.$disconnect()
-//   })
-//   .catch(async (e) => {
-//     console.error(e)
-//     await prisma.$disconnect()
-//     process.exit(1)
-//   })
+    return PrismaService.instance
+  }
+}
