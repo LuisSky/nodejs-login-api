@@ -16,10 +16,11 @@
 ## **How to use**
 
 - Rename .env.example to .env
-- Configure the .env
-- npm install
-- npm start
-- npx knex migrate:latest
+- Configure the .
+- run postgres docker aplication with  `docker compose up`
+- `npm install`
+- `npm start`
+- `npx prisma migrate`
 
 - you can use insomnia / postman or any other rest client to acess the endpoints
 
