@@ -22,6 +22,11 @@
 - `npm start`
 - `npx prisma migrate`
 
+## **Tests**
+- `npm run dev:integration` - to run integration tests
+- `npm run dev:unity` - to run unity tests
+- `npm run dev:coverage` - to collect coverage data
+
 - you can use insomnia / postman or any other rest client to acess the endpoints
 
 ## **Routes**
