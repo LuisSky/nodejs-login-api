@@ -21,7 +21,7 @@
 - npm start
 - npx knex migrate:latest
 
-- you can use insomnia / postman or any another rest client to acess the endpoints
+- you can use insomnia / postman or any other rest client to acess the endpoints
 
 ## **Routes**
 /auth/signin - use to login 
@@ -32,13 +32,12 @@
 - bcrypt
 - express
 - jsonwebtoken
-- knex
 - pg
-- validator
 
 #### **Development libs**
 - jest 
 - dotenv 
+- prisma  
   
 ## **ESLint and style guide**  
 - standard
