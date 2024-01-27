@@ -30,7 +30,7 @@
 - you can use insomnia / postman or any other rest client to acess the endpoints
 
 ## **Routes**
-/auth/signin - use to login 
+/auth/signin - use to login
 /auth/signup - use to register 
 
 ## **Dependencies that's will installed after npm install**
