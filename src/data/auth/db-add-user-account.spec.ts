@@ -127,6 +127,5 @@ describe('DbAddUserAccount', () => {
     const user = await sut.add(mockValidUser)
 
     expect(user.email).toBe(mockValidUser.email)
-    expect(user.password).toBe('valid_hash')
   })
 })

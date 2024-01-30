@@ -21,6 +21,7 @@ export class DbAddUserAccount implements IAddUserAccount {
 
     const hashPass = this.encrypter.hash(password)
     const user = await this.userRepository.createOne({ email, password: hashPass })
+    delete user.password
     return user
   }
 }

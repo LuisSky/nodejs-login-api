@@ -7,10 +7,7 @@ export class PostgresUserRepository implements ICreateUserRepository, ILoadUserB
   private readonly prisma: PrismaService = PrismaService.getInstance()
   async createOne (data: User): Promise<User> {
     const user = await this.prisma.user.create({
-      data: {
-        email: data.email,
-        password: data.password
-      }
+      data: { ...data }
     })
     return user
   }
