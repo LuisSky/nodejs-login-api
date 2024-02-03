@@ -4,7 +4,7 @@
   "description": "",
   "main": "src/main/server.js",
   "scripts": {
-    "start": "node ./dist/src/main/server",
+    "start": "node --env-file=.env ./dist/src/main/server",
     "dev:unity": "JEST_TYPE_TEST=unity jest --watch --passWithNoTests --runInBand",
     "dev:integration": "JEST_TYPE_TEST=integration jest --passWithNoTests --watch --runInBand",
     "dev:coverage": "JEST_TYPE_TEST=unity jest --passWithNoTests --runInBand --coverage"
@@ -15,7 +15,6 @@
   "dependencies": {
     "@prisma/client": "^5.8.1",
     "bcrypt": "^5.1.1",
-    "dotenv": "^11.0.0",
     "express": "^4.17.2",
     "jsonwebtoken": "^9.0.2",
     "pg": "^8.7.1"
