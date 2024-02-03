@@ -1,5 +1,5 @@
 import { Response, Request } from 'express'
-import { IController, IHttpResponse } from '../../utils/protocols'
+import { IController, IHttpResponse } from '../../../utils/protocols'
 
 export default class ExpressAdapter {
   static adapt (controller: IController) {

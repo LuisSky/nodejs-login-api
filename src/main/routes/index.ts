@@ -1,6 +1,6 @@
 import express from 'express'
 
-import ExpressAdapter from '../adapters/express-adapter'
+import ExpressAdapter from '../../infra/adapters/express/express-adapter'
 
 import { SignupRouterComposer, SigninRouterCompose } from '../composers'
 
