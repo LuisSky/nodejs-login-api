@@ -6,7 +6,7 @@ import { TokenGenerator, EncrypterHelper } from '../../../utils/helpers'
 // import { TempMemoryRepository } from '../../infra/repository/temp-memory-repository'
 import { PostgresUserRepository } from '../../../infra/repository/postgres-user-repository'
 
-export class SigninRouterCompose {
+export class SigninRouterComposer {
   static compose (): IController {
     const loginService = new DbUserAuthenticate(new PostgresUserRepository(), new EncrypterHelper(), new TokenGenerator(env.SECRET_TOKEN_PHRASE))
     return new SigninController(loginService)

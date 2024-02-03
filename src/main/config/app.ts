@@ -1,8 +1,14 @@
-import express from 'express'
-import routes from '../routes'
-const app = express()
+import { IHttpServer } from '../../utils/protocols/http-server'
+import env from './env'
 
-app.use(express.json())
-app.use(routes)
+export default class App {
+  constructor (
+    private readonly dbConnection: any,
+    private readonly httpServer: IHttpServer
+  ) {}
 
-export default app
+  async startApplication (): Promise<void> {
+    await this.dbConnection.connect()
+    this.httpServer.listen(env.PORT as number)
+  }
+}
