@@ -1,4 +1,4 @@
-import env from '../../config/env'
+import { env } from '../../config/env'
 import { DbUserAuthenticate } from '../../../data/auth/db-user-authenticate'
 import { SigninController } from '../../../presentation/controllers/auth'
 import { IController } from '../../../utils/protocols'
