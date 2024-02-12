@@ -17,10 +17,10 @@
 
 - Rename .env.example to .env
 - Configure the .env
+- `docker compose up` - run postgres docker aplication  
 - `npm install` - install all dependencies
 - `npm run build` - build project
 - `npx prisma migrate` - create database migration
-- `docker compose up` - run postgres docker aplication  
 - `npm start` - start application
 
 ## **Tests**
@@ -28,11 +28,11 @@
 - `npm run dev:unity` - to run unity tests
 - `npm run dev:coverage` - to collect coverage data
 
-- you can use insomnia / postman or any other rest client to acess the endpoints
+- you can use insomnia / postman or any other rest client to access the endpoints
 
 ## **Routes**
-/auth/signin - use to login
-/auth/signup - use to register 
+- /auth/signin - use to login
+- /auth/signup - use to register 
 
 ## **Dependencies that's will installed after npm install**
 
