@@ -16,11 +16,12 @@
 ## **How to use**
 
 - Rename .env.example to .env
-- Configure the .
-- run postgres docker aplication with  `docker compose up`
-- `npm install`
-- `npm start`
-- `npx prisma migrate`
+- Configure the .env
+- `npm install` - install all dependencies
+- `npm run build` - build project
+- `npx prisma migrate` - create database migration
+- `docker compose up` - run postgres docker aplication  
+- `npm start` - start application
 
 ## **Tests**
 - `npm run dev:integration` - to run integration tests
