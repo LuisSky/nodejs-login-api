@@ -3,7 +3,7 @@ class Env {
   readonly PORT: number = Number(process.env.SERVER_PORT) ?? 3000
 
   // Webtoken
-  readonly SECRET_TOKEN_PHRASE: string = process.env.SECRET_TOKEN_PHRASE ?? 'any_secret_token'
+  readonly SECRET_TOKEN: string = process.env.SECRET_TOKEN ?? 'any_secret_token'
 
   // Database
   readonly DB_CLIENT: string | undefined = process.env.DB_CLIENT

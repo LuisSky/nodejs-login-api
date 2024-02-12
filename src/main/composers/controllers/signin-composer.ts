@@ -8,7 +8,7 @@ import { PostgresUserRepository } from '../../../infra/repository/postgres-user-
 
 export class SigninRouterComposer {
   static compose (): IController {
-    const loginService = new DbUserAuthenticate(new PostgresUserRepository(), new EncrypterHelper(), new TokenGenerator(env.SECRET_TOKEN_PHRASE))
+    const loginService = new DbUserAuthenticate(new PostgresUserRepository(), new EncrypterHelper(), new TokenGenerator(env.SECRET_TOKEN))
     return new SigninController(loginService)
   }
 }
