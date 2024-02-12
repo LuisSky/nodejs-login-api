@@ -4,10 +4,11 @@
   "description": "",
   "main": "src/main/server.js",
   "scripts": {
-    "start": "node --env-file=.env ./dist/src/main/server",
+    "build": "rm -Rf ./dist && tsc",
     "dev:unity": "JEST_TYPE_TEST=unity jest --watch --passWithNoTests --runInBand",
     "dev:integration": "JEST_TYPE_TEST=integration jest --passWithNoTests --watch --runInBand",
-    "dev:coverage": "JEST_TYPE_TEST=unity jest --passWithNoTests --runInBand --coverage"
+    "dev:coverage": "JEST_TYPE_TEST=unity jest --passWithNoTests --runInBand --coverage",
+    "start": "node --env-file=.env ./dist/src/main/main"
   },
   "keywords": [],
   "author": "Luis Sky",
